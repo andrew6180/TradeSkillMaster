@@ -1,0 +1,131 @@
+v2.1.1
+*Fixed error with averages tab.
+
+v2.1
+*Added option to include soulbound items (disabled by default).
+*Added "Averages" tab to options.
+*Enabled sorting on scrolling tables within options.
+*Fixed visual bug with log.
+*Fixed visual bug with options layout.
+
+v2.0.6
+*No update. Trying to fix issue with curse.
+
+v2.0.5
+*Added tracing to assist in debugging lua errors.
+
+v2.0.4
+*Using new movable frame TSMAPI function for destroying frame.
+
+v2.0.3
+*The destroying frame will now remember its position when moved.
+
+v2.0.2
+*Updated TOC for patch 5.4.
+
+v2.0.1
+*Fixed error with closing destroying window in combat.
+*Updated scrolling tables.
+*Fixed issue with detecting disenchantable items for non-enUS locales.
+
+v2.0
+*First 2.0 Version!
+\\
+
+v1.3
+*Updated for patch 5.2.
+*The safe table is back.
+*Many other minor bug fixes and improvements.
+
+v1.2
+*There is a new destroy window that is smaller and has a bigger button
+*It is safe to use slow speed for DE items that are soulbound
+*Destroying plays nice with loot addons such as Xloot
+*Removed the lag caused by counting loot
+*Removed safelist from DE
+*Made the code simpler and faster
+*other things that I dont remember...
+
+v1.1
+*fixed a bug.
+
+v1.0
+*release
+
+v0.2.0.3
+*fixed a bug in Prospecting/Milling
+
+v0.2.0.2
+*fixed a ui bug in DE
+
+v0.2.0.1
+*added the option to block sum loot later I will redo the algorithim that causes the lag.
+
+
+v0.2
+*4.3
+
+v0.1.6.8
+*DE now ignores all items that are not green, blue or purple 
+
+v0.1.6.7
+*In slow mode the destroy button will now become disabled
+*Fixed and issue with sum loot
+
+v0.1.6.6
+*fixed a typo
+
+v0.1.6.5
+*fixed another error with DE UI
+
+v0.1.6.4
+*added an error msg, for filter results.
+*fixed an error with DE UI
+
+v0.1.6.3
+*remove a print statement.
+
+v0.1.6.2
+*For Milling and Prospecting you can now chose to filter results by mat or date
+ but be warned your old tables may not work
+
+v0.1.6.1
+*fixed a lua error
+
+v0.1.6.0
+*DE works!!
+
+v0.1.5.3
+*fixed pigment issue
+
+v0.1.5.2
+*postclick wasnt working so I did something a bit different
+
+v0.1.5.1
+*SumLoot added
+*Merge stacks added
+*needs TSM 0.2.5.1Beta to work 
+
+v0.1.5.0
+*new ui
+
+v0.1.4.1
+*fixed a lua error
+
+v0.1.4
+*Fixed and issue with pigments showing up in the milling dd
+
+v0.1.3
+*Fixed a localization issue with the button.
+*Updated the TOC for patch 4.2.
+
+v0.1.2
+*Herbs/Ore no longer swap spots infinitely
+*Lua error fixed
+
+v0.1.1
+*Added the ability to mill/prospect older herbs/ore
+*Populate Menus now uses a tooltip scan; so that the dropdowns are updated dynamically
+
+v0.1
+*First version!

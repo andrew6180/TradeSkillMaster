@@ -1,0 +1,189 @@
+v2.3.5
+*Fixed issue with calculating price per target item for gems in destroying search.
+*Added events and moduleAPIs for the new TSM Assistant feature.
+
+v2.3.4
+*Fixed issue with calculating percentage of min buyout versus deValue.
+*Added min / max item level for other > disenchant search.
+*Fixed issue with destroying search scanning the entire AH.
+
+v2.3.3
+*Fixed variable being declarded as global unnecessarily.
+*Fixed bug with Sniper not working for Shopping operations.
+*Fixed error when starting Sniper scans.
+
+v2.3.2
+*Fixed issue with vendor and disenchant searches.
+
+v2.3.1
+*No update. Trying to fix issue with curse.
+
+v2.3
+*Added Sniper feature in the "Other" sidebar tab.
+*Added options for new Sniper feature to Shopping's options page.
+*Cleaned up a lot of older, deprecated code.
+*Updated localizations.
+
+v2.2.4
+*Fixed bug in filter search code.
+
+v2.2.3
+*Updated Shopping Appdata to support changes in desktop App v203.
+
+v2.2.2
+*Fixed layout of buttons in the "Other" sidebar page.
+
+v2.2.1
+*Updating group tree creation API call.
+
+v2.2
+*Added disenchant search to the "Other" sidebar tab.
+*Added an option to set the max percentage of disenchant value that the disenchant search will return results for.
+
+v2.1.1
+*Api changes for gathering shopping search
+
+v2.1
+*Fixed bug on non-enUS clients.
+*Added Ink of Dreams / Shadow Pigment to applicable destroy mode searches.
+*Updated some API functions to support new gathering functionality in TSM_Crafting.
+*Added shopping operation max price to tooltips.
+*Added lesser essences to destroy searches for greater essences.
+*Fixed some destroy ratio issues.
+*Updated TOC for patch 5.4.
+
+v2.0.4
+*Bug fix with v2.0.3 and TSM2.1.
+
+v2.0.3
+*Fixed a bug involving switching AH tabs without ever opening the sidebar.
+*Moved operation management to its own tab.
+
+v2.0.2
+*Fixed bug that was causing destroy searches from gathering to not work properly.
+*Updated scrolling tables.
+*The Bid percent option is now correctly a percent slider.
+
+v2.0.1
+*Removed old dealfinding code.
+*Bug fix with the quick posting window.
+
+v2.0
+*First 2.0 Version!
+\\
+
+v1.4
+*Updated for patch 5.2.
+*Fixed some bugs with linking items into the search bar.
+*Added the "Quick Posting" window and corresponding options.
+*Added support for new quick buyout feature.
+*Fixed various battle pet issues.
+*Fixed an issue with quick posting auction duration.
+*Many other minor bug fixes and improvements.
+
+v1.3
+*The search should now be smarter when selecting the next item to buy.
+*Moved the dealfinding search to the "special searches" frame.
+*Added code to take advantage of some of the new scan speedups in LibAuctionScan.
+*Added option for selecting price source of % market value column in search results table.
+*Fixed a bug with items in imported lists not getting names.
+*Updated for the new TSM design.
+*Many other minor bug fixes and improvements.
+
+v1.2
+*Added special searches (currently Vendor and Disenchant).
+*Dramatically increased the speed at which Shopping can purchase items.
+*Added support for other modules being able to create shopping lists.
+*Items in shopping lists will now show in alphabetical order.
+*Many other minor bug fixes and improvements.
+
+v1.1
+*Added an option for not showing results above max dealfinding price.
+*Added right-click shortcut to dealfinding/shopping lists in recent searches frame to open up options for that list.
+*Fixed a bug with the text at the top of the Crafting Mats search not being correct.
+*Fixed a bug where the Crafting Mats search could potentially buy too many mats.
+*The Crafting Mats frame will now properly update its color when changed in the TSM options.
+*The search bar will now properly lose focus when the TSM tab is in the background.
+*Fixed some bugs with the confirmation window's frame strata in various situations.
+*The search will no longer restart if an auction is not found.
+*When buying things, the next row will now be selected automatically.
+*Many other minor bug fixes and improvements.
+
+v1.0
+*First Release Version!
+
+
+
+**Beta Versions:**
+
+v0.2.5
+*Updated TOC for patch 4.2.
+*Many other minor bug fixes and improvements.
+
+v0.2.4
+*Updated the scanning code.
+*The scanning code should now work better with the new version of Auctioneer.
+*Added "Transforming" to what was previously the "Shopping - Milling / Prospecting / Disenchanting" feature.
+*Many other minor bug fixes and improvements.
+
+v0.2.3
+*Adding items to dealfinding should now give an "invalid item" message far less frequently.
+*Fixed a bug with the disenchanting feature not properly integrating with the shopping - crafting mats feature.
+*Updated the TOC for patch 4.1.
+*Many other minor bug fixes and improvements.
+
+v0.2.2
+*Fixed a bug with shopping for inks causing an error.
+*Implemented disenchanting scans. Currently only dusts are supported.
+*Added an option to not disenchant for crafting mats.
+*Many other minor bug fixes and improvements.
+
+v0.2.1
+*Possibly fixed the bug where auctions were being skipped / ignored by Shopping.
+*Fixed a few typos.
+*Fixed a bug where setting a max price for general buying was throwing an error.
+*Added a "Skip Current Auction" button to Dealfinding.
+*Changed any use of "Dealfinder" to "Dealfinding" for consistency.
+*Many other minor bug fixes and improvements.
+
+v0.2
+*Fixed some incorrect prospecting values.
+*Added an option to disable searching for ore when shopping for raw gems for Crafting.
+*Added "herbs / ore only" option for milling / prospecting searches.
+*Moved all the options / dealfinding settings to a new options page inside the main TSM window.
+*Added an option to shop for blackfallow ink for trade-ins automatically if cheaper.
+*Many other minor bug fixes and improvements.
+
+v0.1.8
+*Added a few more bug fixes.
+
+v0.1.7
+*Fixed a bug with Dealfinding occasionally giving an error.
+*Localization files should now be loaded correctly.
+*Fixed inferno ink ratios.
+*Removed the enchanting icon as it's not yet implemented.
+*Many fixes for the "no auctions found..." issue.
+*Many other minor bug fixes and improvements.
+
+v0.1.6
+*Dealfinding list is now stored globally instead of by profile.
+*Fixed milling coefficients.
+*Many other minor bug fixes and improvements.
+
+v0.1.5
+*Fixed a major bug that was preventing some gems from being purchased through the automatic mode.
+
+v0.1.4
+*Multiple bug fixes with buying items in all different modes.
+
+v0.1.3
+*Fixed another bug caused by setting a max price in the destroying section of Shopping.
+
+v0.1.2
+*Few minor bug fixes.
+
+v0.1.1
+*Fixed a bug that caused the addon to not upload properly.
+
+v0.1
+*First version!

@@ -1,0 +1,26 @@
+## Interface: 50400
+## Title: |cff00ff00TradeSkillMaster_Accounting|r
+## Notes: Tracks your gold-flow/sales/purchases and provides you with detailed summaries and lists of this information.
+## Author: Sapu94, Bart39
+## Version: v2.3.1
+## SavedVariables: TradeSkillMaster_AccountingDB
+## Dependency: TradeSkillMaster
+## X-Curse-Packaged-Version: v2.3.1
+## X-Curse-Project-Name: TradeSkillMaster_Accounting
+## X-Curse-Project-ID: tradeskillmaster_accounting
+## X-Curse-Repository-ID: wow/tradeskillmaster_accounting/mainline
+
+Locale\enUS.lua
+Locale\frFR.lua
+Locale\deDE.lua
+Locale\koKR.lua
+Locale\esMX.lua
+Locale\ruRU.lua
+Locale\zhCN.lua
+Locale\esES.lua
+Locale\zhTW.lua
+Locale\ptBR.lua
+
+TradeSkillMaster_Accounting.lua
+Modules\data.lua
+Modules\gui.lua

@@ -1,0 +1,52 @@
+v2.0.8
+*Fixed minor bug with connected realms.
+
+v2.0.7
+*Added connected realm support for character inventories.
+*Fixed bug with deleting the current character causing errors (will now reset the current character's inventory data instead of attempt to delete it).
+
+v2.0.6
+*Rewrote some of the mail tracking code to make it much less laggy.
+
+v2.0.5
+*Remove some old mail tracking code.
+*Fixed error from not viewing a character in a while.
+
+v2.0.4
+*Updated TOC for patch 5.4.
+
+v2.0.3
+*Some initial fixes for patch 5.4.
+*Bug fix with returning mail containing gold (or COD).
+
+v2.0.2
+*Rewrote code for tacking mails to reduce lag and fix some bugs.
+
+v2.0.1
+*Bug fix in some of the 1.x cleanup code.
+*Updated scrolling tables.
+
+v2.0
+*First 2.0 Version!
+\\
+
+v1.3
+*Updated for 5.2.
+*Fixed a bug with scrolling tables collapsing to half width in some situations.
+*Fixed some issues with syncing multiple accounts.
+*Many other minor bug fixes and improvements.
+
+v1.2
+*ItemTracker now tracks items in the mail.
+*Updated for new design.
+*Updated for patch 5.0.4.
+*Many other minor bug fixes and improvements.
+
+v1.1
+*Added support for multiple accounts.
+*Added inventory viewer tab to the ItemTracker part of the TSM window.
+*Removed unnecessary processing code which was slowing things down.
+*Fixed bug with tooltip lines being duplicated after changing tooltip setting.
+
+v1.0
+*First Release Version!

@@ -1,0 +1,241 @@
+v2.3.3
+*Fixed typo in normal price tooltip.
+*Taking advantage of TSMAPI:IsPlayer() for better connected realm support.
+
+v2.3.2
+*Fixed bug with max inventory quantity not working for reset scan.
+
+v2.3.1
+*No update. Trying to fix issue with curse.
+
+v2.3
+*Added keep quantity to Auctioning operations (including relationship support).
+*Added warning (in chat) for items with min prices below the vendor sell price.
+*Added relationship support for "Max Inventory Quantity" reset option.
+
+v2.2.7
+*The sound for when a post/cancel scan is complete is now defaulted to off.
+
+v2.2.6
+*Fixed bug with getting battle pet stack size.
+
+v2.2.5
+*Added the option to select the sound that is played when post / cancel scan is complete.
+
+v2.2.4
+*Fixed a few bugs in the post scan code.
+*Fixed bug with the cancel scan not canceling at the min price when it should to repost higher.
+
+v2.2.3
+*Auctioning will now the bid as well as the buyout of whitelisted players (when it previously just matched the buyout).
+*Fixed a bug with multiple profiles.
+
+v2.2.2
+*Fixed bug with cancel scan when player's auction was the only one and "above max" price was set to post at max.
+
+v2.2.1
+*Updating group tree creation API call.
+
+v2.2
+*Fixed bug with the post scan searching for operations which have posting disabled.
+*Fixed bug with log tooltips not displaying the lowest buyout.
+*Fixed intermittent issue with the post scan not finding an item and throwing an error.
+*Added "above max price" dropdown to post options within operations.
+
+v2.1.1
+*Fixed bug with sorting of log.
+
+v2.1
+*Added reset method to ignore all auctions below min price.
+*Enabled sorting of post / cancel log.
+*Added "Max Inventory Quantity" option to the reset options of operations.
+*Enabled sorting of post/cancel log.
+*Added custom filter support for canceling all auctions below/above a buyout price.
+*Fixed some 5.4 issues.
+*Updated TOC for patch 5.4.
+*Fixed bug with cancel scan validating repost higher threshold when not enabled.
+
+v2.0.2
+*Fixed localization related error.
+*Fixed bug related to canceling auctions which the player has undercut.
+*Moved operation management to new tab.
+
+v2.0.1
+*Fixed a bug with posting against whitelist auctions above the max price.
+*Fixed bug with cancel scan scanning operations without canceling enabled.
+
+v2.0
+*First 2.0 Version!
+\\
+
+v1.3
+*Updated for patch 5.2.
+*The cancel scan should no longer cause UI lag when requeuing items which didn't cancel correctly the first time.
+*Made the "___ as a ___" price source dropboxes slightly larger.
+*Fixed a global usage of _ which was causing taint in the glyph UI.
+*Added basic support for battle pets.
+*Added category management buttons for removing all category overrides and for removing all group overrides.
+*Many other minor bug fixes and improvements.
+
+v1.2
+*Added Auctioning group creation wizard.
+*Fixed some divide by zero issues for patch 5.0.4.
+*The maximum price gap setting was removed.
+*Fixed a bug with scanning items by itemID.
+*Added tooltips to resetscan log.
+*Added support for the new TSM design.
+*Added feature for creating shopping lists from Auctioning groups / categories.
+*Fixed a bug with items at reset price being incorrectly canceled.
+*Added quick group creation feature.
+*Many other minor bug fixes and improvements.
+
+v1.1
+*Added tooltips to the add/remove items pages for the items in the lists.
+*Improved the sorting of the post/cancel log.
+*Added an option for items to be added to groups by itemID rather than itemString.
+*Added an API to allow Warehousing to get the post num from Auctioning.
+*The processing for the reset scan should no longer cause noticeable lag.
+*Added group validation back into the addon (never meant to take it out).
+*Changed the default fallback from 5g to 1000g.
+*Many other minor bug fixes and improvements.
+
+v1.0
+*First Release Version!
+
+
+
+**Beta Versions:**
+
+v0.3.3
+*Fixed an error that was preventing people who hadn't updated in a while from posting.
+*Fixed a bug that would cause an error when setting the reset method to "custom" in some situations.
+
+v0.3.2
+*Updated the TOC for patch 4.2.
+*Many other minor bug fixes and improvements.
+
+v0.3.1
+*A bunch of minor bug fixes and improvements.
+
+v0.3
+*Fixed a bug with Crafting not being able to get fallback data accurately for items with a fallback set as a % of something at the category level.
+*Fixed a bug with improper rounding causing items with a stack size greater than one to sometimes not be canceled correctly.
+*Fixed a bug with items that are posting at a reset price not getting canceled correctly.
+*Fixed a bug where the counts were not updating correctly on items there were canceling due to reset prices.
+*Fixed a bug with the undercut editbox not updating / showing correctly.
+*You can no longer create a nameless group / category.
+*Fixed a bug with posting more than one stack worth of an item.
+*Cleaned up a lot of the posting and cancel all code.
+*Added a warning message for when somebody moves an item around in their bags while a post scan is running. Don't do it!
+*Added group validation to the start of a post / cancel scan. A popup will be shown if invalid groups are found.
+*Many other minor bug fixes and improvements.
+
+v0.2.6
+*Added support for setting threshold / fallback as a percent of values from TheUndermineJournal addon.
+*Fixed a bug with the "Don't Import Already Grouped Items" doing the opposite of what it was set to.
+
+v0.2.5
+*Updated the scanning code to work better with the new version of Auctioneer.
+*Made a ton of improvements and tweaks to the bot prevention code.
+*Many other minor bug fixes and improvements.
+
+v0.2.4
+*Fixed a bug where patterns that taught you how to make BOP items weren't able to be added.
+*Many other minor bug fixes and improvements.
+
+v0.2.3
+*Fixed a bug where smart group creation wasn't working for items with "-" in their name.
+*Fixed a ton of bugs / annoyances with the Auctioning options.
+*Updated the TOC to 4.1.
+*Many other minor bug fixes and improvements.
+
+v0.2.2
+*Fixed a bug where after adding/removing an item/group, the tab was being changed to "Management".
+*Fixed a bug where soulbound keys were showing up in the add/remove items tab.
+*The "Number of Stacks" label in the post frame will now show the number of stacks remaining to be posted.
+*Made the initial post scan processing take far less time (should no longer be noticable at all).
+*Added the ability to enter "0.5" into the 2nd box in the Cancel All window to cancel all auctions with short duration.
+*Added a "Smart group creation" option to the top "Options" page. Check the tooltip to see what it does.
+*Many other minor bug fixes and improvements.
+
+v0.2.1
+*Fixed a bug with how Auctioning gets info about what the player has in their bags.
+*Posting a large number of auctions should no longer freeze the game client for a few seconds after hitting the "Post" icon.
+*Fixed a bug with items posted at % fallbacks being incorrectly canceled.
+*Added the capability to deal with items on the keyring.
+*Many other minor bug fixes and improvements.
+
+v0.2
+*Added a "Show Auctions" button to the post / cancel frame for viewing currently posted auctions the current item.
+*Added a "Edit Post Price" button to the post frame for adjusting the post buyout.
+*Added a method for importing / exporting groups.
+*Added a blacklist feature.
+*Many other minor bug fixes and improvements.
+
+v0.1.12
+*Added a config button to post / cancel frames.
+*Fixed a bug with original config button in sidebar.
+*Fixed a bug with renaming groups causing an error.
+*Fixed a bug with smart canceling not taking into account "disable auto canceling" correctly.
+*Added code to hopefully prevent stack overflows when posting large numbers of auctions.
+*Added option for ignoring short duration auctions.
+*Many other minor bug fixes and improvements.
+
+v0.1.11
+*Added an option for playing a sound when a scan is complete.
+*You can now disable groups to prevent them from posting / canceling.
+*Added a "Smart Scanning" option which won't scan for things that are set to not post / cancel.
+*Many other minor bug fixes and improvements.
+
+v0.1.10
+*Fixed some bugs with items with bids on them getting canceled incorrectly.
+*Changed the tab order for group / category settings.
+*Skipping an item should no longer cause the post frame to bug out.
+*Put in warnings for invalid threshold / fallback settings.
+*Collapsed categories should now remain collapsed between sessions.
+*Many other minor bug fixes and improvements.
+
+v0.1.9
+*Fixed the localization tags.
+*Reverted the posting code back to when it was working. It will post correctly now but may leave some uneven stacks in the player's bags.
+*Inlcuded new functions to provide compatibility with the new "Create Auctioning Groups" feature in Crafting.
+*Many other minor changes and bug fixes.
+
+v0.1.8
+*Fixed some bugs with posting multiple stacks worth of one item.
+*Randomly enchanted gear should now be posted properly.
+*You can now use the link of an item as the name of a group.
+
+v0.1.7
+*Setting threshold/fallback as a % at the category or default level should now correctly be calculated per group rather than just assigning one value to every group.
+*The evaluation of a non-overriden threshold / fallback setting will not show in the fallback/threshold editbox for the group.
+*Fixed a bug with the rows in the Log overlapping after a status scan.
+*Fixed a bug preventing posting of multiple stacks worth of some items.
+*Many other minor changes and bug fixes.
+
+v0.1.6
+*Fixed the memory leak with the log.
+*Fixed cancelall scans.
+*Fixed a bug where adding items to Auctioning through Crafting was sometimes causing an error.
+*Many other minor changes and bug fixes.
+
+v0.1.5
+*Settings should now properly transfer.
+*Bindings are now saved by character.
+*Many other bug fixes
+
+v0.1.4
+*Fixed a bug with the popups added in 0.1.3Beta
+
+v0.1.3
+*Added a popup for first time users when you first visit the Auctioning options.
+
+v0.1.2
+*Fixed a major bug with the groups not transferring correctly from APM.
+
+v0.1.1
+*Updated the changelog.
+*Fixed a typo in the posting interface.
+
+v0.1
+*First Beta Release!

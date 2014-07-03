@@ -1,0 +1,120 @@
+﻿## Interface: 50400
+## Title: |cff00fe00TradeSkillMaster|r
+## Notes: Core addon for the TradeSkillMaster suite. Does nothing without modules installed.
+## Author: Sapu94, Bart39
+## Version: v2.8
+## SavedVariables: TradeSkillMasterAppDB, TradeSkillMasterDB
+## OptionalDeps: AccurateTime, Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, TipHelper, LibParse, LibCompress, LibGraph-2.0, TheUndermineJournal, TheUndermineJournalGE
+## X-Embeds: AccurateTime, Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, TipHelper, LibParse, LibCompress, LibGraph-2.0
+## X-Curse-Packaged-Version: v2.8
+## X-Curse-Project-Name: TradeSkillMaster
+## X-Curse-Project-ID: tradeskill-master
+## X-Curse-Repository-ID: wow/tradeskill-master/mainline
+
+#@no-lib-strip@
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+Libs\AceAddon-3.0\AceAddon-3.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Libs\AceConfig-3.0\AceConfig-3.0.xml
+Libs\AceEvent-3.0\AceEvent-3.0.xml
+Libs\AceHook-3.0\AceHook-3.0.xml
+Libs\AceDB-3.0\AceDB-3.0.xml
+Libs\AceDBOptions-3.0\AceDBOptions-3.0.xml
+Libs\AceLocale-3.0\AceLocale-3.0.xml
+Libs\AceConsole-3.0\AceConsole-3.0.xml
+Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
+Libs\LibParse\load.xml
+Libs\AceComm-3.0\AceComm-3.0.xml
+Libs\AceSerializer-3.0\AceSerializer-3.0.xml
+Libs\LibCompress\lib.xml
+Libs\LibGraph-2.0\LibGraph-2.0.lua
+Libs\AccurateTime\AccurateTime.lua
+#@end-no-lib-strip@
+
+## Embeded libraries not on CurseForge
+Libs\LibExtraTip\Load.xml
+
+Locale\enUS.lua
+Locale\deDE.lua
+Locale\esES.lua
+Locale\esMX.lua
+Locale\frFR.lua
+Locale\koKR.lua
+Locale\ruRU.lua
+Locale\zhCN.lua
+Locale\zhTW.lua
+Locale\ptBR.lua
+
+TradeSkillMaster.lua
+
+## Delay functions must be loaded first
+Util\Delay.lua
+
+Core\Templates.xml
+Core\ErrorHandler.lua
+Core\Events.lua
+Core\EventLogger.lua
+Core\Options.lua
+Core\Groups.lua
+Core\Modules.lua
+Core\Mover.lua
+Core\Tooltips.lua
+Core\Sync.lua
+Core\Prices.lua
+Core\Threading.lua
+
+Util\Money.lua
+Util\Items.lua
+Util\Inventory.lua
+Util\Util.lua
+
+Data\Disenchanting.lua
+Data\ItemData.lua
+Data\Conversions.lua
+Data\Vendor.lua
+Data\ConnectedRealms.lua
+
+Auction\AuctionControl.lua
+Auction\AuctionScanning.lua
+Auction\AuctionQueryUtil.lua
+Auction\AuctionItem.lua
+Auction\AuctionUtil.lua
+Auction\AuctionFrame.lua
+Auction\AuctionResultsTable.lua
+
+GUI\BankUI.lua
+GUI\MainFrame.lua
+GUI\BuildPage.lua
+GUI\Design.lua
+GUI\GUI.lua
+GUI\ScrollingTable.lua
+GUI\GroupTree.lua
+
+GUI\TSMWidgets\TSMMainFrame.lua
+GUI\TSMWidgets\TSMTabGroup.lua
+GUI\TSMWidgets\TSMTreeGroup.lua
+GUI\TSMWidgets\TSMInlineGroup.lua
+GUI\TSMWidgets\TSMScrollFrame.lua
+GUI\TSMWidgets\TSMSimpleGroup.lua
+GUI\TSMWidgets\TSMWindow.lua
+GUI\TSMWidgets\TSMLabel.lua
+GUI\TSMWidgets\TSMCheckBox.lua
+GUI\TSMWidgets\TSMSlider.lua
+GUI\TSMWidgets\TSMButton.lua
+GUI\TSMWidgets\TSMDropdown.lua
+GUI\TSMWidgets\TSMDropdown-Pullout.lua
+GUI\TSMWidgets\TSMDropdown-Items.lua
+GUI\TSMWidgets\TSMMultiLabel.lua
+GUI\TSMWidgets\TSMEditBox.lua
+GUI\TSMWidgets\TSMGroupItemList.lua
+GUI\TSMWidgets\TSMInteractiveLabel.lua
+GUI\TSMWidgets\TSMColorPicker.lua
+GUI\TSMWidgets\TSMMultiLineEditBox.lua
+GUI\TSMWidgets\TSMImage.lua
+GUI\TSMWidgets\TSMGroupBox.lua
+
+Assistant\Assistant.lua
+Assistant\Questions.lua
+Assistant\Steps.lua

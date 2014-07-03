@@ -1,0 +1,102 @@
+v2.2.1
+*No change, just fixed missing item in v2.2 changelog.
+
+v2.2
+*Fixed bug with cancels button not collecting canceled auction mail in some situations.
+*Added auto-complete functionality to target box in Quick Send tab and Mailing operations.
+*Cleaned up a bit of code.
+*Fixed bug with restock option of operations always being applied, regardless of the value of the setting.
+*Moved excess gold options from per-factionrealm to per-character.
+*Time left on mails will now be in yellow for non-returnable mails instead of green.
+
+v2.1.5
+*Added an option to keep free space in bags when looting mail (only applicable to bags that can hold any item like backpack etc). NB mailing autoloots all the attachments of a mail so if looting the whole mail doesn't leave enough free slots then the whole mail will be skipped.
+
+v2.1.4
+*No update. Trying to fix issue with curse.
+
+v2.1.3
+*Fixed bug with gold collected message counting mails which weren't opened.
+
+v2.1.2
+*Updating group tree creation API call.
+
+v2.1.1
+*Fixed bug with expired mail.
+
+v2.1
+*Fixed bug with automatic restarting of sending groups continuing after the mailbox is closed.
+*Fixed error related to closing the mail frame without visiting TSM tab.
+*Fixed bug in group mailing code.
+*Replaced button to open gold mail with multiple AH-related buttons.
+*Added option for changing the default page of the Mailing tab.
+*Added option for showing the reload UI button (enabled by default).
+*Setting the max quantity to 0 in the quick send page will now send all items.
+*Added a chat message for when mailing of groups is finished.
+*Fixed various bugs related to the Mailing tab not being the default.
+*Updated TOC for patch 5.4.
+
+v2.0.3
+*Bug fix with v2.0.2 and TSM2.1.
+
+v2.0.2
+*Fixed issue with detecting disenchantable items on non-enUS clients.
+*Moved operation management to its own tab.
+
+v2.0.1
+*Fix for bug with opening mailbox.
+*Updated scrolling tables.
+
+v2.0
+*First 2.0 Version!
+\\
+
+v1.1
+*Updated for patch 5.2.
+*Added sorting for groups being sent to a target.
+*Added support for ElvUI skinning of open mail / auto mail buttons.
+*Added option to automatically mail disenchantable greens to a player.
+*Many other minor bug fixes and improvements.
+
+v1.0
+*First Release Version!
+
+
+
+**Beta Versions:**
+
+v0.2.4
+*Fixed a bug with the Auto-Mail not working after the first time it's used in a session.
+*Many other minor bug fixes and improvements.
+
+v0.2.3
+*Fixed a bug where the Auto-Mail feature was getting stuck if there was nothing to mail.
+*Added an option to send only one unique item per mail.
+*Updated TOC for patch 4.2.
+*Many other minor bug fixes and improvements.
+
+v0.2.2
+*Added better detection for Postal's "Open All" button.
+*Added a confirmation box for deleting mail targets.
+*Many other minor bug fixes and improvements.
+
+v0.2.1
+*Mailing should no longer try and mail soulbound items.
+*Added a frame that overlays the message part of the send tab that'll show when auto-send is working.
+*Many other minor bug fixes and improvements.
+
+v0.2
+*Fixed a few localization issues.
+*Mailing should now coexist with MailOpener and Beancounter nicely.
+*Fixed a bug with items not showing as being part of a Mailing group if not currently in the player's bags.
+*Fixed a bug with how the ungrouped items / groups were sorted
+*Optimized auto-mailing code to prevent client lag.
+*Added a "Mail Finished" print-out.
+*Many other minor bug fixes and improvements.
+
+v0.1.1
+*The total gold collected from the mail is now printed out.
+*Fixed the .toc file.
+
+v0.1
+*First version!

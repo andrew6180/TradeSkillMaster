@@ -1,0 +1,31 @@
+## Interface: 50400
+## Title: |cff00ff00TradeSkillMaster_Mailing|r
+## Notes: Provides Auto-Opening and Auto-Sending features to the mailbox.
+## Author: Sapu94, Bart39
+## Version: v2.2.1
+## SavedVariables: TradeSkillMaster_MailingDB
+## Dependency: TradeSkillMaster
+## X-Curse-Packaged-Version: v2.2.1
+## X-Curse-Project-Name: TradeSkillMaster_Mailing
+## X-Curse-Project-ID: tradeskillmaster_mailing
+## X-Curse-Repository-ID: wow/tradeskillmaster_mailing/mainline
+
+Locale\enUS.lua
+Locale\frFR.lua
+Locale\deDE.lua
+Locale\koKR.lua
+Locale\esMX.lua
+Locale\ruRU.lua
+Locale\zhCN.lua
+Locale\esES.lua
+Locale\zhTW.lua
+Locale\ptBR.lua
+
+TradeSkillMaster_Mailing.lua
+Modules\MailTab.lua
+Modules\Inbox.lua
+Modules\Groups.lua
+Modules\QuickSend.lua
+Modules\Other.lua
+Modules\Options.lua
+Modules\AutoMail.lua

@@ -1,0 +1,21 @@
+<Ui>
+	<Frame name="TSMErrorHandlerTemplate" virtual="true">
+		<Scripts>
+			<OnLoad>
+				self.handler = function(...)
+					local msg = LibStub("AceAddon-3.0"):GetAddon("TradeSkillMaster"):IsValidError(...)
+					if msg then
+						local status, ret = pcall(self.errorHandler, msg, ...)
+						if status then
+							return ret
+						else
+							self.origErrorHandler(...)
+						end
+					elseif self.origErrorHandler then
+						return self.origErrorHandler(...)
+					end
+				end
+			</OnLoad>
+		</Scripts>
+	</Frame>
+</Ui>

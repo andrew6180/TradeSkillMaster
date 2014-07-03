@@ -1,0 +1,130 @@
+-- ------------------------------------------------------------------------------ --
+--                            TradeSkillMaster_Mailing                            --
+--            http://www.curse.com/addons/wow/tradeskillmaster_mailing            --
+--                                                                                --
+--             A TradeSkillMaster Addon (http://tradeskillmaster.com)             --
+--    All Rights Reserved* - Detailed license information included with addon.    --
+-- ------------------------------------------------------------------------------ --
+
+-- TradeSkillMaster_Mailing Locale - ptBR
+-- Please use the localization app on CurseForge to update this
+-- http://wow.curseforge.com/addons/TradeSkillMaster_Mailing/localization/
+
+local L = LibStub("AceLocale-3.0"):NewLocale("TradeSkillMaster_Mailing", "ptBR")
+if not L then return end
+
+L[ [=[Automatically rechecks mail every 60 seconds when you have too much mail.
+
+If you loot all mail with this enabled, it will wait and recheck then keep auto looting.]=] ] = "Automaticamente checa o correio a cada 60 segundos quando você tem cartas demais." -- Needs review
+L["Auto Recheck Mail"] = "Auto-Checar Correio" -- Needs review
+-- L["BE SURE TO SPELL THE NAME CORRECTLY!"] = ""
+-- L["Buy: %s (%d) | %s | %s"] = ""
+L["Cannot finish auto looting, inventory is full or too many unique items."] = "Não foi possível pegar os itens. Inventório está cheio ou existem itens únicos demais." -- Needs review
+-- L["Chat Message Options"] = ""
+-- L["Clear"] = ""
+-- L["Clears the item box."] = ""
+-- L["Click this button to send all disenchantable greens in your bags to the specified character."] = ""
+-- L["Click this button to send excess gold to the specified character."] = ""
+-- L["Click this button to send off the item to the specified character."] = ""
+-- L["COD Amount (per Item):"] = ""
+-- L["COD: %s | %s | %s | %s"] = ""
+-- L["Collected COD of %s from %s for %s."] = ""
+-- L["Collected expired auction of %s"] = ""
+-- L["Collected mail from %s with a subject of '%s'."] = ""
+-- L["Collected purchase of %s (%d) for %s."] = ""
+-- L["Collected sale of %s (%d) for %s."] = ""
+-- L["Collected %s and %s from %s."] = ""
+-- L["Collected %s from %s."] = ""
+-- L["Collect Gold"] = ""
+-- L["Could not loot item from mail because your bags are full."] = ""
+-- L["Could not send mail due to not having free bag space available to split a stack of items."] = ""
+-- L["Display Total Money Received"] = ""
+-- L["Drag (or place) the item that you want to send into this editbox."] = ""
+-- L["Enable Inbox Chat Messages"] = ""
+-- L["Enable Sending Chat Messages"] = ""
+-- L["Enter name of the character disenchantable greens should be sent to."] = ""
+-- L["Enter the desired COD amount (per item) to send this item with. Setting this to '0c' will result in no COD being set."] = ""
+-- L["Enter the name of the player you want to send excess gold to."] = ""
+-- L["Enter the name of the player you want to send this item to."] = ""
+-- L["Error creating operation. Operation with name '%s' already exists."] = ""
+-- L["Expired: %s | %s"] = ""
+-- L["General"] = ""
+-- L["General Settings"] = ""
+-- L["Give the new operation a name. A descriptive name will help you find this operation later."] = ""
+-- L["If checked, a maxium quantity to send to the target can be set. Otherwise, Mailing will send as many as it can."] = ""
+-- L["If checked, information on mails collected by TSM_Mailing will be printed out to chat."] = ""
+-- L["If checked, information on mails sent by TSM_Mailing will be printed out to chat."] = ""
+-- L["If checked, the Mailing tab of the mailbox will be the default tab."] = ""
+-- L["If checked, the 'Open All' button will leave any mail containing gold."] = ""
+-- L["If checked, the target's current inventory will be taken into account when determing how many to send. For example, if the max quantity is set to 10, and the target already has 3, Mailing will send at most 7 items."] = ""
+-- L["If checked, the target's guild bank will be included in their inventory for the 'Restock Target to Max Quantity' option."] = ""
+-- L["If checked, the total amount of gold received will be shown at the end of automatically collecting mail."] = ""
+-- L["Inbox"] = ""
+-- L["Include Guild Bank in Restock"] = ""
+-- L["Item (Drag Into Box):"] = ""
+-- L["Keep Quantity"] = ""
+-- L["Leave Gold with Open All"] = ""
+-- L["Limit (In Gold):"] = ""
+-- L["Mail Disenchantables:"] = ""
+-- L["Mailing all to %s."] = ""
+-- L["Mailing operations contain settings for easy mailing of items to other characters."] = ""
+-- L["Mailing up to %d to %s."] = ""
+-- L["Mailing will keep this number of items in the current player's bags and not mail them to the target."] = ""
+-- L["Mail Selected Groups"] = ""
+-- L["Mail Send Delay"] = ""
+-- L["Make Mailing Default Mail Tab"] = ""
+-- L["Maxium Quantity"] = ""
+-- L["Max Quantity:"] = ""
+-- L["Multiple Items"] = ""
+-- L["New Operation"] = ""
+-- L["Next inbox update in %d seconds."] = ""
+-- L["No Item Specified"] = ""
+-- L["No Quantity Specified"] = ""
+-- L["No Target Player"] = ""
+-- L["No Target Specified"] = ""
+-- L["Not sending any gold as you have less than the specified limit."] = ""
+-- L["Not Target Specified"] = ""
+L["Open All"] = "Abrir Todas" -- Needs review
+-- L["Operation Name"] = ""
+-- L["Operations"] = ""
+-- L["Operation Settings"] = ""
+L["Options"] = "Opções" -- Needs review
+-- L["Other"] = ""
+-- L["Quick Send"] = ""
+-- L["Relationships"] = ""
+-- L["Reload UI"] = ""
+-- L["Restart Delay (minutes)"] = ""
+-- L["Restock Target to Max Quantity"] = ""
+-- L["Sale: %s (%d) | %s | %s"] = ""
+-- L["Send Disenchantable Greens to %s"] = ""
+-- L["Send Excess Gold to Banker:"] = ""
+-- L["Send Excess Gold to %s"] = ""
+-- L["Sending..."] = ""
+L["Send Items Individually"] = "Enviar itens individualmente" -- Needs review
+L["Sends each unique item in a seperate mail."] = "Enviar cada item em uma carta separada." -- Needs review
+-- L["Send %sx%d to %s - No COD"] = ""
+-- L["Send %sx%d to %s - %s per Item COD"] = ""
+-- L["Sent all disenchantable greens to %s."] = ""
+-- L["Sent %s to %s."] = ""
+-- L["Sent %s to %s with a COD of %s."] = ""
+-- L["Set Max Quantity"] = ""
+-- L["Sets the maximum quantity of each unique item to send to the target at a time."] = ""
+-- L["Shift-Click to automatically re-send after the amount of time specified in the TSM_Mailing options."] = ""
+-- L["Showing all %d mail."] = ""
+-- L["Showing %d of %d mail."] = ""
+-- L["Skipping operation '%s' because there is no target."] = ""
+-- L["%s to collect."] = ""
+-- L["%s total gold collected!"] = ""
+-- L["Target:"] = ""
+-- L["Target is Current Player"] = ""
+-- L["Target Player"] = ""
+-- L["Target Player:"] = ""
+-- L["The name of the player you want to mail items to."] = ""
+-- L["This is maximum amount of gold you want to keep on the current player. Any amount over this limit will be send to the specified character."] = ""
+-- L["This is the maximum number of the specified item to send when you click the button below."] = ""
+-- L["This slider controls how long the mail sending code waits between consecutive mails. If this is set too low, you will run into internal mailbox errors."] = ""
+-- L["This tab allows you to quickly send any quantity of an item to another character. You can also specify a COD to set on the mail (per item)."] = ""
+-- L["TSM Groups"] = ""
+-- L["TSM_Mailing Excess Gold"] = ""
+-- L["When you shift-click a send mail button, after the initial send, it will check for new items to send at this interval."] = ""
+ 

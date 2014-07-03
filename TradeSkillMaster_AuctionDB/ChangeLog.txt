@@ -1,0 +1,159 @@
+v2.3.10
+*No update. Trying to fix issue with curse.
+
+v2.3.9
+*Changed how AuctionDB saves data on logout to avoid race conditions.
+
+v2.3.8
+*Re-applied reverted change.
+
+v2.3.7
+*Reverted previous change temporarily.
+
+v2.3.6
+*Fixed bug with v2.3.4 change not taking effect.
+
+v2.3.5
+*Typing "/tsm adbreset" will now reset update times as well as the data.
+
+v2.3.4
+*AuctionDB will now import up to 48 hours of scan data, instead of 24.
+
+v2.3.3
+*Fixed possible lua error with previous version.
+
+v2.3.2
+*Fixed another bug with importing data from the TSM app.
+
+v2.3.1
+*Removed seen quantities which were not being used and are no longer supported by the TSM app.
+*Fixed bug with importing multiple scans worth of data from the TSM app.
+*Fixed bug with search of AuctionDB database not escaping special characters properly.
+
+v2.3
+*Added code to clear out old, unused scan data from the database to save space.
+*Importing data from the app will now happen in the background rather than when AuctionDB is loaded.
+*Changed how the current day's scans are being stored to be more efficient.
+*Many other general efficiency improvements with how AuctionDB manages its data.
+
+v2.2.3
+*Updated group tree creation API call.
+
+v2.2.2
+*Fixed typo in previous release.
+
+v2.2.1
+*Fixed bug with AuctionDB not saving data which was imported from the TSM app.
+
+v2.2
+*Fixed potential error in scan processing code.
+*Fixed bug with the display of the last scan time.
+*Greatly reduced the time it takes AuctionDB to load / save its data (essentially to zero).
+*Added "Show AuctionDB AH Tab" option (enabled by default) to allow those who use the TSM app to hide the AuctionDB tab.
+
+v2.1
+*Improved the efficiency of the market value lookup code.
+*Fixed lua error with importing data from the TSM application.
+*Rearranged AuctionDB AH tab and added the ability to scan specific groups with AuctionDB.
+
+v2.0.2
+*Updated scrolling tables.
+*Fixed some 5.4 issues.
+*Updated TOC for patch 5.4.
+
+v2.0.1
+*Fixed issue with battlepet tooltips.
+
+v2.0
+*First 2.0 Version!
+\\
+
+v1.4
+*Updated TOC for patch 5.2.
+*Updated for new TSM application.
+*AuctionDB will no longer freeze the game while processing data from the TSM application.
+*Updated the style of AuctionDB's tooltips.
+*Fixed a bug with the scrolling table shrinking to half width in some situations.
+*Greatly increased the efficiency of the code which imports TSM app data.
+*Many other minor bug fixes and improvements.
+
+v1.3
+*Fixed some divide by zero issues which will cause errors in 5.0.4.
+*Added support for new TSM application.
+*Updated to support new TSM design.
+*Many other minor bug fixes and improvements.
+
+v1.2
+*Further optimized the code that decodes the data from the saved variables file when AuctionDB is loaded.
+*Added APIs to support the new special searches in TSM_Shopping.
+*Added disenchant value to the TSM tooltip and applicable options in the AuctionDB config.
+*Many other minor bug fixes and improvements.
+
+v1.1
+*Dramatically reduced the amount of time it takes AuctionDB to load.
+*Removed all caching which should get rid of all interface lag due to AuctionDB.
+*Many other minor bug fixes and improvements.
+
+v1.0
+*First Release Version!
+
+
+
+**Beta Versions:**
+
+v0.4
+*Optimized the code for searching through AuctionDB's database.
+*Fixed a bug where AuctionDB's ScrollTable in the main TSM window wasn't hiding properly.
+*Added code to support new automatic auction data updater application.
+*Scan data will now be compressed when saved.
+*Replaced auction count code with code to use Gathering's data.
+*Redesigned the market value algorithm to work better with the new auto updating application as well as regular scans.
+*Many other minor bug fixes and improvements.
+
+v0.3.4
+*Updated TOC for patch 4.2.
+
+v0.3.3
+*Changed the search page to use lib-st rather than AceGUI.
+*Fixed a bunch of minor bugs.
+
+v0.3.2
+*Fixed a bug with the getall scan.
+*Updated the general scanning code to work better with the new version of Auctioneer.
+*Many other minor bug fixes and improvements.
+
+v0.3.1
+*Removed player auction count code from AuctionDB (it was moved to Gathering).
+*Updated TOC for patch 4.1.
+
+v0.3
+*Minimum buyouts will no long be wiped after a profession scan for items that weren't expected to be scanned.
+*Added a feature for searching through the scan data.
+*Completely re-did AuctionDB's page in the main TSM window to accommodate this new feature.
+*Added a button to the sidebar frame to quickly access this new feature.
+*The AuctionDB tooltip will now show whatever information is available rather than all or nothing.
+*Added a popup confirmation to the slash command for clearing the scan data (/tsm adbreset).
+*Many other minor bug fixes and improvements.
+
+v0.2.2
+*AuctionDB should no longer be blocking Auctioneer when it's not supposed to.
+*Many other minor bug fixes and improvements.
+
+v0.2.1
+*Added an option for preventing Auctioneer from scanning / processing on AuctionDB's scans (recommened).
+*Added more info to the tooltip for stacks of more than 1 to show the min buyout and market value for the entire stack.
+*Many other minor bug fixes and improvements.
+
+v0.2
+*Fixed localization files.
+*Min buyouts are now cleared after a scan.
+*Brand new market value algorithm that should be much less vulnerable to market value poisoning as well as be far more accurate in general.
+*Many other minor bug fixes and improvements.
+
+v0.1.1
+*Added option to do a full AH scan.
+*Fixed blacksmithing scan to include belt buckles.
+*Many other minor bug fixes and improvements.
+
+v0.1
+*First version!

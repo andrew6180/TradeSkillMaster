@@ -1,0 +1,38 @@
+## Interface: 50400
+## Title: |cff00ff00TradeSkillMaster_Shopping|r
+## Notes: Provides an interface for easily viewing, buying, and posting items.
+## Author: Sapu94, Bart39
+## Dependencies: TradeSkillMaster
+## Version: v2.3.5
+## SavedVariables: TradeSkillMaster_ShoppingDB
+## X-Curse-Packaged-Version: v2.3.5
+## X-Curse-Project-Name: TradeSkillMaster_Shopping
+## X-Curse-Project-ID: tradeskillmaster_shopping
+## X-Curse-Repository-ID: wow/tradeskillmaster_shopping/mainline
+
+Locale\enUS.lua
+Locale\deDE.lua
+Locale\esES.lua
+Locale\esMX.lua
+Locale\frFR.lua
+Locale\koKR.lua
+Locale\ruRU.lua
+Locale\zhCN.lua
+Locale\zhTW.lua
+Locale\ptBR.lua
+
+TradeSkillMaster_Shopping.lua
+modules\Util.lua
+modules\Search.lua
+modules\Destroying.lua
+modules\Options.lua
+
+sidebar\Sidebar.lua
+sidebar\Saved.lua
+sidebar\Sniper.lua
+sidebar\Groups.lua
+sidebar\ShoppingLog.lua
+sidebar\QuickPosting.lua
+sidebar\CustomFilter.lua
+sidebar\Crafting.lua
+sidebar\Other.lua

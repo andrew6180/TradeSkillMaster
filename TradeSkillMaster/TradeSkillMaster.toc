@@ -1,4 +1,4 @@
-﻿## Interface: 50400
+﻿## Interface: 30300
 ## Title: |cff00fe00TradeSkillMaster|r
 ## Notes: Core addon for the TradeSkillMaster suite. Does nothing without modules installed.
 ## Author: Sapu94, Bart39
@@ -6,10 +6,6 @@
 ## SavedVariables: TradeSkillMasterAppDB, TradeSkillMasterDB
 ## OptionalDeps: AccurateTime, Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, TipHelper, LibParse, LibCompress, LibGraph-2.0, TheUndermineJournal, TheUndermineJournalGE
 ## X-Embeds: AccurateTime, Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, TipHelper, LibParse, LibCompress, LibGraph-2.0
-## X-Curse-Packaged-Version: v2.8
-## X-Curse-Project-Name: TradeSkillMaster
-## X-Curse-Project-ID: tradeskill-master
-## X-Curse-Repository-ID: wow/tradeskill-master/mainline
 
 #@no-lib-strip@
 Libs\LibStub\LibStub.lua
@@ -38,14 +34,6 @@ Libs\LibExtraTip\Load.xml
 
 Locale\enUS.lua
 Locale\deDE.lua
-Locale\esES.lua
-Locale\esMX.lua
-Locale\frFR.lua
-Locale\koKR.lua
-Locale\ruRU.lua
-Locale\zhCN.lua
-Locale\zhTW.lua
-Locale\ptBR.lua
 
 TradeSkillMaster.lua
 
@@ -61,7 +49,7 @@ Core\Groups.lua
 Core\Modules.lua
 Core\Mover.lua
 Core\Tooltips.lua
-Core\Sync.lua
+##Core\Sync.lua
 Core\Prices.lua
 Core\Threading.lua
 

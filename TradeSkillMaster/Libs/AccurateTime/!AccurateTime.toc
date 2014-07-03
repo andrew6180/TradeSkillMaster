@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 30300
 ## Title: AccurateTime
 ## Notes: Provides accurate, millisecond-level timing.
 ## Author: Sapu94

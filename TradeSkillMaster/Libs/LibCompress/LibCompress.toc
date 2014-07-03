@@ -1,4 +1,4 @@
-﻿## Interface: 40000
+﻿## Interface: 30300
 ## X-Curse-Packaged-Version: r49-release
 ## X-Curse-Project-Name: LibCompress
 ## X-Curse-Project-ID: libcompress

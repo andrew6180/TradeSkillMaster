@@ -1,4 +1,4 @@
-## Interface: 40100
+## Interface: 30300
 ## Title: lib-st |cff7f7fff -Ace3-|r
 ## Notes: Does stuff for sachmo
 ## Author: ddumont (Sachmo - Arthas {TG}) 

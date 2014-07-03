@@ -41,7 +41,7 @@ local function ShowTooltip(self)
 end
 
 local function HideTooltip()
-	BattlePetTooltip:Hide()
+	--BattlePetTooltip:Hide()
 	GameTooltip:Hide()
 end
 

@@ -15,7 +15,7 @@ TSM.moduleObjects = {}
 TSM.moduleNames = {}
 
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster") -- loads the localization table
-TSM._version = GetAddOnMetadata("TradeSkillMaster", "X-Curse-Packaged-Version") or GetAddOnMetadata("TradeSkillMaster", "Version") -- current version of the addon
+TSM._version = GetAddOnMetadata("TradeSkillMaster", "Version") -- current version of the addon
 
 
 TSMAPI = {}
@@ -141,7 +141,7 @@ function TSM:OnInitialize()
 		TSM.operations = TSM.db.profile.operations
 	end
 	
-	TSM:RegisterEvent("BLACK_MARKET_ITEM_UPDATE", "ScanBMAH")
+	--TSM:RegisterEvent("BLACK_MARKET_ITEM_UPDATE", "ScanBMAH")
 	
 	-- Prepare the TradeSkillMasterAppDB database
 	-- We're not using AceDB here on purpose due to bugs in AceDB, but are emulating the parts of it that we need.
@@ -162,7 +162,7 @@ function TSM:OnInitialize()
 	TradeSkillMasterAppDB = TradeSkillMasterAppDB or {factionrealm={}, profiles={}}
 	TradeSkillMasterAppDB.version = max(TradeSkillMasterAppDB.version or 0, 7)
 	TradeSkillMasterAppDB.region = strsub(GetCVar("realmList"), 1, 2):upper()
-	local factionrealmKey = UnitFactionGroup("player").." - "..GetRealmName()
+	local factionrealmKey = UnitFactionGroup("player").." - " .. GetRealmName()
 	local profileKey = TSM.db:GetCurrentProfile()
 	TradeSkillMasterAppDB.factionrealm[factionrealmKey] = TradeSkillMasterAppDB.factionrealm[factionrealmKey] or {}
 	TradeSkillMasterAppDB.profiles[profileKey] = TradeSkillMasterAppDB.profiles[profileKey] or {}
@@ -244,7 +244,7 @@ function TSM:OnInitialize()
 	end
 	
 	-- Cache battle pet names
-	for i=1, C_PetJournal.GetNumPets() do C_PetJournal.GetPetInfoByIndex(i) end
+	--for i=1, C_PetJournal.GetNumPets() do C_PetJournal.GetPetInfoByIndex(i) end
 	-- force a garbage collection
 	collectgarbage()
 end
@@ -271,21 +271,21 @@ function TSM:RegisterModule()
 		end
 	end
 	-- Auctionator
-	if select(4, GetAddOnInfo("Auctionator")) == 1 and Atr_GetAuctionBuyout then
-		tinsert(TSM.priceSources, { key = "AtrValue", label = L["Auctionator - Auction Value"], callback = Atr_GetAuctionBuyout })
-	end
+	--if select(4, GetAddOnInfo("Auctionator")) == 1 and Atr_GetAuctionBuyout then
+	--	tinsert(TSM.priceSources, { key = "AtrValue", label = L["Auctionator - Auction Value"], callback = Atr_GetAuctionBuyout })
+	--end
 	-- TheUndermineJournal
-	if select(4, GetAddOnInfo("TheUndermineJournal")) == 1 and TUJMarketInfo then
-		tinsert(TSM.priceSources, { key = "TUJMarket", label = L["TUJ RE - Market Price"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).market end })
-		tinsert(TSM.priceSources, { key = "TUJMean", label = L["TUJ RE - Mean"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).marketaverage end })
-		tinsert(TSM.priceSources, { key = "TUJGEMarket", label = L["TUJ GE - Market Average"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).gemarketaverage end })
-		tinsert(TSM.priceSources, { key = "TUJGEMedian", label = L["TUJ GE - Market Median"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).gemarketmedian end })
-	end
+	--if select(4, GetAddOnInfo("TheUndermineJournal")) == 1 and TUJMarketInfo then
+	--	tinsert(TSM.priceSources, { key = "TUJMarket", label = L["TUJ RE - Market Price"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).market end })
+	--	tinsert(TSM.priceSources, { key = "TUJMean", label = L["TUJ RE - Mean"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).marketaverage end })
+	--	tinsert(TSM.priceSources, { key = "TUJGEMarket", label = L["TUJ GE - Market Average"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).gemarketaverage end })
+	--	tinsert(TSM.priceSources, { key = "TUJGEMedian", label = L["TUJ GE - Market Median"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).gemarketmedian end })
+	--end
 	-- TheUndermineJournalGE
-	if select(4, GetAddOnInfo("TheUndermineJournalGE")) == 1 and TUJMarketInfo then
-		tinsert(TSM.priceSources, { key = "TUJGEMarket", label = L["TUJ GE - Market Average"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).marketaverage end })
-		tinsert(TSM.priceSources, { key = "TUJGEMedian", label = L["TUJ GE - Market Median"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).marketmedian end })
-	end
+	--if select(4, GetAddOnInfo("TheUndermineJournalGE")) == 1 and TUJMarketInfo then
+	--	tinsert(TSM.priceSources, { key = "TUJGEMarket", label = L["TUJ GE - Market Average"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).marketaverage end })
+	--	tinsert(TSM.priceSources, { key = "TUJGEMedian", label = L["TUJ GE - Market Median"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).marketmedian end })
+	--end
 	-- Vendor Buy Price
 	tinsert(TSM.priceSources, { key = "VendorBuy", label = L["Buy from Vendor"], callback = function(itemLink) return TSMAPI:GetVendorCost(TSMAPI:GetItemString(itemLink)) end })
 
@@ -309,7 +309,7 @@ function TSM:RegisterModule()
 		{ key = "deValue", callback = "GetDisenchantValue" },
 	}
 
-	TSM.sync = { callback = "SyncCallback" }
+	--TSM.sync = { callback = "SyncCallback" }
 
 	TSMAPI:NewModule(TSM)
 end
@@ -710,25 +710,4 @@ function TSM:GetAuctionPlayer(player, player_full)
 	else
 		return player
 	end
-end
-
-function TSM:ScanBMAH()
-	TSM.appDB.factionrealm.bmah = nil
-	local items = {}
-	for i=1, C_BlackMarket.GetNumItems() do
-		local quantity, minBid, minIncr, currBid, numBids, itemLink, bmId = TSMAPI:Select({3, 9, 10, 11, 13, 15, 16}, C_BlackMarket.GetItemInfoByIndex(i))
-		local itemString = TSMAPI:GetItemString(itemLink)
-		if itemString then
-			local itemID, rand = TSMAPI:Select({2, 8}, (":"):split(itemString))
-			itemID = tonumber(itemID)
-			rand = tonumber(rand)
-			if itemID and rand then
-				minBid = floor(minBid/COPPER_PER_GOLD)
-				minIncr = floor(minIncr/COPPER_PER_GOLD)
-				currBid = floor(currBid/COPPER_PER_GOLD)
-				tinsert(items, {item=itemID, rand=rand, quantity=quantity, minBid=minBid, minIncr=minIncr, currBid=currBid, numBids=numBids, bmId=bmId, time=time()})
-			end
-		end
-	end
-	TSM.appDB.factionrealm.blackMarket = {lastUpdate=time(), items=items, version=1}
 end

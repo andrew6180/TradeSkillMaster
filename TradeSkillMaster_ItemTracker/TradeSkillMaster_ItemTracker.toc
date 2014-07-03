@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 30300
 ## Title: |cff00ff00TradeSkillMaster_ItemTracker|r
 ## Notes: Tracks inventory across multiple characters including bags, banks, guild banks, auctions, and mail.
 ## Author: Sapu94, Bart39
@@ -22,6 +22,6 @@ Locale\zhTW.lua
 Locale\ptBR.lua
 
 TradeSkillMaster_ItemTracker.lua
-Modules\sync.lua
+##Modules\sync.lua
 Modules\data.lua
 Modules\config.lua

@@ -92,7 +92,7 @@ function TSM:OnInitialize()
 	if not TSM.characters[playerName] then
 		TSM.characters[playerName] = characterDefaults
 	end
-	TSM.characters[playerName].account = TSMAPI.Sync:GetAccountKey()
+	--TSM.characters[playerName].account = TSMAPI.Sync:GetAccountKey()
 	if guildName and not TSM.guilds[guildName] then
 		TSM.guilds[guildName] = guildDefaults
 	end
@@ -151,7 +151,7 @@ function TSM:RegisterModule()
 		{ key = "playerguildtotal", callback = "GetPlayerGuildTotal" },
 		{ key = "playerguild", callback = "GetPlayerGuild" },
 	}
-	TSM.sync = { callback = "Sync:Callback" }
+	--TSM.sync = { callback = "Sync:Callback" }
 	TSM.tooltipOptions = { callback = "Config:LoadTooltipOptions" }
 
 	TSMAPI:NewModule(TSM)

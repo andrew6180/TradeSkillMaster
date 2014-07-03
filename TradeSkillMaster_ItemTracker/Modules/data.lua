@@ -24,6 +24,7 @@ function Data:Initialize()
 	TSMAPI:RegisterForBankChange(function(...) Data:GetBankData(...) end)
 
 	TSM.CURRENT_PLAYER, TSM.CURRENT_GUILD = UnitName("player"), GetGuildInfo("player")
+	print(TSM.CURRENT_PLAYER)
 	Data:StoreCurrentGuildInfo()
 end
 
@@ -52,7 +53,7 @@ function Data:StoreCurrentGuildInfo(noDelay)
 	end
 	TSM.characters[TSM.CURRENT_PLAYER].guild = TSM.CURRENT_GUILD
 	TSM.characters[TSM.CURRENT_PLAYER].lastUpdate.guild = time()
-	TSM.Sync:BroadcastUpdateRequest()
+	--TSM.Sync:BroadcastUpdateRequest()
 end
 
 function Data:ThrottleEvent(event)
@@ -111,7 +112,7 @@ function Data:GetBagData(state)
 		end
 	end
 	TSM.characters[TSM.CURRENT_PLAYER].lastUpdate.bags = time()
-	TSM.Sync:BroadcastUpdateRequest()
+	--TSM.Sync:BroadcastUpdateRequest()
 end
 
 -- scan the player's bank
@@ -125,7 +126,7 @@ function Data:GetBankData(state)
 		end
 	end
 	TSM.characters[TSM.CURRENT_PLAYER].lastUpdate.bank = time()
-	TSM.Sync:BroadcastUpdateRequest()
+	--TSM.Sync:BroadcastUpdateRequest()
 end
 
 -- scan the guild bank
@@ -154,7 +155,7 @@ function Data:GetGuildBankData()
 	if GuildBankFrame and GuildBankFrame:IsVisible() then
 		TSM.guilds[TSM.CURRENT_GUILD].lastUpdate = time()
 	end
-	TSM.Sync:BroadcastUpdateRequest()
+	--TSM.Sync:BroadcastUpdateRequest()
 end
 
 function Data:ScanPlayerAuctions()
@@ -175,7 +176,7 @@ function Data:ScanPlayerAuctions()
 		end
 	end
 	TSM.characters[TSM.CURRENT_PLAYER].lastUpdate.auctions = time()
-	TSM.Sync:BroadcastUpdateRequest()
+	--TSM.Sync:BroadcastUpdateRequest()
 end
 
 
@@ -204,7 +205,7 @@ local function UpdateMailQuantitiesThread(self)
 					self:Yield()
 				end
 				TSM.characters[player].lastUpdate.mail = time()
-				TSM.Sync:BroadcastUpdateRequest()
+				--TSM.Sync:BroadcastUpdateRequest()
 			end
 		else
 			self:Sleep(1)

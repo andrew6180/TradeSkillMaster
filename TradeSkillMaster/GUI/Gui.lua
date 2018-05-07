@@ -111,6 +111,24 @@ function TSMAPI.GUI:CreateInputBox(parent, name, autoComplete)
 	eb:SetScript("OnEscapePressed", function(self) self:ClearFocus() self:HighlightText(0, 0) end)
 	eb:SetScript("OnEnter", function(self) if self.tooltip then ShowTooltip(self) end end)
 	eb:SetScript("OnLeave", HideTooltip)
+
+	eb.disabled = false
+
+	local SetDisabled = function(editbox, disabled)
+		if editbox.disabled == disabled then return end
+		editbox.disabled = disabled
+
+		TSMAPI.Design:SetWidgetTextColor(editbox, disabled)
+		editbox:EnableMouse(not disabled)
+		if disabled then
+			editbox:ClearFocus()
+		end
+	end
+
+	eb.Disable = function(self) SetDisabled(self, true) end
+	eb.Enable = function(self) SetDisabled(self, false) end
+	eb.IsEnabled = function(self) return not self.disabled end
+
 	return eb
 end
 

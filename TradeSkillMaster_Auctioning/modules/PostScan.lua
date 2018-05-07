@@ -344,7 +344,7 @@ local timeout = CreateFrame("Frame")
 timeout:Hide()
 timeout:SetScript("OnUpdate", function(self, elapsed)
 	self.timeLeft = self.timeLeft - elapsed
-	if self.timeLeft <= 0 or (postQueue[1] and postQueue[1].bag and postQueue[1].slot and not select(3, GetContainerItemInfo(postQueue[1].bag, postQueue[1].slot)) and not AuctionsCreateAuctionButton:IsEnabled()) then
+	if self.timeLeft <= 0 or (postQueue[1] and postQueue[1].bag and postQueue[1].slot and not select(3, GetContainerItemInfo(postQueue[1].bag, postQueue[1].slot)) and 0 == AuctionsCreateAuctionButton:IsEnabled()) then
 		tremove(postQueue, 1)
 		Post:UpdateItem()
 	end

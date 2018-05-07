@@ -2,7 +2,7 @@
 Label Widget
 Displays text and optionally an icon.
 -------------------------------------------------------------------------------]]
-local Type, Version = "Label", 23
+local Type, Version = "Label", 21
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -43,11 +43,7 @@ local function UpdateImageAnchor(self)
 		else
 			-- image on the left
 			image:SetPoint("TOPLEFT")
-			if image:GetHeight() > label:GetHeight() then
-				label:SetPoint("LEFT", image, "RIGHT", 4, 0)
-			else
-				label:SetPoint("TOPLEFT", image, "TOPRIGHT", 4, 0)
-			end
+			label:SetPoint("TOPLEFT", image, "TOPRIGHT", 4, 0)
 			label:SetWidth(width - imagewidth - 4)
 			height = max(image:GetHeight(), label:GetHeight())
 		end

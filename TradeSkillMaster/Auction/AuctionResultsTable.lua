@@ -646,7 +646,7 @@ function TSMAPI:CreateAuctionResultsTable(parent, handlers, quickBuyout, isDestr
 						end
 					end)
 				iconBtn:SetScript("OnLeave", function(self)
-						BattlePetTooltip:Hide()
+						--BattlePetTooltip:Hide()
 						GameTooltip:ClearLines()
 						GameTooltip:Hide()
 						rt.isShowingItemTooltip = false

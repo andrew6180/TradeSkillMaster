@@ -107,7 +107,7 @@ function private:CreateTSMAHTab(moduleName, callbackShow, callbackHide)
 			local currentTotal = 0
 			local incomingTotal = 0
 			for i=1, GetNumAuctionItems("owner") do
-				local count, _, _, _, _, _, _, buyoutAmount = select(3, GetAuctionItemInfo("owner", i))
+				local count, _, _, _, _, _, buyoutAmount = select(3, GetAuctionItemInfo("owner", i))
 				if count == 0 then
 					incomingTotal = incomingTotal + buyoutAmount
 				else

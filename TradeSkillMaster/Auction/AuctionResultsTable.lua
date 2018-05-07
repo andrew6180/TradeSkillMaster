@@ -363,7 +363,7 @@ local methods = {
 				local rowRecord = row.data.auctionRecord
 				for i=1, GetNumAuctionItems("list") do
 					local itemString = TSMAPI:GetItemString(GetAuctionItemLink("list", i))
-					local _, _, count, _, _, _, _, _, _, buyout, _, _, _, seller = GetAuctionItemInfo("list", i)
+					local _, _, count, _, _, _, _, _, buyout, _, _, seller = GetAuctionItemInfo("list", i)
 					if itemString == row.data.itemString and rowRecord.count == count and rowRecord.buyout == buyout and rowRecord.seller == seller then
 						row:ShowActiveBorder()
 						break
@@ -435,7 +435,7 @@ local defaultColScripts = {
 				local link = GetAuctionItemLink("list", i)
 				if not purchaseCache[link] then
 					local itemString = TSMAPI:GetItemString(link)
-					local _, _, count, _, _, _, _, _, _, buyout, _, _, _, seller = GetAuctionItemInfo("list", i)
+					local _, _, count, _, _, _, _, _, buyout, _, _, seller = GetAuctionItemInfo("list", i)
 					if itemString == self.row.data.itemString and rowRecord.count == count and rowRecord.buyout == buyout and rowRecord.seller == seller then
 						PlaceAuctionBid("list", i, rowRecord.buyout)
 						TSM:AuctionControlCallback("OnBuyout", {itemString=TSMAPI:GetItemString(rowRecord.parent.itemLink), link=rowRecord.parent.itemLink, count=rowRecord.count, seller=rowRecord.seller, buyout=rowRecord.buyout, destroyingNum=rowRecord.parent.destroyingNum})

@@ -34,7 +34,7 @@ local function ValidateAuction(index, list)
 		itemString, count, buyout = unpack(list)
 	elseif type(list) == "string" then
 		itemString = TSMAPI:GetItemString(GetAuctionItemLink(list, index))
-		_, _, count, _, _, _, _, _, _, buyout = GetAuctionItemInfo(list, index)
+		_, _, count, _, _, _, _, _, buyout = GetAuctionItemInfo(list, index)
 		data = {itemString, count, buyout}
 	else
 		return

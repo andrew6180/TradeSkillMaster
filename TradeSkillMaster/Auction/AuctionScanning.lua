@@ -57,7 +57,7 @@ function private:ScanAuctionPage(resolveSellers)
 	for i = 1, shown do
 		-- checks to make sure all the data has been sent to the client
 		-- if not, the data is bad and we'll wait / try again
-		local count, _, _, _, _, _, _, buyout, _, _, _, seller = select(3, GetAuctionItemInfo("list", i))
+		local count, _, _, _, _, _, buyout, _, _, seller = select(3, GetAuctionItemInfo("list", i))
 		local itemString = TSMAPI:GetItemString(GetAuctionItemLink("list", i))
 		auctions[i] = { itemString = itemString, index = i, count = count, buyout = buyout, seller = seller }
 		if not (itemString and buyout and count and (seller or not resolveSellers or buyout == 0)) then
@@ -73,7 +73,7 @@ function IsDuplicatePage()
 
 	local numLinks, prevLink = 0, nil
 	for i = 1, GetNumAuctionItems("list") do
-		local _, _, count, _, _, _, _, minBid, minInc, buyout, bid, _, _, seller = GetAuctionItemInfo("list", i)
+		local _, _, count, _, _, _, minBid, minInc, buyout, bid, _, seller = GetAuctionItemInfo("list", i)
 		local link = GetAuctionItemLink("list", i)
 		local temp = private.pageTemp[i]
 
@@ -103,7 +103,7 @@ local function PopulatePageTemp()
 	for i = 1, shown do
 		-- checks to make sure all the data has been sent to the client
 		-- if not, the data is bad and we'll wait / try again
-		local _, _, count, _, _, _, _, minBid, minInc, buyout, bid, _, seller = GetAuctionItemInfo("list", i)
+		local _, _, count, _, _, _, minBid, minInc, buyout, bid, _, seller = GetAuctionItemInfo("list", i)
 		local link = GetAuctionItemLink("list", i)
 
 		private.pageTemp[i] = { count = count, minBid = minBid, minInc = minInc, buyout = buyout, bid = bid, seller = seller, link = link }
@@ -303,9 +303,9 @@ end
 
 -- Add a new record to the private.data table
 function private:AddAuctionRecord(index)
-	local name, texture, count, _, _, _, _, minBid, minIncrement, buyout, bid, highBidder, highBidder_full, seller, seller_full = GetAuctionItemInfo("list", index)
-	seller = TSM:GetAuctionPlayer(seller, seller_full)
-	highBidder = TSM:GetAuctionPlayer(highBidder, highBidder_full)
+	local name, texture, count, _, _, _, minBid, minIncrement, buyout, bid, highBidder, seller = GetAuctionItemInfo("list", index)
+	--seller = TSM:GetAuctionPlayer(seller, seller_full)
+	--highBidder = TSM:GetAuctionPlayer(highBidder, highBidder_full)
 	local timeLeft = GetAuctionItemTimeLeft("list", index)
 	local link = GetAuctionItemLink("list", index)
 	local itemString = TSMAPI:GetItemString(link)
@@ -475,8 +475,8 @@ end
 
 local function IsTargetAuction(index)
 	local itemString = TSMAPI:GetItemString(GetAuctionItemLink("list", index))
-	local _, _, count, _, _, _, _, minBid, bidIncrement, buyout, bidAmount, _, _, seller, seller_full = GetAuctionItemInfo("list", index)
-	seller = TSM:GetAuctionPlayer(seller, seller_full)
+	local _, _, count, _, _, _, minBid, bidIncrement, buyout, bidAmount, _, seller = GetAuctionItemInfo("list", index)
+	--seller = TSM:GetAuctionPlayer(seller, seller_full)
 	local bid = bidAmount == 0 and minBid or bidAmount
 	local tmp = { itemString = itemString, count = count, bid = bid, buyout = buyout, seller = seller }
 	return CompareTableKeys(tmp, findPrivate.targetInfo)

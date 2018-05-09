@@ -502,8 +502,10 @@ local function GetSearchFilterOptions(searchTerm)
 		elseif i == 1 then
 			if strfind(str, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?%-?([0-9]*)$") or strfind(str, "battlepet:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)$") then
 				queryString = TSMAPI:GetSafeItemInfo(str)
+				print("Safe queryString: ", queryString)
 			else
 				queryString = str
+				print("queryString: ", queryString)
 			end
 		else
 			return false, L["Unknown Filter"]
@@ -522,7 +524,7 @@ local function GetSearchFilterOptions(searchTerm)
 		minILevel = oldMaxILevel
 	end
 	
-	return true, queryString or "", class or 0, subClass or 0, minLevel or 0, maxLevel or 0, minILevel or 0, maxILevel or 0, rarity or 0, usableOnly or 0, exactOnly or nil, evenOnly or nil, maxQuantity or 0, maxPrice
+	return true, queryString or "", class, subClass, minLevel, maxLevel, minILevel, maxILevel, rarity, usableOnly, exactOnly, evenOnly, maxQuantity, maxPrice
 end
 
 -- gets all the filters for a given search term (possibly semicolon-deliminated list of search terms)

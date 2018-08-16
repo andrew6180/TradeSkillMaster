@@ -633,7 +633,7 @@ function private:GetBagSlots()
 			genericSpace[bag] = GetContainerNumFreeSlots(bag) or 0
 		end
 		for slot = 1, GetContainerNumSlots(bag) do
-			local iLink = TSMGetContainerItemLink(bag, slot)
+			local iLink = GetContainerItemLink(bag, slot)
 			if iLink then
 				if not partSlots[bag] then
 					partSlots[bag] = {}

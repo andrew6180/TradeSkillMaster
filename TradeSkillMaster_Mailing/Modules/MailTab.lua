@@ -11,6 +11,7 @@ local MailTab = TSM:NewModule("MailTab", "AceEvent-3.0", "AceHook-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_Mailing") -- loads the localization table
 
 local private = {tabs = {}}
+local mailTabPoint, mailTabRelativeTo, mailTabRelativePoint, mailTabXOfs, mailTabYOfs, tsmShownMailTabYOfs
 
 
 function MailTab:OnEnable()
@@ -31,7 +32,7 @@ function private:OnMailShow()
 	-- make sure the second tab gets loaded so we can send mail
 	local currentTab = PanelTemplates_GetSelectedTab(MailFrame)
 	MailFrameTab2:Click()
-	_G["MailFrameTab"..currentTab]:Click()
+	_G["MailFrameTab"..currentTab]:Click()	
 end
 
 function private:CreateMailTab()
@@ -44,29 +45,43 @@ function private:CreateMailTab()
 	
 	local function OnTabClick(self)
 		PanelTemplates_SetTab(MailFrame, self:GetID())
-		ButtonFrameTemplate_HideButtonBar(MailFrame)
+		--ButtonFrameTemplate_HideButtonBar(MailFrame)
 		InboxFrame:Hide()
 		OpenMailFrame:Hide()
 		StationeryPopupFrame:Hide()
 		SendMailFrame:Hide()
 		SetSendMailShowing(false)
 		
-		MailFrameInset:Hide()
-		MailFramePortraitFrame:Hide()
-		MailFrameBg:Hide()
-		if MailFrameText then MailFrameText:Hide() end
-		MailFrameTitleBg:Hide()
-		MailFrameTitleText:Hide()
-		MailFrameCloseButton:Hide()
+		-- 3.3.5
+		InboxCloseButton:Hide()
+
+		-- Save the default mailTabFrame1 Point data
+		if mailTabPoint == nil then
+			mailTabPoint, mailTabRelativeTo, mailTabRelativePoint, mailTabXOfs, mailTabYOfs = MailFrameTab1:GetPoint()
+			tsmShownMailTabYOfs = mailTabYOfs - 76
+		end
+
+		MailFrameTab1:SetPoint(mailTabPoint, mailTabRelativeTo, mailTabRelativePoint, mailTabXOfs, tsmShownMailTabYOfs)
+		if Postal_ModuleMenuButton then
+			Postal_ModuleMenuButton:Hide()
+		end
+
+		--MailFrameInset:Hide()
+		--MailFramePortraitFrame:Hide()
+		--MailFrameBg:Hide()
+		--if MailFrameText then MailFrameText:Hide() end
+		--MailFrameTitleBg:Hide()
+		--MailFrameTitleText:Hide()
+		--MailFrameCloseButton:Hide()
 		
-		MailFrameLeftBorder:Hide()
-		MailFrameTopBorder:Hide()
-		MailFrameRightBorder:Hide()
-		MailFrameBottomBorder:Hide()
-		MailFrameTopTileStreaks:Hide()
-		MailFrameTopRightCorner:Hide()
-		MailFrameBotLeftCorner:Hide()
-		MailFrameBotRightCorner:Hide()
+		--MailFrameLeftBorder:Hide()
+		--MailFrameTopBorder:Hide()
+		--MailFrameRightBorder:Hide()
+		--MailFrameBottomBorder:Hide()
+		--MailFrameTopTileStreaks:Hide()
+		--MailFrameTopRightCorner:Hide()
+		--MailFrameBotLeftCorner:Hide()
+		--MailFrameBotRightCorner:Hide()
 		
 		private.frame:Show()
 		if TSM.db.global.defaultPage == 1 then
@@ -83,22 +98,30 @@ function private:CreateMailTab()
 	local function OnOtherTabClick()
 		if not private.frame then return end
 		private.frame:Hide()
-		MailFrameLeftBorder:Show()
-		MailFrameTopBorder:Show()
-		MailFrameRightBorder:Show()
-		MailFrameBottomBorder:Show()
-		MailFrameTopTileStreaks:Show()
-		MailFrameTopRightCorner:Show()
-		MailFrameBotLeftCorner:Show()
-		MailFrameBotRightCorner:Show()
+
+		-- 3.3.5
+		InboxCloseButton:Show()
+		MailFrameTab1:SetPoint(mailTabPoint, mailTabRelativeTo, mailTabRelativePoint, mailTabXOfs, mailTabYOfs)
+		if Postal_ModuleMenuButton then
+			Postal_ModuleMenuButton:Hide()
+		end
+
+		--MailFrameLeftBorder:Show()
+		--MailFrameTopBorder:Show()
+		--MailFrameRightBorder:Show()
+		--MailFrameBottomBorder:Show()
+		--MailFrameTopTileStreaks:Show()
+		--MailFrameTopRightCorner:Show()
+		--MailFrameBotLeftCorner:Show()
+		--MailFrameBotRightCorner:Show()
 		
-		MailFrameInset:Show()
-		MailFramePortraitFrame:Show()
-		MailFrameBg:Show()
-		if MailFrameText then MailFrameText:Show() end
-		MailFrameTitleBg:Show()
-		MailFrameTitleText:Show()
-		MailFrameCloseButton:Show()
+		--MailFrameInset:Show()
+		--MailFramePortraitFrame:Show()
+		--MailFrameBg:Show()
+		--if MailFrameText then MailFrameText:Show() end
+		--MailFrameTitleBg:Show()
+		--MailFrameTitleText:Show()
+		--MailFrameCloseButton:Show()
 	end
 	
 	MailTab:Hook("MailFrameTab_OnClick", OnOtherTabClick, true)

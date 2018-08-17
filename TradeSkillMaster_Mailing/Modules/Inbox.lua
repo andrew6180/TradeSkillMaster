@@ -252,13 +252,13 @@ function private:InboxUpdate()
 		local isInvoice = select(4, GetInboxText(i))
 		local _, _, sender, subject, money, cod, daysLeft, hasItem = GetInboxHeaderInfo(i)
 		if isInvoice then
-			local invoiceType, itemName, playerName, bid, _, _, ahcut, _, _, _, quantity = GetInboxInvoiceInfo(i)
+			local invoiceType, itemName, playerName, bid, _, _, ahcut = GetInboxInvoiceInfo(i)
 			if invoiceType == "buyer" then
 				local itemLink = GetInboxItemLink(i, 1) or itemName
-				mailInfo[i] = format(L["Buy: %s (%d) | %s | %s"], itemLink, quantity, TSMAPI:FormatTextMoney(bid, redColor), FormatDaysLeft(daysLeft, i))
+				mailInfo[i] = format(L["Buy: %s | %s | %s"], itemLink, TSMAPI:FormatTextMoney(bid, redColor), FormatDaysLeft(daysLeft, i))
 			elseif invoiceType == "seller" then
 				collectGold = collectGold + bid - ahcut
-				mailInfo[i] = format(L["Sale: %s (%d) | %s | %s"], itemName, quantity, TSMAPI:FormatTextMoney(bid - ahcut, greenColor), FormatDaysLeft(daysLeft, i))
+				mailInfo[i] = format(L["Sale: %s | %s | %s"], itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor), FormatDaysLeft(daysLeft, i))
 			end
 		elseif hasItem then
 			local itemLink
@@ -466,12 +466,12 @@ function private:LootMailItem(index)
 		sender = sender or "?"
 		if select(4, GetInboxText(index)) then
 			-- it's an invoice
-			local invoiceType, itemName, playerName, bid, _, _, ahcut, _, _, _, quantity = GetInboxInvoiceInfo(index)
+			local invoiceType, itemName, playerName, bid, _, _, ahcut = GetInboxInvoiceInfo(index)
 			if invoiceType == "buyer" then
 				local itemLink = GetInboxItemLink(index, 1) or itemName
-				TSM:Printf(L["Collected purchase of %s (%d) for %s."], itemLink, quantity, TSMAPI:FormatTextMoney(bid, redColor))
+				TSM:Printf(L["Collected purchase of %s for %s."], itemLink, TSMAPI:FormatTextMoney(bid, redColor))
 			elseif invoiceType == "seller" then
-				TSM:Printf(L["Collected sale of %s (%d) for %s."], itemName, quantity, TSMAPI:FormatTextMoney(bid - ahcut, greenColor))
+				TSM:Printf(L["Collected sale of %s for %s."], itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor))
 			end
 		elseif hasItem then
 			local itemLink
@@ -633,7 +633,7 @@ function private:GetBagSlots()
 			genericSpace[bag] = GetContainerNumFreeSlots(bag) or 0
 		end
 		for slot = 1, GetContainerNumSlots(bag) do
-			local iLink = GetContainerItemLink(bag, slot)
+			local iLink = TSMGetContainerItemLink(bag, slot)
 			if iLink then
 				if not partSlots[bag] then
 					partSlots[bag] = {}

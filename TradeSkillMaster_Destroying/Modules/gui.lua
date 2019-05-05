@@ -128,29 +128,29 @@ function private:CreateDestroyingFrame()
 	destroyBtn:SetAttribute("type1", "macro")
 	destroyBtn:SetAttribute("macrotext1", "")
 	destroyBtn:SetScript("PreClick", function()
-		if not destroyBtn:IsVisible() or #private.data == 0 then
-			destroyBtn:SetAttribute("macrotext1", "")
-		else
-			local data = private.data[1]
-			private.tempData = data
-			destroyBtn:SetAttribute("macrotext1", format("/cast %s;\n/use %d %d", data.spell, data.bag, data.slot))
-			destroyBtn:Disable()
-			TSMAPI:CancelFrame("destroyEnableDelay")
-			TSMAPI:CreateTimeDelay("destroyEnableDelay", 3, function()
-				if not UnitCastingInfo("player") and not LootFrame:IsVisible() then
-					destroyBtn:Enable()
-				else
-					-- Check delay again
-					TSMAPI:CreateTimeDelay("destroyEnableDelay", 0.5, function()
-						-- Always re enable the button if we get here
+			if not destroyBtn:IsVisible() or #private.data == 0 then
+				destroyBtn:SetAttribute("macrotext1", "")
+			else
+				local data = private.data[1]
+				private.tempData = data
+				destroyBtn:SetAttribute("macrotext1", format("/cast %s;\n/use %d %d", data.spell, data.bag, data.slot))
+				destroyBtn:Disable()
+				TSMAPI:CancelFrame("destroyEnableDelay")
+				TSMAPI:CreateTimeDelay("destroyEnableDelay", 3, function()
+					if not UnitCastingInfo("player") and not LootFrame:IsVisible() then
 						destroyBtn:Enable()
-					end)
-				end
-			end)
-			private.highStack = data.numDestroys > 1
-			private.currentSpell = data.spell
-		end
-	end)
+					else
+						-- Check delay again
+						TSMAPI:CreateTimeDelay("destroyEnableDelay", 0.5, function()
+							-- Always re enable the button if we get here
+							destroyBtn:Enable()
+						end)
+					end
+				end)
+				private.highStack = data.numDestroys > 1
+				private.currentSpell = data.spell
+			end
+		end)
 	frame.destroyBtn = destroyBtn
 	
 	return frame
@@ -201,7 +201,7 @@ function private:UpdateST(forceShow)
 	for bag, slot, itemString, quantity in TSMAPI:GetBagIterator(nil, TSM.db.global.includeSoulbound) do
 		if not private.ignore[itemString] and not TSM.db.global.ignore[itemString] then
 			local spell, perDestroy = TSM:IsDestroyable(bag, slot, itemString)
-			local link = GetContainerItemLink(bag, slot)
+			local link = TSMGetContainerItemLink(bag, slot)
 			if spell and quantity >= perDestroy then
 				local row = {
 					cols = {

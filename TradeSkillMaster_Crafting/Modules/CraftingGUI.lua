@@ -78,7 +78,7 @@ end
 
 function GUI:ShowProfessionWindow()
 	if not TradeSkillFrame then return TSMAPI:CreateTimeDelay("craftingShowProfessionDelay", 0, GUI.ShowProfessionWindow) end
-	if GetTradeSkillLine() == GetSpellInfo(53428) or IsTradeSkillGuild() then
+	if GetTradeSkillLine() == GetSpellInfo(53428) then
 		-- runeforging or guild profession
 		if GUI.frame then
 			GUI.noClose = true
@@ -213,7 +213,7 @@ function GUI:UpdateTradeSkills()
 	local playerName = UnitName("player")
 	if not playerName then return end
 	TSM.db.factionrealm.tradeSkills[playerName] = TSM.db.factionrealm.tradeSkills[playerName] or {}
-	SpellBook_UpdateProfTab()
+	--SpellBook_UpdateProfTab()
 
 	local tradeSkill1, tradeSkill2, _, _, cook, firstAid = GetProfessions()
 	local btns = { PrimaryProfession1SpellButtonBottom, PrimaryProfession2SpellButtonBottom, SecondaryProfession3SpellButtonRight, SecondaryProfession4SpellButtonRight }

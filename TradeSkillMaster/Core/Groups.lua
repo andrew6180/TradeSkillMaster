@@ -1215,7 +1215,7 @@ function private:DrawGroupItemsPage(container, groupPath)
 				for bag, slot, itemString in TSMAPI:GetBagIterator() do
 					if not usedLinks[itemString] then
 						local baseItemString = TSMAPI:GetBaseItemString(itemString)
-						local link = GetContainerItemLink(bag, slot)
+						local link = TSMGetContainerItemLink(bag, slot)
 						if itemString ~= baseItemString and TSM.db.global.ignoreRandomEnchants then -- a random enchant item
 							itemString = baseItemString
 							link = select(2, TSMAPI:GetSafeItemInfo(itemString))

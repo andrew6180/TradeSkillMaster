@@ -16,7 +16,7 @@ TSM.moduleNames = {}
 
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster") -- loads the localization table
 TSM._version = GetAddOnMetadata("TradeSkillMaster", "Version") -- current version of the addon
-
+TSM._debug = false
 
 TSMAPI = {}
 
@@ -122,12 +122,32 @@ local savedDBDefaults = {
 	},
 }
 
+function TSM:Debug(msg, ...)
+	if TSM._debug and ViragDevTool_AddData then 
+		ViragDevTool_AddData({...}, "TSM: "..msg);
+	end
+end
+
+--function TSMGetContainerItemLinkWithRE(itemLink, slot) 
+--	local itemRe = GetContainerItemLinkWithRE(itemLink, slot)
+--	TSM:Debug("TSM:GetContainerItemLinkWithRE", itemRe)
+--	return itemRe
+--end
+
 -- Called once the player has loaded WOW.
 function TSM:OnInitialize()
 	TSMAPI:RegisterForTracing(TSMAPI, "TSMAPI")
 	
 	TSM.moduleObjects = nil
 	TSM.moduleNames = nil
+
+	-- Blizzard api mappings
+	TSMGetContainerItemLink = GetContainerItemLink
+	--TSM:Debug("Mapping Blizzard api")
+	--if GetContainerItemLinkWithRE then
+	--	TSM:Debug("Setting TSMGetContainerItemLink to GetContainerItemLinkWithRE")
+	--	TSMGetContainerItemLink = TSMGetContainerItemLinkWithRE
+	--end
 
 	-- load the savedDB into TSM.db
 	TSM.db = LibStub:GetLibrary("AceDB-3.0"):New("TradeSkillMasterDB", savedDBDefaults, true)
@@ -271,9 +291,9 @@ function TSM:RegisterModule()
 		end
 	end
 	-- Auctionator
-	--if select(4, GetAddOnInfo("Auctionator")) == 1 and Atr_GetAuctionBuyout then
-	--	tinsert(TSM.priceSources, { key = "AtrValue", label = L["Auctionator - Auction Value"], callback = Atr_GetAuctionBuyout })
-	--end
+	if select(4, GetAddOnInfo("Auctionator")) == 1 and Atr_GetAuctionBuyout then
+		tinsert(TSM.priceSources, { key = "AtrValue", label = L["Auctionator - Auction Value"], callback = Atr_GetAuctionBuyout })
+	end
 	-- TheUndermineJournal
 	--if select(4, GetAddOnInfo("TheUndermineJournal")) == 1 and TUJMarketInfo then
 	--	tinsert(TSM.priceSources, { key = "TUJMarket", label = L["TUJ RE - Market Price"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).market end })

@@ -10,7 +10,6 @@
 
 local TSM = select(2, ...)
 
-
 function TSMAPI:SafeTooltipLink(link)
 	if strmatch(link, "battlepet") then
 		local _, speciesID, level, breedQuality, maxHealth, power, speed, battlePetID = strsplit(":", link)
@@ -26,23 +25,32 @@ function TSMAPI:GetItemString(item)
 	end
 	
 	if type(item) ~= "string" and type(item) ~= "number" then
+		TSM:Debug("TSMAPI:GetItemString", "invalid arg type", item)
 		return nil, "invalid arg type"
 	end
 	item = select(2, TSMAPI:GetSafeItemInfo(item)) or item
 	if tonumber(item) then
+		--TSM:Debug("TSMAPI:GetItemString", "item:"..item..":0:0:0:0:0:0")
 		return "item:"..item..":0:0:0:0:0:0"
 	end
 	
 	local itemInfo = {strfind(item, "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%-?%d*):?(%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")}
+	TSM:Debug("item", item)
+	TSM:Debug("itemInfo", itemInfo)
+
 	if not itemInfo[11] then return nil, "invalid link" end
 	itemInfo[11] = tonumber(itemInfo[11]) or 0
 	
+	local it = nil
 	if itemInfo[4] == "item" then
 		for i=6, 10 do itemInfo[i] = 0 end
-		return table.concat(itemInfo, ":", 4, 11)
+		it = table.concat(itemInfo, ":", 4, 11)
 	else
-		return table.concat(itemInfo, ":", 4, 7)
+		it = table.concat(itemInfo, ":", 4, 7)
 	end
+
+	--TSM:Debug("TSMAPI:GetItemString", it)
+	return it
 end
 
 function TSMAPI:GetBaseItemString(itemString, doGroupLookup)
@@ -58,13 +66,19 @@ function TSMAPI:GetBaseItemString(itemString, doGroupLookup)
 		parts[i] = 0
 	end
 	local baseItemString = table.concat(parts, ":")
-	if not doGroupLookup then return baseItemString end
+	if not doGroupLookup then
+		--TSM:Debug("TSMAPI:GetBaseItemString", baseItemString)
+		return baseItemString
+	end
 	
 	if TSM.db.profile.items[itemString] and TSM.db.profile.items[baseItemString] then
+		--TSM:Debug("TSMAPI:GetBaseItemString", itemString)
 		return itemString
 	elseif TSM.db.profile.items[baseItemString] then
+		--TSM:Debug("TSMAPI:GetBaseItemString", baseItemString)
 		return baseItemString
 	else
+		--TSM:Debug("TSMAPI:GetBaseItemString", itemString)
 		return itemString
 	end
 end
@@ -110,6 +124,10 @@ end
 function TSMAPI:GetItemID(itemLink)
 	if not itemLink or type(itemLink) ~= "string" then return nil, "invalid args" end
 	
+	-- Remove any random enchant information
+	--local parts = {("/"):split(itemLink)}
+	--itemLink = parts[1]
+
 	local test = select(2, strsplit(":", itemLink))
 	if not test then return nil, "invalid link" end
 	

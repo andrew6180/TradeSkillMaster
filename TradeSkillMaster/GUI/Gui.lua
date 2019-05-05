@@ -133,7 +133,7 @@ function TSMAPI.GUI:CreateInputBox(parent, name, autoComplete)
 end
 
 function TSMAPI.GUI:SetAutoComplete(inputBox, params)
-	local autoCompleteHandlers = {"OnTabPressed", "OnEnterPressed", "OnTextChanged", "OnChar", "OnEditFocusLost", "OnEscapePressed", "OnArrowPressed"}
+	local autoCompleteHandlers = {"OnTabPressed", "OnEnterPressed", "OnTextChanged", "OnChar", "OnEditFocusLost", "OnEscapePressed"}
 	if params then
 		if inputBox._priorTSMHandlers then return end -- already done
 		inputBox.autoCompleteParams = params

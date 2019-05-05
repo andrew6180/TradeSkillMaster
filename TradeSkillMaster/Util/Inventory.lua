@@ -105,7 +105,7 @@ function TSMAPI:GetBagIterator(autoBaseItems, includeSoulbound)
 				if not bags[b] then return end
 			end
 			
-			local link = GetContainerItemLink(bags[b], s)
+			local link = TSMGetContainerItemLink(bags[b], s)
 			if not link then
 				return iter()
 			end
@@ -146,7 +146,7 @@ function TSMAPI:GetBankIterator(autoBaseItems, includeSoulbound)
 				b = b + 1
 				if not bags[b] then return end
 			end
-			local link = GetContainerItemLink(bags[b], s)
+			local link = TSMGetContainerItemLink(bags[b], s)
 			local itemString
 			if autoBaseItems then
 				itemString = TSMAPI:GetBaseItemString(link, true)

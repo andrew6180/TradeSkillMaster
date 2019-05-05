@@ -98,3 +98,41 @@ end
 function TSMAPI:IsPlayer(target)
 	return strlower(target) == strlower(UnitName("player")) or (strfind(target, "-") and strlower(target) == strlower(UnitName("player").."-"..GetRealmName()))
 end
+
+CreateFrame('GameTooltip', 'TSMAPITooltip', nil, 'GameTooltipTemplate')
+function TSMAPI:GetRandomEnchant(setter, arg1, arg2)
+    TSMAPITooltip:SetOwner(UIParent, 'ANCHOR_NONE')
+	TSMAPITooltip:ClearLines()
+    
+    if setter == 'auction' then
+	    TSMAPITooltip:SetAuctionItem(arg1, arg2)
+    elseif setter == 'bag' then
+	    TSMAPITooltip:SetBagItem(arg1, arg2)
+    elseif setter == 'inventory' then
+	    TSMAPITooltip:SetInventoryItem(arg1, arg2)
+    elseif setter == 'link' then
+	    TSMAPITooltip:SetHyperlink(arg1)
+    end
+
+    local re = nil
+    for i = 1, TSMAPITooltip:NumLines() do
+		t = _G[TSMAPITooltip:GetName().."TextLeft"..i]:GetText()
+		if t and string.find(t,"^Equip:") then 
+			re = t
+			break
+		end
+    end
+    return re
+end
+
+function TSMAPI:StringHash(text)
+  local counter = 1
+  local len = string.len(text)
+  for i = 1, len, 3 do 
+    counter = math.fmod(counter*8161, 4294967279) +  -- 2^32 - 17: Prime!
+  	  (string.byte(text,i)*16776193) +
+  	  ((string.byte(text,i+1) or (len-i+256))*8372226) +
+  	  ((string.byte(text,i+2) or (len-i+256))*3932164)
+  end
+  return math.fmod(counter, 4294967291) -- 2^32 - 5: Prime (and different from the prime in the loop)
+end

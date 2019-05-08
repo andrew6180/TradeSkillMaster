@@ -21,7 +21,7 @@ function GUI:OnEnable()
 	GUI:RegisterEvent("TRADE_SKILL_SHOW", "ShowProfessionWindow")
 	GUI:RegisterEvent("TRADE_SKILL_CLOSE", "EventHandler")
 	GUI:RegisterEvent("TRADE_SKILL_UPDATE", "EventHandler")
-	GUI:RegisterEvent("TRADE_SKILL_FILTER_UPDATE", "EventHandler")
+	--GUI:RegisterEvent("TRADE_SKILL_FILTER_UPDATE", "EventHandler")
 	GUI:RegisterEvent("UPDATE_TRADESKILL_RECAST", "EventHandler")
 	GUI:RegisterEvent("CHAT_MSG_SKILL", "EventHandler")
 	GUI:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", "EventHandler")
@@ -110,8 +110,8 @@ function GUI:ShowProfessionWindow()
 			GUI.frame:Hide()
 			TSMAPI:CreateTimeDelay("craftingSyncDelay", 0.1, function() TSM.Sync:OpenTradeSkill() end)
 		elseif not IsTradeSkillLinked() then
-			GUI:SaveFilters()
-			GUI:ClearFilters()
+			--GUI:SaveFilters()
+			--GUI:ClearFilters()
 			GUI.frame.content.professionsTab.linkBtn:Enable()
 			TSMAPI:CreateTimeDelay("craftingScanDelay", 0.1, TSM.Util.ScanCurrentProfession)
 		else
@@ -128,8 +128,8 @@ function GUI:ShowProfessionWindow()
 	end
 
 	if not IsTradeSkillLinked() then
-		GUI:SaveFilters()
-		GUI:ClearFilters()
+		--GUI:SaveFilters()
+		--GUI:ClearFilters()
 		GUI.frame.content.professionsTab.linkBtn:Enable()
 		TSMAPI:CreateTimeDelay("craftingScanDelay", 0.1, TSM.Util.ScanCurrentProfession)
 	elseif not TSM.isSyncing then
@@ -157,14 +157,14 @@ function GUI:EventHandler(event, ...)
 
 	if event == "TRADE_SKILL_CLOSE" then
 		GUI.frame:Hide()
-	elseif event == "TRADE_SKILL_UPDATE" or event == "TRADE_SKILL_FILTER_UPDATE" then
+	elseif event == "TRADE_SKILL_UPDATE" then
 		if GetTradeSkillLine() ~= GUI.currentTradeSkill or select(2, IsTradeSkillLinked()) ~= GUI.currentLinkedPlayer then
 			StopTradeSkillRepeat()
 			GUI.currentTradeSkill = GetTradeSkillLine()
 			GUI.currentLinkedPlayer = select(2, IsTradeSkillLinked())
 		end
 		GUI.frame.content.professionsTab:UpdateProfession()
-		if (event ~= "TRADE_SKILL_FILTER_UPDATE") and (GetTradeSkillSelectionIndex() > 1) and (GetTradeSkillSelectionIndex() <= GetNumTradeSkills()) then
+		if (GetTradeSkillSelectionIndex() > 1) and (GetTradeSkillSelectionIndex() <= GetNumTradeSkills()) then
 			TradeSkillFrame_SetSelection(GetTradeSkillSelectionIndex())
 		else
 			TradeSkillFrame_SetSelection(GetFirstTradeSkill())
@@ -215,30 +215,49 @@ function GUI:UpdateTradeSkills()
 	TSM.db.factionrealm.tradeSkills[playerName] = TSM.db.factionrealm.tradeSkills[playerName] or {}
 	--SpellBook_UpdateProfTab()
 
-	local tradeSkill1, tradeSkill2, _, _, cook, firstAid = GetProfessions()
-	local btns = { PrimaryProfession1SpellButtonBottom, PrimaryProfession2SpellButtonBottom, SecondaryProfession3SpellButtonRight, SecondaryProfession4SpellButtonRight }
+	local skillName, level, maxLevel, _ = GetTradeSkillLine()
+	if not skillName then return; end;
 	local old = TSM.db.factionrealm.tradeSkills[playerName]
 	TSM.db.factionrealm.tradeSkills[playerName] = {}
-	for i, id in pairs({ tradeSkill1, tradeSkill2, cook, firstAid }) do -- needs to be pairs since may not be continuous indices
-		if not btns[i]:GetParent().missingHeader:IsVisible() then
-			local skillName, _, level, maxLevel = GetProfessionInfo(id)
-			TSM.db.factionrealm.tradeSkills[playerName][skillName] = old[skillName] or {}
-			TSM.db.factionrealm.tradeSkills[playerName][skillName].level = level
-			TSM.db.factionrealm.tradeSkills[playerName][skillName].maxLevel = maxLevel
-			TSM.db.factionrealm.tradeSkills[playerName][skillName].isSecondary = (i > 2) and true
+	TSM.db.factionrealm.tradeSkills[playerName][skillName] = old[skillName] or {}
+	TSM.db.factionrealm.tradeSkills[playerName][skillName].level = level
+	TSM.db.factionrealm.tradeSkills[playerName][skillName].maxLevel = maxLevel
+	TSM.db.factionrealm.tradeSkills[playerName][skillName].isSecondary = (skillName == "First Aid" or skillName == "Cooking" or skillName == "Fishing") and true
+	-- 		local spellBookSlot = btns[i]:GetID() + btns[i]:GetParent().spellOffset
+	-- 		local _, link = GetSpellLink(spellBookSlot, BOOKTYPE_SPELL)
+	-- if link then
+	-- 	TSM.db.factionrealm.tradeSkills[playerName][skillName].link = link
+	-- 	if not TSM.isSyncing then
+	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName].account = nil
+	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName].accountKey = TSMAPI.Sync:GetAccountKey()
+	-- 		TSM.Sync:BroadcastTradeSkillData()
+	-- 	end
+	-- end
 
-			local spellBookSlot = btns[i]:GetID() + btns[i]:GetParent().spellOffset
-			local _, link = GetSpellLink(spellBookSlot, BOOKTYPE_PROFESSION)
-			if link then
-				TSM.db.factionrealm.tradeSkills[playerName][skillName].link = link
-				if skillName == GetTradeSkillLine() and i <= 2 and not TSM.isSyncing then
-					TSM.db.factionrealm.tradeSkills[playerName][skillName].account = nil
-					TSM.db.factionrealm.tradeSkills[playerName][skillName].accountKey = TSMAPI.Sync:GetAccountKey()
-					TSM.Sync:BroadcastTradeSkillData()
-				end
-			end
-		end
-	end
+	-- local tradeSkill1, tradeSkill2, _, cook, firstAid = GetProfessions()
+	-- local btns = { PrimaryProfession1SpellButtonBottom, PrimaryProfession2SpellButtonBottom, SecondaryProfession3SpellButtonRight, SecondaryProfession4SpellButtonRight }
+	-- local old = TSM.db.factionrealm.tradeSkills[playerName]
+	-- TSM.db.factionrealm.tradeSkills[playerName] = {}
+	-- for i, id in pairs({ tradeSkill1, tradeSkill2, cook, firstAid }) do -- needs to be pairs since may not be continuous indices
+	-- 	if not btns[i]:GetParent().missingHeader:IsVisible() then
+	-- 		local skillName, _, level, maxLevel = GetProfessionInfo(id)
+	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName] = old[skillName] or {}
+	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName].level = level
+	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName].maxLevel = maxLevel
+	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName].isSecondary = (i > 2) and true
+
+	-- 		local spellBookSlot = btns[i]:GetID() + btns[i]:GetParent().spellOffset
+	-- 		local _, link = GetSpellLink(spellBookSlot, BOOKTYPE_PROFESSION)
+	-- 		if link then
+	-- 			TSM.db.factionrealm.tradeSkills[playerName][skillName].link = link
+	-- 			if skillName == GetTradeSkillLine() and i <= 2 and not TSM.isSyncing then
+	-- 				TSM.db.factionrealm.tradeSkills[playerName][skillName].account = nil
+	-- 				TSM.db.factionrealm.tradeSkills[playerName][skillName].accountKey = TSMAPI.Sync:GetAccountKey()
+	-- 				TSM.Sync:BroadcastTradeSkillData()
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end
 
 	--tidy up crafts if player unlearned a profession
 	for spellid, data in pairs(TSM.db.factionrealm.crafts) do
@@ -257,81 +276,81 @@ function GUI:UpdateTradeSkills()
 	end
 end
 
-function GUI:SaveFilters()
-	local filters = {}
-	filters.search = GetTradeSkillItemNameFilter()
-	filters.headers = {}
-	local hasHeaderCollapsed
-	for i = 1, GetNumTradeSkills() do
-		local name, t, _, e = GetTradeSkillInfo(i)
-		if t == "header" or t == "subheader" then
-			filters.headers[name] = e
-			if not e then
-				hasHeaderCollapsed = true
-			end
-		end
-	end
-	if not hasHeaderCollapsed then
-		filters.headers = nil
-	end
-	private.professionFilters = filters
-end
+-- function GUI:SaveFilters()
+-- 	local filters = {}
+-- 	filters.search = GetTradeSkillItemNameFilter()
+-- 	filters.headers = {}
+-- 	local hasHeaderCollapsed
+-- 	for i = 1, GetNumTradeSkills() do
+-- 		local name, t, _, e = GetTradeSkillInfo(i)
+-- 		if t == "header" or t == "subheader" then
+-- 			filters.headers[name] = e
+-- 			if not e then
+-- 				hasHeaderCollapsed = true
+-- 			end
+-- 		end
+-- 	end
+-- 	if not hasHeaderCollapsed then
+-- 		filters.headers = nil
+-- 	end
+-- 	private.professionFilters = filters
+-- end
 
-function GUI:RestoreFilters()
-	if not private.professionFilters then return end
-	GUI:ClearFilters()
-	SetTradeSkillItemNameFilter(private.professionFilters.search)
-	if private.professionFilters.headers then
-		for i = 1, GetNumTradeSkills() do
-			local name, t, _, e = GetTradeSkillInfo(i)
-			if t == "header" or t == "subheader" then
-				if private.professionFilters.headers[name] ~= e then
-					if private.professionFilters.headers[name] then
-						ExpandTradeSkillSubClass(i)
-					else
-						CollapseTradeSkillSubClass(i)
-					end
-				end
-			end
-		end
-	end
-	if private.professionFilters.search then
-		GUI.frame.content.professionsTab.searchBar:SetTextColor(1, 1, 1, 1)
-		GUI.frame.content.professionsTab.searchBar:SetText(private.professionFilters.search)
-	else
-		GUI.frame.content.professionsTab.searchBar:SetTextColor(1, 1, 1, 0.5)
-		GUI.frame.content.professionsTab.searchBar:SetText(SEARCH)
-	end
-	GUI.frame.content.professionsTab.searchBar:ClearFocus()
-end
+-- function GUI:RestoreFilters()
+-- 	if not private.professionFilters then return end
+-- 	--GUI:ClearFilters()
+-- 	SetTradeSkillItemNameFilter(private.professionFilters.search)
+-- 	if private.professionFilters.headers then
+-- 		for i = 1, GetNumTradeSkills() do
+-- 			local name, t, _, e = GetTradeSkillInfo(i)
+-- 			if t == "header" or t == "subheader" then
+-- 				if private.professionFilters.headers[name] ~= e then
+-- 					if private.professionFilters.headers[name] then
+-- 						ExpandTradeSkillSubClass(i)
+-- 					else
+-- 						CollapseTradeSkillSubClass(i)
+-- 					end
+-- 				end
+-- 			end
+-- 		end
+-- 	end
+-- 	if private.professionFilters.search then
+-- 		GUI.frame.content.professionsTab.searchBar:SetTextColor(1, 1, 1, 1)
+-- 		GUI.frame.content.professionsTab.searchBar:SetText(private.professionFilters.search)
+-- 	else
+-- 		GUI.frame.content.professionsTab.searchBar:SetTextColor(1, 1, 1, 0.5)
+-- 		GUI.frame.content.professionsTab.searchBar:SetText(SEARCH)
+-- 	end
+-- 	GUI.frame.content.professionsTab.searchBar:ClearFocus()
+-- end
 
-function GUI:ClearFilters()
-	-- close the dropdown and uncheck the buttons
-	CloseDropDownMenus()
-	local id = TradeSkillLinkDropDown:GetID()
-	local skillupButton = _G["DropDownList" .. id .. "Button1"]
-	local makeableButton = _G["DropDownList" .. id .. "Button2"]
-	if skillupButton and skillupButton.checked and skillupButton.value == CRAFT_IS_MAKEABLE then
-		UIDropDownMenuButton_OnClick(_G["DropDownList" .. id .. "Button1"])
-	end
-	if makeableButton and makeableButton.checked and makeableButton.value == TRADESKILL_FILTER_HAS_SKILL_UP then
-		UIDropDownMenuButton_OnClick(_G["DropDownList" .. id .. "Button2"])
-	end
-	TradeSkillOnlyShowMakeable(false)
-	TradeSkillOnlyShowSkillUps(false)
-	TradeSkillFrame_Update()
-	TradeSkillSetFilter(-1, -1)
-	SetTradeSkillItemNameFilter("")
-	for i = 1, GetNumTradeSkills() do
-		local _, t, _, e = GetTradeSkillInfo(i)
-		if not e and (t == "header" or t == "subheader") then
-			ExpandTradeSkillSubClass(i)
-		end
-	end
-	GUI.frame.content.professionsTab.searchBar:SetTextColor(1, 1, 1, 0.5)
-	GUI.frame.content.professionsTab.searchBar:SetText(SEARCH)
-	GUI.frame.content.professionsTab.searchBar:ClearFocus()
-end
+-- function GUI:ClearFilters()
+-- 	-- close the dropdown and uncheck the buttons
+-- 	CloseDropDownMenus()
+-- 	local id = TradeSkillLinkDropDown:GetID()
+-- 	local skillupButton = _G["DropDownList" .. id .. "Button1"]
+-- 	local makeableButton = _G["DropDownList" .. id .. "Button2"]
+-- 	if skillupButton and skillupButton.checked and skillupButton.value == CRAFT_IS_MAKEABLE then
+-- 		UIDropDownMenuButton_OnClick(_G["DropDownList" .. id .. "Button1"])
+-- 	end
+-- 	if makeableButton and makeableButton.checked and makeableButton.value == TRADESKILL_FILTER_HAS_SKILL_UP then
+-- 		UIDropDownMenuButton_OnClick(_G["DropDownList" .. id .. "Button2"])
+-- 	end
+-- 	TradeSkillOnlyShowMakeable(false)
+-- 	TradeSkillOnlyShowSkillUps(false)
+-- 	TradeSkillFrame_Update()
+-- 	TradeSkillSetFilter(-1, -1)
+-- 	SetTradeSkillItemNameFilter("")
+-- 	for i = 1, GetNumTradeSkills() do
+-- 		local _, t, _, e = GetTradeSkillInfo(i)
+-- 		if not e and (t == "header" or t == "subheader") then
+-- 			ExpandTradeSkillSubClass(i)
+-- 		end
+-- 	end
+-- 	GUI.frame.content.professionsTab.searchBar:SetTextColor(1, 1, 1, 0.5)
+-- 	GUI.frame.content.professionsTab.searchBar:SetText(SEARCH)
+-- 	GUI.frame.content.professionsTab.searchBar:ClearFocus()
+-- end
 
 function GUI:CastTradeSkill(index, quantity, vellum)
 	SelectTradeSkill(index)
@@ -851,21 +870,21 @@ function GUI:CreateProfessionsTab(parent)
 	searchBar:SetScript("OnEnterPressed", searchBar.ClearFocus)
 	frame.searchBar = searchBar
 
-	local btn = TSMAPI.GUI:CreateButton(frame, 14)
-	btn:SetPoint("TOPLEFT", searchBar, "TOPRIGHT", 5, 0)
-	btn:SetWidth(80)
-	btn:SetHeight(24)
-	btn:SetText(L["Clear Filters"])
-	btn:SetScript("OnClick", GUI.ClearFilters)
-	frame.clearFilterBtn = btn
+	-- local btn = TSMAPI.GUI:CreateButton(frame, 14)
+	-- btn:SetPoint("TOPLEFT", searchBar, "TOPRIGHT", 5, 0)
+	-- btn:SetWidth(80)
+	-- btn:SetHeight(24)
+	-- btn:SetText(L["Clear Filters"])
+	-- btn:SetScript("OnClick", GUI.ClearFilters)
+	-- frame.clearFilterBtn = btn
 
-	local btn = TSMAPI.GUI:CreateButton(frame, 14, "TSMCraftingFilterButton")
-	btn:SetPoint("TOPLEFT", frame.clearFilterBtn, "TOPRIGHT", 5, 0)
-	btn:SetPoint("TOPRIGHT", -5, -35)
-	btn:SetHeight(24)
-	btn:SetText(L["Filters >>"])
-	btn:SetScript("OnClick", function(self) ToggleDropDownMenu(1, nil, TradeSkillFilterDropDown, "TSMCraftingFilterButton", btn:GetWidth(), 0) end)
-	frame.filterBtn = btn
+	-- local btn = TSMAPI.GUI:CreateButton(frame, 14, "TSMCraftingFilterButton")
+	-- btn:SetPoint("TOPLEFT", frame.clearFilterBtn, "TOPRIGHT", 5, 0)
+	-- btn:SetPoint("TOPRIGHT", -5, -35)
+	-- btn:SetHeight(24)
+	-- btn:SetText(L["Filters >>"])
+	-- btn:SetScript("OnClick", function(self) ToggleDropDownMenu(1, nil, TradeSkillFilterDropDown, "TSMCraftingFilterButton", btn:GetWidth(), 0) end)
+	-- frame.filterBtn = btn
 
 	TSMAPI.GUI:CreateHorizontalLine(frame, -64)
 
@@ -1167,7 +1186,7 @@ function GUI:CreateCraftInfoFrame(parent)
 	buttonsFrame.queueBtn = queueBtn
 
 	local createBtn = TSMAPI.GUI:CreateButton(buttonsFrame, 15)
-	createBtn:SetText(CREATE_PROFESSION)
+	createBtn:SetText(CREATE)
 	createBtn:SetPoint("BOTTOMLEFT")
 	createBtn:SetPoint("BOTTOMRIGHT", buttonsFrame, "BOTTOM", -2, 0)
 	createBtn:SetHeight(20)
@@ -1331,7 +1350,8 @@ function GUI:UpdateProfessionsTabST()
 	local numAvailableAllCache = {}
 	local inventoryTotals = select(4, TSM.Inventory:GetTotals())
 	for i = 1, GetNumTradeSkills() do
-		local skillName, skillType, numAvailable, isExpanded, _, numSkillUps, _, showProgressBar, currentRank, maxRank = GetTradeSkillInfo(i)
+		--numSkillUps, _, showProgressBar, currentRank, maxRank
+		local skillName, skillType, numAvailable, isExpanded, _ = GetTradeSkillInfo(i)
 		if skillName then
 			local spellID = TSM.Util:GetSpellID(i)
 			local key = skillName .. i
@@ -1341,15 +1361,7 @@ function GUI:UpdateProfessionsTabST()
 				ts = "  "
 			end
 			if skillType == "header" or skillType == "subheader" then
-				if showProgressBar then
-					skillName = skillName .. " (" .. currentRank .. "/" .. maxRank .. ") " .. (isExpanded and " [-]" or " [+]")
-				else
-					skillName = skillName .. (isExpanded and " [-]" or " [+]")
-				end
-			end
-
-			if numSkillUps > 1 and skillType == "optimal" then
-				skillName = skillName .. " <" .. numSkillUps .. ">"
+				skillName = skillName .. (isExpanded and " [-]" or " [+]")
 			end
 
 			if not numAvailableAllCache[spellID] then
@@ -1720,7 +1732,7 @@ function GUI:CreatePromptFrame(parent)
 end
 
 function GUI:PromptPresetGroups(currentTradeSkill, presetGroupInfo)
-	GUI:RestoreFilters()
+	--GUI:RestoreFilters()
 	if TSM.db.factionrealm.tradeSkills[UnitName("player")][currentTradeSkill] and not TSM.db.factionrealm.tradeSkills[UnitName("player")][currentTradeSkill].prompted then
 		GUI.frame.prompt.profession = currentTradeSkill
 		GUI.frame.prompt.presetGroupInfo = presetGroupInfo

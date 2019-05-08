@@ -53,7 +53,7 @@ function Scan.ProcessGetAllScan(self)
 			end
 		end
 		
-		local itemID = TSMAPI:GetItemID(GetAuctionItemLink("list", i))
+		local itemID = TSMAPI:GetItemID(GetAuctionItemLinkWithRE("list", i))
 		--local itemRE = TSMAPI:GetRandomEnchant("auction", "list", i)
 
 		--if itemRE then

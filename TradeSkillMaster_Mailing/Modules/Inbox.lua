@@ -56,7 +56,9 @@ function Inbox:CreateTab(parent)
 				OpenMailFrame.updateButtonPositions = true
 				OpenMail_Update()
 				ShowUIPanel(OpenMailFrame)
-				OpenMailFrameInset:SetPoint("TOPLEFT", 4, -80)
+				if OpenMailFrameInset then
+					OpenMailFrameInset:SetPoint("TOPLEFT", 4, -80)
+				end
 				PlaySound("igSpellBookOpen")
 			else
 				InboxFrame.openMailID = 0
@@ -469,9 +471,9 @@ function private:LootMailItem(index)
 			local invoiceType, itemName, playerName, bid, _, _, ahcut = GetInboxInvoiceInfo(index)
 			if invoiceType == "buyer" then
 				local itemLink = GetInboxItemLink(index, 1) or itemName
-				TSM:Printf(L["Collected purchase of %s for %s."], itemLink, TSMAPI:FormatTextMoney(bid, redColor))
+				TSM:Printf("Collected purchase of %s for %s.", itemLink, TSMAPI:FormatTextMoney(bid, redColor))
 			elseif invoiceType == "seller" then
-				TSM:Printf(L["Collected sale of %s for %s."], itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor))
+				TSM:Printf("Collected sale of %s for %s.", itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor))
 			end
 		elseif hasItem then
 			local itemLink

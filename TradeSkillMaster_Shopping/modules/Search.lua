@@ -502,10 +502,10 @@ local function GetSearchFilterOptions(searchTerm)
 		elseif i == 1 then
 			if strfind(str, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?%-?([0-9]*)$") or strfind(str, "battlepet:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)$") then
 				queryString = TSMAPI:GetSafeItemInfo(str)
-				print("Safe queryString: ", queryString)
+				--print("Safe queryString: ", queryString)
 			else
 				queryString = str
-				print("queryString: ", queryString)
+				--print("queryString: ", queryString)
 			end
 		else
 			return false, L["Unknown Filter"]

@@ -185,7 +185,18 @@ function GUI:EventHandler(event, ...)
 			TSM.db.factionrealm.tradeSkills[UnitName("player")][skillName].maxLevel = maxLevel
 		end
 	elseif event == "UNIT_SPELLCAST_SUCCEEDED" then
-		local unit, _, _, _, spellID = ...
+		local unit, item = ...
+		spellID = 0
+		for id, v in pairs(TSM.db.factionrealm.crafts) do
+			if (v.name and v.name == item) then
+				spellID = id
+				break
+			end
+		end
+		if (spellID == 0) then
+			return GUI:UpdateQueue()
+		end
+
 		local craft = spellID and TSM.db.factionrealm.crafts[spellID]
 		if unit ~= "player" or not craft then return end
 
@@ -199,7 +210,7 @@ function GUI:EventHandler(event, ...)
 		end
 		TSMAPI:CreateTimeDelay("craftingQueueUpdateThrottle", 0.2, GUI.UpdateQueue)
 	elseif event == "UNIT_SPELLCAST_INTERRUPTED" or event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_FAILED_QUIET" then
-		local unit, _, _, _, spellID = ...
+		local unit, _, _, spellID = ...
 		if unit ~= "player" then return end
 
 		if GUI.isCrafting and spellID == GUI.isCrafting.spellID then

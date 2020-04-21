@@ -4,7 +4,6 @@
 ## Author: Sapu94, Bart39
 ## Version: v2.8
 ## SavedVariables: TradeSkillMasterAppDB, TradeSkillMasterDB
-## Dependency: AIO_Client
 ## OptionalDeps: AccurateTime, Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, TipHelper, LibParse, LibCompress, LibGraph-2.0, TheUndermineJournal, TheUndermineJournalGE
 ## X-Embeds: AccurateTime, Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, TipHelper, LibParse, LibCompress, LibGraph-2.0
 
@@ -50,7 +49,7 @@ Core\Groups.lua
 Core\Modules.lua
 Core\Mover.lua
 Core\Tooltips.lua
-##Core\Sync.lua
+Core\Sync.lua
 Core\Prices.lua
 Core\Threading.lua
 

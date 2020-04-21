@@ -34,7 +34,10 @@ function Scan.ProcessGetAllScan(self)
 	while true do
 		temp = min(temp + 1, 100)
 		self:Sleep(0.2)
-		if not Scan.isScanning then return end
+		if not Scan.isScanning then 
+			TSM:Print("Ending Scan early")
+			return 
+		end
 		if Scan.getAllLoaded then
 			break
 		end
@@ -47,19 +50,13 @@ function Scan.ProcessGetAllScan(self)
 		if i % 100 == 0 then
 			self:Yield()
 			if GetNumAuctionItems("list") ~= Scan.getAllLoaded then
-				TSM:Print(L["GetAll scan did not run successfully due to issues on Blizzard's end. Using the TSM application for your scans is recommended."])
+				TSM:Print("GetAll Scan didnt run because " .. GetNumAuctionItems("list") .. " not equal " .. Scan.getAllLoaded)
 				Scan:DoneScanning()
 				return
 			end
 		end
 		
-		local itemID = TSMAPI:GetItemID(GetAuctionItemLinkWithRE("list", i))
-		--local itemRE = TSMAPI:GetRandomEnchant("auction", "list", i)
-
-		--if itemRE then
-		--	-- Create a unique id if this has a random enchant
-		--	itemID = format("%s\re:%s", itemID, TSMAPI:StringHash(itemRE))
-		--end
+		local itemID = TSMAPI:GetItemID(GetAuctionItemLink("list", i))
 
 		local _, _, count, _, _, _, _, _, _, buyout = GetAuctionItemInfo("list", i)
 		if itemID and buyout and buyout > 0 then
@@ -67,7 +64,6 @@ function Scan.ProcessGetAllScan(self)
 			data[itemID].minBuyout = min(data[itemID].minBuyout, buyout)
 			data[itemID].quantity = data[itemID].quantity + count
 			for j=1, count do
-				ViragDevTool_AddData({data[itemID]}, "data[itemID]")
 				tinsert(data[itemID].records, floor(buyout/count))
 			end
 		end
@@ -85,22 +81,28 @@ function Scan.ProcessGetAllScan(self)
 end
 
 function Scan:AUCTION_ITEM_LIST_UPDATE()
+	TSM:Print("AUCTION_ITEM_LIST_UPDATE")
 	Scan:UnregisterEvent("AUCTION_ITEM_LIST_UPDATE")
-	local num, total = GetNumAuctionItems("list")
-	if num ~= total or num == 0 then
-		TSM:Print(L["GetAll scan did not run successfully due to issues on Blizzard's end. Using the TSM application for your scans is recommended."])
+	local num= GetNumAuctionItems("list")
+	if num == 0 then
+		TSM:Print("GetAll scan returned 0 items. You must wait 15 minutes.")
 		Scan:DoneScanning()
 		return
 	end
 	Scan.getAllLoaded = num
+	TSM:Print(Scan.getAllLoaded .. " auctions loaded")
 end
 
 function Scan:GetAllScanQuery()
 	local canScan, canGetAll = CanSendAuctionQuery()
 	if not canGetAll then return TSM:Print(L["Can't run a GetAll scan right now."]) end
-	if not canScan then return TSMAPI:CreateTimeDelay(0.5, Scan.GetAllScanQuery) end
-	QueryAuctionItems("", nil, nil, 0, 0, 0, 0, 0, 0, true)
+	if not canScan then 
+		TSM:Print("Cannot Scan")
+		return TSMAPI:CreateTimeDelay(0.5, Scan.GetAllScanQuery) 
+	end
 	Scan:RegisterEvent("AUCTION_ITEM_LIST_UPDATE")
+	TSM:Print("Registered AUCTION_ITEM_LIST_UPDATE")
+	QueryAuctionItems("", nil, nil, 0, 0, 0, 0, 0, 0, true)
 	TSMAPI.Threading:Start(Scan.ProcessGetAllScan, 1, function() Scan:DoneScanning() end)
 end
 

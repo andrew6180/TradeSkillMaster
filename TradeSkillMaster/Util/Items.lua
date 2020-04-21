@@ -25,18 +25,14 @@ function TSMAPI:GetItemString(item)
 	end
 	
 	if type(item) ~= "string" and type(item) ~= "number" then
-		TSM:Debug("TSMAPI:GetItemString", "invalid arg type", item)
 		return nil, "invalid arg type"
 	end
 	item = select(2, TSMAPI:GetSafeItemInfo(item)) or item
 	if tonumber(item) then
-		--TSM:Debug("TSMAPI:GetItemString", "item:"..item..":0:0:0:0:0:0")
 		return "item:"..item..":0:0:0:0:0:0"
 	end
 	
 	local itemInfo = {strfind(item, "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%-?%d*):?(%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")}
-	TSM:Debug("item", item)
-	TSM:Debug("itemInfo", itemInfo)
 
 	if not itemInfo[11] then return nil, "invalid link" end
 	itemInfo[11] = tonumber(itemInfo[11]) or 0
@@ -48,8 +44,6 @@ function TSMAPI:GetItemString(item)
 	else
 		it = table.concat(itemInfo, ":", 4, 7)
 	end
-
-	--TSM:Debug("TSMAPI:GetItemString", it)
 	return it
 end
 
@@ -67,18 +61,14 @@ function TSMAPI:GetBaseItemString(itemString, doGroupLookup)
 	end
 	local baseItemString = table.concat(parts, ":")
 	if not doGroupLookup then
-		--TSM:Debug("TSMAPI:GetBaseItemString", baseItemString)
 		return baseItemString
 	end
 	
 	if TSM.db.profile.items[itemString] and TSM.db.profile.items[baseItemString] then
-		--TSM:Debug("TSMAPI:GetBaseItemString", itemString)
 		return itemString
 	elseif TSM.db.profile.items[baseItemString] then
-		--TSM:Debug("TSMAPI:GetBaseItemString", baseItemString)
 		return baseItemString
 	else
-		--TSM:Debug("TSMAPI:GetBaseItemString", itemString)
 		return itemString
 	end
 end

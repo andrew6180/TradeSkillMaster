@@ -18,7 +18,7 @@ if not L then return end
 If you loot all mail with this enabled, it will wait and recheck then keep auto looting.]=] ] = "" ]==]
 -- L["Auto Recheck Mail"] = ""
 -- L["BE SURE TO SPELL THE NAME CORRECTLY!"] = ""
--- L["Buy: %s (%d) | %s | %s"] = ""
+-- L["Buy: %s | %s | %s"] = ""
 -- L["Cannot finish auto looting, inventory is full or too many unique items."] = ""
 -- L["Chat Message Options"] = ""
 -- L["Clear"] = ""

@@ -20,7 +20,7 @@ If you loot all mail with this enabled, it will wait and recheck then keep auto 
 Wenn diese Option aktiviert ist und das automatische Plündern läuft, wird die Entnahme nach den 60 Sekunden fortgesetzt.]=]
 L["Auto Recheck Mail"] = "Post automatisch aktualisieren"
 L["BE SURE TO SPELL THE NAME CORRECTLY!"] = "VERSICHERE DICH, DASS DER NAME RICHTIG GESCHRIEBEN IST!"
-L["Buy: %s (%d) | %s | %s"] = "Kauf: %s (%d) | %s | %s" -- Needs review
+L["Buy: %s | %s | %s"] = "Kauf: %s | %s | %s" -- Needs review
 L["Cannot finish auto looting, inventory is full or too many unique items."] = "Automatisches Plündern kann nicht beendet werden. Inventar ist voll oder zu viele \"einzigartige\" Gegenstände vorhanden."
 L["Chat Message Options"] = "Chatnachricht Optionen" -- Needs review
 L["Clear"] = "Löschen" -- Needs review

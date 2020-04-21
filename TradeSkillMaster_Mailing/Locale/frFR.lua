@@ -20,7 +20,7 @@ If you loot all mail with this enabled, it will wait and recheck then keep auto 
 Si vous récupérer tout les courriers avec ceci d'activé, l'auto-récupération des courriers continuera après l'actualisation.]=]
 L["Auto Recheck Mail"] = "Vérifier auto. les courriers"
 -- L["BE SURE TO SPELL THE NAME CORRECTLY!"] = ""
--- L["Buy: %s (%d) | %s | %s"] = ""
+-- L["Buy: %s | %s | %s"] = ""
 L["Cannot finish auto looting, inventory is full or too many unique items."] = "Impossible de finir de récupérer le courriers, l'inventaire est plein où vous avez trop d'objets unique."
 -- L["Chat Message Options"] = ""
 -- L["Clear"] = ""

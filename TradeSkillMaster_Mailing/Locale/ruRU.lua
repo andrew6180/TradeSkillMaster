@@ -18,7 +18,7 @@ L[ [=[Automatically rechecks mail every 60 seconds when you have too much mail.
 If you loot all mail with this enabled, it will wait and recheck then keep auto looting.]=] ] = "Автоматически проверяет почтовый ящик каждые 60 секунд, если у вас больше 50 писем. Если включить эту опцию, то при нажатии на кнопку \"Получить всё\" модуль заберет все письма из почтового ящика, обновит его и продолжит получение писем."
 L["Auto Recheck Mail"] = "Автопроверка почты"
 L["BE SURE TO SPELL THE NAME CORRECTLY!"] = "УБЕДИТЕСЬ, ЧТО ЗАПИСАЛИ ИМЯ ПРАВИЛЬНО!"
-L["Buy: %s (%d) | %s | %s"] = "Купить: %s (%d) | %s | %s"
+L["Buy: %s | %s | %s"] = "Купить: %s | %s | %s"
 L["Cannot finish auto looting, inventory is full or too many unique items."] = "Невозможно завершить получение почты. Ваши сумки заполнены, или у вас слишком много уникальных предметов."
 L["Chat Message Options"] = "Настройки чата"
 L["Clear"] = "Очистить"

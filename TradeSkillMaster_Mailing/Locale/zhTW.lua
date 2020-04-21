@@ -20,7 +20,7 @@ If you loot all mail with this enabled, it will wait and recheck then keep auto 
 當開啟此項時若你正在拾取全部郵件,程式將等待並複查郵件但保持自動拾取。]=]
 L["Auto Recheck Mail"] = "自動重新檢查郵件"
 L["BE SURE TO SPELL THE NAME CORRECTLY!"] = "請務必保證收件人姓名拼寫的正確性！"
-L["Buy: %s (%d) | %s | %s"] = "購買: %s (%d) | %s | %s"
+L["Buy: %s | %s | %s"] = "購買: %s | %s | %s"
 L["Cannot finish auto looting, inventory is full or too many unique items."] = "無法完成自動拾取郵件,行囊已滿或者擁有過多唯一物品."
 L["Chat Message Options"] = "聊天框消息选项"
 L["Clear"] = "清除"

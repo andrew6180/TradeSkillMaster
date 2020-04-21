@@ -20,7 +20,7 @@ If you loot all mail with this enabled, it will wait and recheck then keep auto 
 若你启用此功能时打开所有邮件，插件将等待并重新检查以保持自动拾取。]=]
 L["Auto Recheck Mail"] = "自动复查邮件"
 L["BE SURE TO SPELL THE NAME CORRECTLY!"] = "请务必保证收件人姓名拼写的正确性!!!"
-L["Buy: %s (%d) | %s | %s"] = "竞拍获胜: %s (%d) | %s | %s"
+L["Buy: %s | %s | %s"] = "竞拍获胜: %s | %s | %s"
 L["Cannot finish auto looting, inventory is full or too many unique items."] = "自动打开邮件无法完成，背包已满或者拥有过多唯一物品。"
 L["Chat Message Options"] = "聊天框消息选项"
 L["Clear"] = "清除"

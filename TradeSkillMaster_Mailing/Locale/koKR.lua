@@ -18,7 +18,7 @@ L[ [=[Automatically rechecks mail every 60 seconds when you have too much mail.
 If you loot all mail with this enabled, it will wait and recheck then keep auto looting.]=] ] = "보유 한도를 초과해 메일을 받았을 때 60초 주기로 메일을 재검색합니다.\\n\\n이 기능이 활성화되어 있으면 60초 대기후 초과한 메일을 재검색해 자동으로 모두 받을 수 있습니다." -- Needs review
 L["Auto Recheck Mail"] = "메일 자동 재검색"
 L["BE SURE TO SPELL THE NAME CORRECTLY!"] = "이름의 철자가 맞는지 다시 한 번 확인하세요!" -- Needs review
-L["Buy: %s (%d) | %s | %s"] = "구매: %s (%d) | %s | %s" -- Needs review
+L["Buy: %s | %s | %s"] = "구매: %s | %s | %s" -- Needs review
 L["Cannot finish auto looting, inventory is full or too many unique items."] = "자동 메일 받기를 완료할 수 없습니다. 가방이 다 찼거나 고유아이템이 너무 많습니다."
 L["Chat Message Options"] = "채팅 메시지 옵션" -- Needs review
 L["Clear"] = "지우기" -- Needs review

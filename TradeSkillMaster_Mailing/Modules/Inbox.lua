@@ -257,7 +257,7 @@ function private:InboxUpdate()
 			local invoiceType, itemName, playerName, bid, _, _, ahcut = GetInboxInvoiceInfo(i)
 			if invoiceType == "buyer" then
 				local itemLink = GetInboxItemLink(i, 1) or itemName
-				mailInfo[i] = format(L["Buy: %s | %s | %s"], itemLink, TSMAPI:FormatTextMoney(bid, redColor), FormatDaysLeft(daysLeft, i))
+				mailInfo[i] = format(L["Buy: %s (%d) | %s | %s"], itemLink, TSMAPI:FormatTextMoney(bid, redColor), FormatDaysLeft(daysLeft, i))
 			elseif invoiceType == "seller" then
 				collectGold = collectGold + bid - ahcut
 				mailInfo[i] = format(L["Sale: %s | %s | %s"], itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor), FormatDaysLeft(daysLeft, i))

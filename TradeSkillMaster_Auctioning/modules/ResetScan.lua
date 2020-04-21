@@ -617,7 +617,7 @@ end
 
 function Reset:VerifyAuction(index, tab, record, itemString)
 	local iString = TSMAPI:GetBaseItemString(GetAuctionItemLink(tab, index), true)
-	local _, _, count, _, _, _, _, minBid, _, buyout, bid = GetAuctionItemInfo(tab, index)
+	local _, _, count, _, _, _, minBid, _, buyout, bid = GetAuctionItemInfo(tab, index)
 	return (iString == itemString and bid == record.bid and minBid == record.minBid and buyout == record.buyout and count == record.count)
 end
 
@@ -673,7 +673,7 @@ end
 
 local function ValidateAuction(index, listType)
 	local itemString = TSMAPI:GetBaseItemString(GetAuctionItemLink(listType, index), true)
-	local _, _, count, _, _, _, _, _, _, buyout = GetAuctionItemInfo(listType, index)
+	local _, _, count, _, _, _, _, _, buyout = GetAuctionItemInfo(listType, index)
 	return count == currentAuction.count and buyout == currentAuction.buyout and itemString == currentAuction.itemString
 end
 

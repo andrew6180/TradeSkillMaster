@@ -58,7 +58,7 @@ function Scan.ProcessGetAllScan(self)
 		
 		local itemID = TSMAPI:GetItemID(GetAuctionItemLink("list", i))
 
-		local _, _, count, _, _, _, _, _, _, buyout = GetAuctionItemInfo("list", i)
+		local _, _, count, _, _, _, _, _, buyout = GetAuctionItemInfo("list", i)
 		if itemID and buyout and buyout > 0 then
 			data[itemID] = data[itemID] or {records={}, minBuyout=math.huge, quantity=0}
 			data[itemID].minBuyout = min(data[itemID].minBuyout, buyout)
@@ -97,11 +97,10 @@ function Scan:GetAllScanQuery()
 	local canScan, canGetAll = CanSendAuctionQuery()
 	if not canGetAll then return TSM:Print(L["Can't run a GetAll scan right now."]) end
 	if not canScan then 
-		TSM:Print("Cannot Scan")
+		TSM:Print(L["Can't run a GetAll scan right now."])
 		return TSMAPI:CreateTimeDelay(0.5, Scan.GetAllScanQuery) 
 	end
 	Scan:RegisterEvent("AUCTION_ITEM_LIST_UPDATE")
-	TSM:Print("Registered AUCTION_ITEM_LIST_UPDATE")
 	QueryAuctionItems("", nil, nil, 0, 0, 0, 0, 0, 0, true)
 	TSMAPI.Threading:Start(Scan.ProcessGetAllScan, 1, function() Scan:DoneScanning() end)
 end

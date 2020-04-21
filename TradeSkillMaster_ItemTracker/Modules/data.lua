@@ -166,8 +166,7 @@ function Data:ScanPlayerAuctions()
 		local link = GetAuctionItemLink("owner", i)
 		local itemString = TSMAPI:GetItemString(link)
 		local baseItemString = TSMAPI:GetBaseItemString(link)
-		local name, _, quantity, _, _, _, _, _, _, buyout, _, _, _, wasSold, _, wasSold_54 = GetAuctionItemInfo("owner", i)
-		if select(4, GetBuildInfo()) == 50400 then wasSold = wasSold_54 end
+		local name, _, quantity, _, _, _, _, _, buyout, _, _, _, wasSold = GetAuctionItemInfo("owner", i)
 		if wasSold == 0 and itemString then
 			TSM.characters[TSM.CURRENT_PLAYER].auctions[itemString] = (TSM.characters[TSM.CURRENT_PLAYER].auctions[itemString] or 0) + quantity
 			if itemString ~= baseItemString then
@@ -306,7 +305,7 @@ do
 	local tmpBuyouts = {}
 	local function OnAuctionBid(listType, index, bidPlaced)
 		local link = GetAuctionItemLink(listType, index)
-		local name, _, count, _, _, _, _, _, _, buyout = GetAuctionItemInfo(listType, index)
+		local name, _, count, _, _, _, _, _, buyout = GetAuctionItemInfo(listType, index)
 		if bidPlaced == buyout then
 			tinsert(tmpBuyouts, { name = name, link = link, count = count })
 		end

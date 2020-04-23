@@ -500,7 +500,9 @@ function GUI:CreateQueueFrame(parent)
 		end
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
 		GameTooltip:SetPoint("LEFT", self, "RIGHT")
-		GameTooltip:AddLine(TSM.db.factionrealm.crafts[data.spellID].name .. " (x" .. data.numQueued .. ")")
+		if data.spellID and data.numQueued and TSM.db.factionrealm.crafts[data.spellID].name then
+			GameTooltip:AddLine(TSM.db.factionrealm.crafts[data.spellID].name .. " (x" .. data.numQueued .. ")")
+		end
 		if moneyCoinsTooltip then
 			GameTooltip:AddLine(L["Profit (Total Profit):"] .. " " .. (TSMAPI:FormatTextMoneyIcon(data.profit, color) or "---") .. "(" .. (TSMAPI:FormatTextMoneyIcon(totalProfit, color) or "---") .. ")")
 		else

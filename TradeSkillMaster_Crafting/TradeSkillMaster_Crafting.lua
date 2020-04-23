@@ -228,7 +228,7 @@ end
 
 local reverseLookupUpdate = 0
 function TSM:UpdateCraftReverseLookup()
-	if reverseLookupUpdate >= time() - 30 then return end
+	if reverseLookupUpdate >= time() - 5 then return end
 	reverseLookupUpdate = time()
 	TSM.craftReverseLookup = {}
 

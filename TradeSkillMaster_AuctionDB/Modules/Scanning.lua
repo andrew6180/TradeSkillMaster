@@ -81,7 +81,6 @@ function Scan.ProcessGetAllScan(self)
 end
 
 function Scan:AUCTION_ITEM_LIST_UPDATE()
-	TSM:Print("AUCTION_ITEM_LIST_UPDATE")
 	Scan:UnregisterEvent("AUCTION_ITEM_LIST_UPDATE")
 	local num= GetNumAuctionItems("list")
 	if num == 0 then

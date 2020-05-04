@@ -53,7 +53,8 @@ function GUI:OnEnable()
 		TSMAPI:CreateTimeDelay("gatheringUpdateThrottle", 0.3, GUI.UpdateGathering)
 	end)
 
-	GUI:UpdateTradeSkills()
+	-- [3.3.5 ] does commenting this shit out fix all the dumb issues with saving professions in the tsm db?
+	--GUI:UpdateTradeSkills()
 	GUI.gatheringFrame = GUI:CreateGatheringFrame()
 	if next(TSM.db.factionrealm.gathering.neededMats) then
 		TSMAPI:CreateTimeDelay("gatheringShowThrottle", 0.3, GUI:ShowGatheringFrame())
@@ -224,16 +225,17 @@ function GUI:UpdateTradeSkills()
 	local playerName = UnitName("player")
 	if not playerName then return end
 	TSM.db.factionrealm.tradeSkills[playerName] = TSM.db.factionrealm.tradeSkills[playerName] or {}
+	
 	--SpellBook_UpdateProfTab()
 
 	local skillName, level, maxLevel, _ = GetTradeSkillLine()
 	if not skillName then return; end;
 	local old = TSM.db.factionrealm.tradeSkills[playerName]
-	TSM.db.factionrealm.tradeSkills[playerName] = {}
 	TSM.db.factionrealm.tradeSkills[playerName][skillName] = old[skillName] or {}
 	TSM.db.factionrealm.tradeSkills[playerName][skillName].level = level
 	TSM.db.factionrealm.tradeSkills[playerName][skillName].maxLevel = maxLevel
 	TSM.db.factionrealm.tradeSkills[playerName][skillName].isSecondary = (skillName == "First Aid" or skillName == "Cooking" or skillName == "Fishing") and true
+	
 	-- 		local spellBookSlot = btns[i]:GetID() + btns[i]:GetParent().spellOffset
 	-- 		local _, link = GetSpellLink(spellBookSlot, BOOKTYPE_SPELL)
 	-- if link then

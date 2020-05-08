@@ -170,6 +170,7 @@ function GUI:EventHandler(event, ...)
 		else
 			TradeSkillFrame_SetSelection(GetFirstTradeSkill())
 		end
+		
 		TradeSkillFrame_Update()
 		TSMAPI:CreateTimeDelay("craftingProfessionUpdateThrottle", 0.2, GUI.UpdateProfessionsTabST)
 		TSMAPI:CreateTimeDelay("craftingQueueUpdateThrottle", 0.2, GUI.UpdateQueue)
@@ -234,43 +235,12 @@ function GUI:UpdateTradeSkills()
 	TSM.db.factionrealm.tradeSkills[playerName][skillName] = old[skillName] or {}
 	TSM.db.factionrealm.tradeSkills[playerName][skillName].level = level
 	TSM.db.factionrealm.tradeSkills[playerName][skillName].maxLevel = maxLevel
-	TSM.db.factionrealm.tradeSkills[playerName][skillName].isSecondary = (skillName == "First Aid" or skillName == "Cooking" or skillName == "Fishing") and true
+	local isSecondary = (skillName == "First Aid" or skillName == "Cooking" or skillName == "Fishing") and true
+	TSM.db.factionrealm.tradeSkills[playerName][skillName].isSecondary = isSecondary
+	TSM.db.factionrealm.tradeSkills[playerName][skillName].timestamp = time()
 	
-	-- 		local spellBookSlot = btns[i]:GetID() + btns[i]:GetParent().spellOffset
-	-- 		local _, link = GetSpellLink(spellBookSlot, BOOKTYPE_SPELL)
-	-- if link then
-	-- 	TSM.db.factionrealm.tradeSkills[playerName][skillName].link = link
-	-- 	if not TSM.isSyncing then
-	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName].account = nil
-	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName].accountKey = TSMAPI.Sync:GetAccountKey()
-	-- 		TSM.Sync:BroadcastTradeSkillData()
-	-- 	end
-	-- end
-
-	-- local tradeSkill1, tradeSkill2, _, cook, firstAid = GetProfessions()
-	-- local btns = { PrimaryProfession1SpellButtonBottom, PrimaryProfession2SpellButtonBottom, SecondaryProfession3SpellButtonRight, SecondaryProfession4SpellButtonRight }
-	-- local old = TSM.db.factionrealm.tradeSkills[playerName]
-	-- TSM.db.factionrealm.tradeSkills[playerName] = {}
-	-- for i, id in pairs({ tradeSkill1, tradeSkill2, cook, firstAid }) do -- needs to be pairs since may not be continuous indices
-	-- 	if not btns[i]:GetParent().missingHeader:IsVisible() then
-	-- 		local skillName, _, level, maxLevel = GetProfessionInfo(id)
-	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName] = old[skillName] or {}
-	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName].level = level
-	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName].maxLevel = maxLevel
-	-- 		TSM.db.factionrealm.tradeSkills[playerName][skillName].isSecondary = (i > 2) and true
-
-	-- 		local spellBookSlot = btns[i]:GetID() + btns[i]:GetParent().spellOffset
-	-- 		local _, link = GetSpellLink(spellBookSlot, BOOKTYPE_PROFESSION)
-	-- 		if link then
-	-- 			TSM.db.factionrealm.tradeSkills[playerName][skillName].link = link
-	-- 			if skillName == GetTradeSkillLine() and i <= 2 and not TSM.isSyncing then
-	-- 				TSM.db.factionrealm.tradeSkills[playerName][skillName].account = nil
-	-- 				TSM.db.factionrealm.tradeSkills[playerName][skillName].accountKey = TSMAPI.Sync:GetAccountKey()
-	-- 				TSM.Sync:BroadcastTradeSkillData()
-	-- 			end
-	-- 		end
-	-- 	end
-	-- end
+	-- remove oldest professions if we have any
+	TSM.Util:RemoveOldProfessions()
 
 	--tidy up crafts if player unlearned a profession
 	for spellid, data in pairs(TSM.db.factionrealm.crafts) do
@@ -1264,7 +1234,11 @@ function GUI:CreateCraftInfoFrame(parent)
 
 		if altVerb == ENSCRIBE then
 			createAllBtn:SetText(L["Enchant Vellum"])
-			createAllBtn.vellum = TSMAPI:GetSafeItemInfo("item:38682:0:0:0:0:0:0")
+			local itemInfo = "item:43145:0:0:0:0:0:0"
+			if string.find(name, "Weapon - ") then
+				itemInfo = "item:43146:0:0:0:0:0:0"
+			end
+			createAllBtn.vellum = TSMAPI:GetSafeItemInfo(itemInfo)
 		else
 			createAllBtn:SetText(CREATE_ALL)
 			createAllBtn.vellum = nil
@@ -1537,7 +1511,10 @@ function GUI:UpdateQueue()
 						end
 
 						local velName
-						local VELLUM_ID = "item:38682:0:0:0:0:0:0"
+						local VELLUM_ID = "item:43145:0:0:0:0:0:0"
+						if string.find(TSM.db.factionrealm.crafts[spellID].name, "Weapon - ") then 
+							VELLUM_ID = "item:43146:0:0:0:0:0:0"
+						end
 						if TSM.db.factionrealm.crafts[spellID].mats[VELLUM_ID] then
 							velName = GetItemInfo(VELLUM_ID) or TSM.db.factionrealm.mats[VELLUM_ID].name
 						end

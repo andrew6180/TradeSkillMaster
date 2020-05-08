@@ -9,7 +9,7 @@
 -- load the parent file (TSM) into a local variable and register this file as a module
 local TSM = select(2, ...)
 local Util = TSM:NewModule("Util")
-local VELLUM_ID = "item:38682:0:0:0:0:0:0"
+local VELLUM_ID = "item:43145:0:0:0:0:0:0"
 
 local scanTooltip
 function GetTradeSkillReagentItemLink(skillIndex, reagentLink)
@@ -88,6 +88,11 @@ function Util:ScanCurrentProfession()
 			local spellID, itemID, craftName
 			if strfind(itemLink, "enchant:") then
 				-- result of craft is enchant
+				if strfind(itemLink, "Weapon - ") then
+					VELLUM_ID = "item:43146:0:0:0:0:0:0" 
+				else
+					VELLUM_ID = "item:43145:0:0:0:0:0:0"
+				end
 				spellID = Util:GetSpellID(index)
 				itemID = TSM.enchantingItemIDs[spellID] and "item:"..TSM.enchantingItemIDs[spellID]..":0:0:0:0:0:0"
 				craftName = GetSpellInfo(spellID)
@@ -298,6 +303,7 @@ function Util.ScanSyncedProfessionThread(self)
 	TSM.db.factionrealm.tradeSkills[playerName][skillName].accountKey = TSM.isSyncing.accountKey
 	TSM.db.factionrealm.tradeSkills[playerName][skillName].level = level
 	TSM.db.factionrealm.tradeSkills[playerName][skillName].maxLevel = maxLevel
+	TSM.db.factionrealm.tradeSkills[playerName][skillName].timestamp = time()
 end
 
 function Util:GetSpellID(index)
@@ -323,4 +329,40 @@ function Util:FormatTime(seconds)
 		str = str..format("%ds", secs)
 	end
 	return str
+end
+
+function Util:RemoveOldProfessions()
+	local playerName = UnitName("player")
+	if not playerName then return end
+
+	skills = TSM.db.factionrealm.tradeSkills[playerName]
+
+	mainProfessions = { }
+	for skillName, data in pairs(skills) do 
+
+		if skillName ~= "UNKNOWN" and not data.isSecondary then 
+			mainProfessions[skillName] = data
+		end
+	end
+
+	-- exit if we only have 2 professions
+	local count = 0
+	for _ in pairs(mainProfessions) do count = count + 1 end
+	if count < 3 then return end
+
+	table.sort(mainProfessions, function(a, b) return a.timestamp > b.timestamp end)
+	
+	for i = 3, count do
+		tremove(mainProfessions)
+	end
+
+	for k in pairs(mainProfessions) do
+		TSM:Print("[KEEPING] " .. k)
+	end
+
+	TSM.db.factionrealm.tradeSkills[playerName] = mainProfessions
+
+	for k in pairs(TSM.db.factionrealm.tradeSkills[playerName]) do
+		TSM:Print("[KEPT] " .. k)
+	end
 end

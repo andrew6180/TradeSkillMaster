@@ -91,7 +91,7 @@ function Inbox:CreateTab(parent)
 	label:SetJustifyV("CENTER")
 	label:SetText(L["AH Mail:"])
 
-	local btnWidth = (frame:GetWidth() - label:GetWidth() - 25) / 4
+	local btnWidth = (frame:GetWidth() - label:GetWidth() - 25) / 5
 
 	local btn = TSMAPI.GUI:CreateButton(frame, 18)
 	btn:SetPoint("BOTTOMLEFT", label, "BOTTOMRIGHT", 5, 0)
@@ -119,10 +119,18 @@ function Inbox:CreateTab(parent)
 
 	local btn = TSMAPI.GUI:CreateButton(frame, 18)
 	btn:SetPoint("BOTTOMLEFT", frame.cancelsBtn, "BOTTOMRIGHT", 5, 0)
-	btn:SetPoint("BOTTOMRIGHT", -5, 5)
+	btn:SetWidth(btnWidth)
 	btn:SetHeight(20)
 	btn:SetText(L["Expires"])
 	btn:SetScript("OnClick", function() private:StartAutoLooting("expires") end)
+	frame.expiresBtn = btn
+
+	local btn = TSMAPI.GUI:CreateButton(frame, 18)
+	btn:SetPoint("BOTTOMLEFT", frame.expiresBtn, "BOTTOMRIGHT", 5, 0)
+	btn:SetPoint("BOTTOMRIGHT", -5, 5)
+	btn:SetHeight(20)
+	btn:SetText("Pending")
+	btn:SetScript("OnClick", function() private:StartAutoLooting("pendings") end)
 	frame.expiresBtn = btn
 
 	local btn = TSMAPI.GUI:CreateButton(frame, 16)
@@ -246,7 +254,7 @@ function private:InboxUpdate()
 
 	local numMail, totalMail = GetInboxNumItems()
 
-	local greenColor, redColor = "|cff00ff00", "|cffff0000"
+	local greenColor, redColor, yellowColor = "|cff00ff00", "|cffff0000", "|cffeeff00"
 	local mailInfo = {}
 	local collectGold = 0
 	for i = 1, numMail do
@@ -262,7 +270,7 @@ function private:InboxUpdate()
 				collectGold = collectGold + bid - ahcut
 				mailInfo[i] = format(L["Sale: %s | %s | %s"], itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor), FormatDaysLeft(daysLeft, i))
 			elseif invoiceType == "seller_temp_invoice" then
-				mailInfo[i] = format("Pending Sale: %s | %s | %s", itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor), FormatDaysLeft(daysLeft, i))
+				mailInfo[i] = format("Pending Sale: %s | %s | %s", itemName, TSMAPI:FormatTextMoney(bid - ahcut, yellowColor), FormatDaysLeft(daysLeft, i))
 			end
 		elseif hasItem then
 			local itemLink
@@ -367,6 +375,14 @@ function private:ShouldOpenMail(index)
 				if quantity and quantity > 0 and (subject == format(AUCTION_REMOVED_MAIL_SUBJECT.." (%d)", itemName, quantity) or subject == format(AUCTION_REMOVED_MAIL_SUBJECT, itemName)) then
 					return true
 				end
+			end
+		end
+	elseif private.mode == "pendings" then
+		local isInvoice = select(4, GetInboxText(index))
+		if isInvoice then
+			invoiceType = GetInboxInvoiceInfo(index)
+			if invoiceType == "seller_temp_invoice" then
+				return true
 			end
 		end
 	elseif private.mode == "expires" then
@@ -477,7 +493,7 @@ function private:LootMailItem(index)
 			elseif invoiceType == "seller" then
 				TSM:Printf("Collected sale of %s for %s.", itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor))
 			elseif invoiceType == "seller_temp_invoice" then
-				TSM:Printf("Removing pending sale: %s (%s)", itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor))
+				TSM:Printf("Removing pending sale: %s (%s)", itemName, TSMAPI:FormatTextMoney(bid - ahcut, yellowColor))
 				DeleteInboxItem(index)
 				return
 			end

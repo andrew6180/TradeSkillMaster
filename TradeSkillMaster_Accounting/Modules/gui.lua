@@ -967,8 +967,9 @@ function GUI:DrawGoldGraph(container)
 				},
 				{
 					type = "ScrollFrame",
+					layout = "fill",
 					fullHeight = true,
-					layout = "flow"
+					fullWidth = true,
 				},
 			},
 		},
@@ -976,10 +977,10 @@ function GUI:DrawGoldGraph(container)
 
 	TSMAPI:BuildPage(container, page)
 
-	local parent = container.children[1].children[#container.children[1].children].frame
+	local parent = container.children[1].children[5].frame
 
 	if not GUI.lineGraph then
-		local graph = LibStub("LibGraph-2.0"):CreateGraphLine(nil, parent, "CENTER", nil, nil, nil, parent:GetWidth(), parent:GetHeight())
+		local graph = LibStub("LibGraph-2.0"):CreateGraphLine(nil, parent, "CENTER", nil, nil, nil, container.children[1].frame:GetWidth(), parent:GetHeight() - 160)
 		graph:SetGridColor({ 0.8, 0.8, 0.8, 0.6 })
 		graph:SetYLabels(true)
 		GUI.lineGraph = graph
@@ -988,6 +989,8 @@ function GUI:DrawGoldGraph(container)
 	GUI.lineGraph:SetParent(parent)
 	GUI.lineGraph:ClearAllPoints()
 	GUI.lineGraph:SetAllPoints(parent)
+	local level = GUI.lineGraph:GetFrameLevel(container.children[1].children[1].frame)
+	GUI.lineGraph:SetFrameLevel(level - 1)
 
 	GUI.lineGraph:ResetData()
 	local ySpacing = max(ceil((maxY - minY) / 20), 0.5)

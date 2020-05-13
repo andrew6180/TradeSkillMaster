@@ -126,10 +126,6 @@ local function ParsePriceString(str, badPriceSource)
 			local s, e = strfind(convertParams, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)")
 			convertItem = strsub(convertParams, s, e)
 			source = strsub(convertParams, 1, s - 1)
-		elseif strfind(convertParams, "battlepet:") then
-			local s, e = strfind(convertParams, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)")
-			convertItem = strsub(convertParams, s, e)
-			source = strsub(convertParams, 1, s - 1)
 		else
 			source = convertParams
 		end
@@ -167,8 +163,6 @@ local function ParsePriceString(str, badPriceSource)
 		local s, e
 		if strfind(str, "item:") then
 			s, e = strfind(str, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)")
-		elseif strfind(str, "battlepet:") then
-			s, e = strfind(str, "battlepet:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)")
 		else
 			break
 		end

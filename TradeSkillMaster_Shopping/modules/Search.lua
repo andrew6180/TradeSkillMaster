@@ -324,7 +324,7 @@ end
 function Search:StartFilterSearch(filter, callback, isCrafting)
 	TSM.isCrafting = isCrafting
 	TSM.searchCallback = callback
-	if strfind(filter, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?%-?([0-9]*)$") or strfind(filter, "battlepet:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)$") then
+	if strfind(filter, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?%-?([0-9]*)$") then
 		filter = TSMAPI:GetSafeItemInfo(filter) or filter
 	end
 	if TSM.isCrafting then
@@ -500,7 +500,7 @@ local function GetSearchFilterOptions(searchTerm)
 		elseif TSMAPI:UnformatTextMoney(str) then
 			maxPrice = TSMAPI:UnformatTextMoney(str)
 		elseif i == 1 then
-			if strfind(str, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?%-?([0-9]*)$") or strfind(str, "battlepet:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)$") then
+			if strfind(str, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?%-?([0-9]*)$") then
 				queryString = TSMAPI:GetSafeItemInfo(str)
 				--print("Safe queryString: ", queryString)
 			else

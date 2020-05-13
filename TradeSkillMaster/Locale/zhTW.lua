@@ -356,7 +356,7 @@ L["Override Module Operations"] = "覆蓋模組操作"
 L["Parent Group Items:"] = "上級分組物品"
 L["Parent/Ungrouped Items:"] = "上級分組/未分組物品:"
 L["Past Contributors:"] = "過去的貢獻者："
-L["Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For battle pets, the entire battlepet string should be used. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."] = "粘貼導出的物品到此框並按下回車或點擊確定按鈕. 一般物品的推薦格式為:輸入物品ID並用逗號隔開. 對於戰鬥寵物,必須輸入戰寵全名.對於隨機附魔物品,格式為: <物品ID>:<隨機附魔> (例如: 38472:-29)."
+L["Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."] = "粘貼導出的物品到此框並按下回車或點擊確定按鈕. 一般物品的推薦格式為:輸入物品ID並用逗號隔開. 對於戰鬥寵物,必須輸入戰寵全名.對於隨機附魔物品,格式為: <物品ID>:<隨機附魔> (例如: 38472:-29)."
 -- L["Paste the exported operation settings into this box and hit enter or press the 'Okay' button. Imported settings will irreversibly replace existing settings for this operation."] = ""
 L[ [=[Paste the list of items into the box below and hit enter or click on the 'Okay' button.
 

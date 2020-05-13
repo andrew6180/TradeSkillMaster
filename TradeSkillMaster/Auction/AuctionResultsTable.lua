@@ -94,14 +94,8 @@ local function GetRowTable(rt, auction, isExpandable)
 		auctionsData = {#auction.parent.records, auction.parent.records[1].playerAuctions, isExpandable}
 	end
 	local name, iLvl
-	if strmatch(auction.parent.itemLink, "battlepet") then
-		local _, speciesID, itemLvl = strsplit(":", auction.parent.itemLink)
-		local itemName = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
-		name, iLvl = itemName, itemLvl
-	else
-		local itemName, _, _, itemLvl = GetItemInfo(auction.parent.itemLink)
-		name, iLvl = itemName, itemLvl
-	end
+	local itemName, _, _, itemLvl = GetItemInfo(auction.parent.itemLink)
+	name, iLvl = itemName, itemLvl
 	local pct = auction:GetPercent()
 	if not pct or pct < 0 or pct == math.huge then
 		pct = nil
@@ -646,7 +640,6 @@ function TSMAPI:CreateAuctionResultsTable(parent, handlers, quickBuyout, isDestr
 						end
 					end)
 				iconBtn:SetScript("OnLeave", function(self)
-						--BattlePetTooltip:Hide()
 						GameTooltip:ClearLines()
 						GameTooltip:Hide()
 						rt.isShowingItemTooltip = false

@@ -11,11 +11,7 @@
 local TSM = select(2, ...)
 
 function TSMAPI:SafeTooltipLink(link)
-	if strmatch(link, "battlepet") then
-		local _, speciesID, level, breedQuality, maxHealth, power, speed, battlePetID = strsplit(":", link)
-		BattlePetToolTip_Show(tonumber(speciesID), tonumber(level), tonumber(breedQuality), tonumber(maxHealth), tonumber(power), tonumber(speed), gsub(gsub(link, "^(.*)%[", ""), "%](.*)$", ""))
-	else
-		GameTooltip:SetHyperlink(link)
+	GameTooltip:SetHyperlink(link)
 	end
 end
 
@@ -74,31 +70,11 @@ function TSMAPI:GetBaseItemString(itemString, doGroupLookup)
 end
 
 local itemInfoCache = {}
-local PET_CAGE_ITEM_INFO = {isDefault=true, 0, "Battle Pets", "", 1, "", "", 0}
 function TSMAPI:GetSafeItemInfo(link)
 	if type(link) ~= "string" then return end
 	
 	if not itemInfoCache[link] then
-		if strmatch(link, "battlepet:") then
-			local _, speciesID, level, quality, health, power, speed, petID = strsplit(":", link)
-			if not tonumber(speciesID) then return end
-			level, quality, health, power, speed, petID = level or 0, quality or 0, health or 0, power or 0, speed or 0, petID or "0"
-			
-			local name, texture = C_PetJournal.GetPetInfoBySpeciesID(tonumber(speciesID))
-			if name == "" then return end
-			level, quality = tonumber(level), tonumber(quality)
-			petID = strsub(petID, 1, (strfind(petID, "|") or #petID)-1)
-			link = ITEM_QUALITY_COLORS[quality].hex.."|Hbattlepet:"..speciesID..":"..level..":"..quality..":"..health..":"..power..":"..speed..":"..petID.."|h["..name.."]|h|r"
-			if PET_CAGE_ITEM_INFO.isDefault then
-				local data = {select(5, GetItemInfo(82800))}
-				if #data > 0 then
-					PET_CAGE_ITEM_INFO = data
-				end
-			end
-			local minLvl, iType, _, stackSize, _, _, vendorPrice = unpack(PET_CAGE_ITEM_INFO)
-			local subType, equipLoc = 0, ""
-			itemInfoCache[link] = {name, link, quality, level, minLvl, iType, subType, stackSize, equipLoc, texture, vendorPrice}
-		elseif strmatch(link, "item:") then
+		if strmatch(link, "item:") then
 			itemInfoCache[link] = {GetItemInfo(link)}
 		end
 		if itemInfoCache[link] and #itemInfoCache[link] == 0 then itemInfoCache[link] = nil end
@@ -158,10 +134,7 @@ function TSMAPI:IsSoulbound(bag, slot)
 	
 	local slotID
 	if type(bag) == "string" then
-		if strfind(bag, "battlepet") then return end
-		slotID = bag
-		scanTooltip:SetHyperlink(slotID)
-	elseif bag and slot then
+		if bag and slot then
 		slotID = bag.."@"..slot
 		local itemID = GetContainerItemID(bag, slot)
 		local maxCharges

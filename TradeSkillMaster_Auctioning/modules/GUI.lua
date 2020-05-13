@@ -355,7 +355,6 @@ function private:CreateInfoText(parent)
 			end
 		end)
 	icon:SetScript("OnLeave", function()
-			BattlePetTooltip:Hide()
 			GameTooltip:ClearLines()
 			GameTooltip:Hide()
 		end)

@@ -246,10 +246,6 @@ function TSM:OnInitialize()
 		TSM.db.profile.destroyValueSource = TSM.db.profile.deValueSource
 		TSM.db.profile.deValueSource = nil
 	end
-	
-	-- Cache battle pet names
-	--for i=1, C_PetJournal.GetNumPets() do C_PetJournal.GetPetInfoByIndex(i) end
-	-- force a garbage collection
 	collectgarbage()
 end
 

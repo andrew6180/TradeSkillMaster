@@ -151,15 +151,12 @@ local function AddTooltip(widget, text, title)
 				GameTooltip:SetHyperlink("item:" .. text)
 			elseif tonumber(text) then
 				GameTooltip:SetHyperlink("enchant:"..text)
-			elseif type(tooltip) == "string" and (strfind(tooltip, "item:") or strfind(tooltip, "battlepet:")) then
-				TSMAPI:SafeTooltipLink(tooltip)
 			else
 				GameTooltip:AddLine(text, 1, 1, 1, 1)
 			end
 			GameTooltip:Show()
 		end)
 	widget:SetCallback("OnLeave", function()
-			--BattlePetTooltip:Hide()
 			GameTooltip:ClearLines()
 			GameTooltip:Hide()
 		end)

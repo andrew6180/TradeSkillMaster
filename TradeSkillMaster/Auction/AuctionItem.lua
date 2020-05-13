@@ -137,12 +137,12 @@ local AuctionItem = {
 		self.texture = ""
 	end,
 	
-	-- sets the item (or battle pet's) texture
+	-- sets the item texture
 	SetTexture = function(self, texture)
 		self.texture = texture
 	end,
 	
-	-- gets the item (or battle pet's) texture
+	-- gets the item texture
 	GetTexture = function(self)
 		return self.texture
 	end,
@@ -176,11 +176,7 @@ local AuctionItem = {
 	AddAuctionRecord = function(self, ...)
 		local record = NewRecord()
 		record:SetData(self, ...)
-		if strfind(self.itemLink, "battlepet") then
-			record.uniqueID = table.concat({TSMAPI:Select({2, 3, 4, 5, 6, 7}, (":"):split(self.itemLink))}, ".")
-		else
-			record.uniqueID = select(9, (":"):split(self.itemLink))
-		end
+		record.uniqueID = select(9, (":"):split(self.itemLink))
 		self:AddRecord(record)
 	end,
 	

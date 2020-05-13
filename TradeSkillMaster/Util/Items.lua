@@ -12,7 +12,6 @@ local TSM = select(2, ...)
 
 function TSMAPI:SafeTooltipLink(link)
 	GameTooltip:SetHyperlink(link)
-	end
 end
 
 function TSMAPI:GetItemString(item)
@@ -134,7 +133,9 @@ function TSMAPI:IsSoulbound(bag, slot)
 	
 	local slotID
 	if type(bag) == "string" then
-		if bag and slot then
+		slotID = bag
+		scanTooltip:SetHyperlink(slotID)
+	elseif bag and slot then
 		slotID = bag.."@"..slot
 		local itemID = GetContainerItemID(bag, slot)
 		local maxCharges

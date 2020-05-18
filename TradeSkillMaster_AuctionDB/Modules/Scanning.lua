@@ -50,7 +50,7 @@ function Scan.ProcessGetAllScan(self)
 		if i % 100 == 0 then
 			self:Yield()
 			if GetNumAuctionItems("list") ~= Scan.getAllLoaded then
-				TSM:Print("GetAll Scan didnt run because " .. GetNumAuctionItems("list") .. " not equal " .. Scan.getAllLoaded)
+				TSM:Print("GetAll Scan didnt run because " .. GetNumAuctionItems("list") .. " not equal " .. tostring(Scan.getAllLoaded))
 				Scan:DoneScanning()
 				return
 			end

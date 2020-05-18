@@ -352,17 +352,14 @@ function Util:RemoveOldProfessions()
 
 	table.sort(mainProfessions, function(a, b) return a.timestamp > b.timestamp end)
 	
-	for i = 3, count do
-		tremove(mainProfessions)
+	for i = 2, count do
+		local removed = tremove(mainProfessions)
+		TSM:Print("[REMOVED] " .. removed)
 	end
 
 	for k in pairs(mainProfessions) do
-		TSM:Print("[KEEPING] " .. k)
+		TSM:Print("[KEPT] " .. k)
 	end
 
 	TSM.db.factionrealm.tradeSkills[playerName] = mainProfessions
-
-	for k in pairs(TSM.db.factionrealm.tradeSkills[playerName]) do
-		TSM:Print("[KEPT] " .. k)
-	end
 end

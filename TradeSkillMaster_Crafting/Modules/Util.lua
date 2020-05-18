@@ -350,19 +350,26 @@ function Util:RemoveOldProfessions()
 	for _ in pairs(mainProfessions) do count = count + 1 end
 	if count < 3 then return end
 
-	table.sort(mainProfessions, function(a, b) return a.timestamp > b.timestamp end)
-	
-	for i = 3, count do
-		tremove(mainProfessions)
-	end
+	local firstProfession = nil
+	local secondProfession = nil
 
-	for k in pairs(mainProfessions) do
-		TSM:Print("[KEEPING] " .. k)
+	for k, v in pairs(mainProfessions) do 
+		if firstProfession == nil or v.timestamp > firstProfession[2].timestamp then
+			if firstProfession ~= nil then
+				secondProfession = firstProfession
+			end
+			firstProfession = {k, v}
+		elseif secondProfession == nil or v.timestamp > secondProfession[2].timestamp then
+			if secondProfession ~= nil then
+				--TSM:Print("[REMOVED] " .. secondProfession[1])
+				mainProfessions[secondProfession[1]] = nil
+			end
+			secondProfession = {k, v}
+		else
+			--TSM:Print("[REMOVED] " .. k)
+			mainProfessions[k] = nil
+		end
 	end
 
 	TSM.db.factionrealm.tradeSkills[playerName] = mainProfessions
-
-	for k in pairs(TSM.db.factionrealm.tradeSkills[playerName]) do
-		TSM:Print("[KEPT] " .. k)
-	end
 end

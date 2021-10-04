@@ -671,7 +671,7 @@ function Options:LoadCraftsPage(container)
 				headAlign = "CENTER",
 			},
 			{
-				name = L["Other"],
+				name = "Other",--L["Other"],
 				width = 0.05,
 				align = "CENTER",
 				headAlign = "CENTER",

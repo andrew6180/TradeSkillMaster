@@ -59,7 +59,7 @@ function private:CreateButtons(parent)
 			private:OnAction(self.which)
 		end
 	end
-	
+		
 	local button = TSMAPI.GUI:CreateButton(frame, 22, "TSMAuctioningPostButton")
 	button:SetPoint("TOPLEFT")
 	button:SetWidth(80)
@@ -95,6 +95,7 @@ function private:CreateButtons(parent)
 	button.which = "stop"
 	button:SetScript("OnClick", OnClick)
 	frame.stop = button
+	
 	
 	return frame
 end
@@ -243,7 +244,7 @@ function private:CreateContentButtons(parent)
 		end)
 	cancelButton:SetText(L["Cancel"])
 	editPriceFrame.cancelButton = cancelButton
-	
+		
 	return frame
 end
 
@@ -355,6 +356,7 @@ function private:CreateInfoText(parent)
 			end
 		end)
 	icon:SetScript("OnLeave", function()
+			--BattlePetTooltip:Hide()
 			GameTooltip:ClearLines()
 			GameTooltip:Hide()
 		end)
@@ -486,16 +488,16 @@ function private:CreateLogST(parent)
 		OnEnter = function(_, data, self)
 			if not data.operation then return end
 			local prices = TSM.Util:GetItemPrices(data.operation, data.itemString)
-			
 			GameTooltip:SetOwner(self, "ANCHOR_NONE")
 			GameTooltip:SetPoint("BOTTOMLEFT", self, "TOPLEFT")
-			GameTooltip:AddLine(data.link)
+			GameTooltip:AddLine(data.link)		
+			GameTooltip:AddLine("Crafting Cost:".." "..(TSMAPI:FormatTextMoney(prices.cost, "|cffffffff") or "---"))
 			GameTooltip:AddLine(L["Minimum Price:"].." "..(TSMAPI:FormatTextMoney(prices.minPrice, "|cffffffff") or "---"))
 			GameTooltip:AddLine(L["Maximum Price:"].." "..(TSMAPI:FormatTextMoney(prices.maxPrice, "|cffffffff") or "---"))
 			GameTooltip:AddLine(L["Normal Price:"].." "..(TSMAPI:FormatTextMoney(prices.normalPrice, "|cffffffff") or "---"))
 			GameTooltip:AddLine(L["Lowest Buyout:"].." |r"..(TSMAPI:FormatTextMoney(data.lowestBuyout, "|cffffffff") or "---"))
 			GameTooltip:AddLine(L["Log Info:"].." "..data.info)
-			GameTooltip:AddLine("\n"..TSMAPI.Design:GetInlineColor("link2")..L["Click to show auctions for this item."].."|r")
+			GameTooltip:AddLine("\n"..TSMAPI.Design:GetInlineColor("link2")..L["Click to show auctions for this item."].."|r".."     ") -- the blank space is to fix formating.
 			GameTooltip:AddLine(TSMAPI.Design:GetInlineColor("link2")..format(L["Right-Click to add %s to your friends list."], "|r"..(data.seller or "---")..TSMAPI.Design:GetInlineColor("link2")).."|r")
 			GameTooltip:AddLine(TSMAPI.Design:GetInlineColor("link2")..L["Shift-Right-Click to show the options for this operation.".."|r"])
 			GameTooltip:Show()
@@ -707,6 +709,21 @@ function GUI:CreateSelectionFrame(parent)
 	stContainer:SetPoint("BOTTOMRIGHT", -200, 30)
 	TSMAPI.Design:SetFrameColor(stContainer)
 	frame.groupTree = TSMAPI:CreateGroupTree(stContainer, "Auctioning", "Auctioning_AH")
+	
+	-- top row (auto updater)
+	local text = TSMAPI.GUI:CreateLabel(stContainer)
+	text:SetFont(TSMAPI.Design:GetContentFont(), 24)
+	text:SetPoint("TOP", 96, 76)
+	text:SetHeight(24)
+	text:SetJustifyH("CENTER")
+	text:SetJustifyV("CENTER")
+	text:SetText(TSMAPI.Design:GetInlineColor("link").."TSM_Auctioning")
+	local ag = text:CreateAnimationGroup()
+	local a1 = ag:CreateAnimation("Alpha")
+	a1:SetChange(-.5)
+	a1:SetDuration(.5)
+	ag:SetLooping("BOUNCE")
+	ag:Play()
 	
 	local helpText = TSMAPI.GUI:CreateLabel(frame)
 	helpText:SetPoint("TOP", stContainer, 0, 20)

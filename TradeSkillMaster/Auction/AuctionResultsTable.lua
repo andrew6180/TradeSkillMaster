@@ -94,8 +94,14 @@ local function GetRowTable(rt, auction, isExpandable)
 		auctionsData = {#auction.parent.records, auction.parent.records[1].playerAuctions, isExpandable}
 	end
 	local name, iLvl
-	local itemName, _, _, itemLvl = GetItemInfo(auction.parent.itemLink)
-	name, iLvl = itemName, itemLvl
+	-- if strmatch(auction.parent.itemLink, "battlepet") then
+		-- local _, speciesID, itemLvl = strsplit(":", auction.parent.itemLink)
+		-- local itemName = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
+		-- name, iLvl = itemName, itemLvl
+	-- else
+		local itemName, _, _, itemLvl = GetItemInfo(auction.parent.itemLink)
+		name, iLvl = itemName, itemLvl
+	-- end
 	local pct = auction:GetPercent()
 	if not pct or pct < 0 or pct == math.huge then
 		pct = nil
@@ -233,8 +239,20 @@ local methods = {
 		wipe(rt.displayRows)
 		
 		local function RowSort(a, b)
-			local aVal = a[rt.sortInfo.column].args[1]
-			local bVal = b[rt.sortInfo.column].args[1]
+			if a[rt.sortInfo.column].args[1] == nil then return end
+			
+			local aVal
+			local bVal
+			if getn(a[rt.sortInfo.column].args) == 4 then
+				aVal = a[rt.sortInfo.column].args[4]
+				bVal = b[rt.sortInfo.column].args[4]
+			else
+				aVal = a[rt.sortInfo.column].args[1]
+				bVal = b[rt.sortInfo.column].args[1]
+			end
+			-- local aVal = a[rt.sortInfo.column].args[1]
+			-- local bVal = b[rt.sortInfo.column].args[1]
+			
 			if type(aVal) ~= "string" or type(bVal) ~= "string" then
 				aVal = tonumber(aVal) or 0
 				bVal = tonumber(bVal) or 0
@@ -357,6 +375,7 @@ local methods = {
 				local rowRecord = row.data.auctionRecord
 				for i=1, GetNumAuctionItems("list") do
 					local itemString = TSMAPI:GetItemString(GetAuctionItemLink("list", i))
+					-- local _, _, count, _, _, _, _, _, _, buyout, _, _, _, seller = GetAuctionItemInfo("list", i)
 					local _, _, count, _, _, _, _, _, buyout, _, _, seller = GetAuctionItemInfo("list", i)
 					if itemString == row.data.itemString and rowRecord.count == count and rowRecord.buyout == buyout and rowRecord.seller == seller then
 						row:ShowActiveBorder()
@@ -429,6 +448,7 @@ local defaultColScripts = {
 				local link = GetAuctionItemLink("list", i)
 				if not purchaseCache[link] then
 					local itemString = TSMAPI:GetItemString(link)
+					-- local _, _, count, _, _, _, _, _, _, buyout, _, _, _, seller = GetAuctionItemInfo("list", i)
 					local _, _, count, _, _, _, _, _, buyout, _, _, seller = GetAuctionItemInfo("list", i)
 					if itemString == self.row.data.itemString and rowRecord.count == count and rowRecord.buyout == buyout and rowRecord.seller == seller then
 						PlaceAuctionBid("list", i, rowRecord.buyout)
@@ -640,6 +660,7 @@ function TSMAPI:CreateAuctionResultsTable(parent, handlers, quickBuyout, isDestr
 						end
 					end)
 				iconBtn:SetScript("OnLeave", function(self)
+						-- BattlePetTooltip:Hide()
 						GameTooltip:ClearLines()
 						GameTooltip:Hide()
 						rt.isShowingItemTooltip = false

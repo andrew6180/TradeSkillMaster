@@ -2,7 +2,7 @@
 ## Title: |cff00fe00TradeSkillMaster|r
 ## Notes: Core addon for the TradeSkillMaster suite. Does nothing without modules installed.
 ## Author: Sapu94, Bart39
-## Version: v2.8
+## Version: v2.8.3
 ## SavedVariables: TradeSkillMasterAppDB, TradeSkillMasterDB
 ## OptionalDeps: AccurateTime, Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, TipHelper, LibParse, LibCompress, LibGraph-2.0, TheUndermineJournal, TheUndermineJournalGE
 ## X-Embeds: AccurateTime, Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, TipHelper, LibParse, LibCompress, LibGraph-2.0
@@ -27,6 +27,7 @@ Libs\AceSerializer-3.0\AceSerializer-3.0.xml
 Libs\LibCompress\lib.xml
 Libs\LibGraph-2.0\LibGraph-2.0.lua
 Libs\AccurateTime\AccurateTime.lua
+Libs\LibChatAnims\LibChatAnims.xml
 #@end-no-lib-strip@
 
 ## Embeded libraries not on CurseForge
@@ -34,6 +35,14 @@ Libs\LibExtraTip\Load.xml
 
 Locale\enUS.lua
 Locale\deDE.lua
+Locale\esES.lua
+Locale\esMX.lua
+Locale\frFR.lua
+Locale\koKR.lua
+Locale\ruRU.lua
+Locale\zhCN.lua
+Locale\zhTW.lua
+Locale\ptBR.lua
 
 TradeSkillMaster.lua
 
@@ -62,7 +71,7 @@ Data\Disenchanting.lua
 Data\ItemData.lua
 Data\Conversions.lua
 Data\Vendor.lua
-Data\ConnectedRealms.lua
+##Data\ConnectedRealms.lua
 
 Auction\AuctionControl.lua
 Auction\AuctionScanning.lua

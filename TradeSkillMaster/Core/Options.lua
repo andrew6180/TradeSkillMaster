@@ -39,7 +39,7 @@ function private:LoadHelpPage(parent)
 		TSMAPI.Design:ColorText("Mailing", "link") .. " - " .. L["Allows you to quickly and easily empty your mailbox as well as automatically send items to other characters with the single click of a button."] .. "\n",
 		TSMAPI.Design:ColorText("Shopping", "link") .. " - " .. L["Provides interfaces for efficiently searching for items on the auction house. When an item is found, it can easily be bought, canceled (if it's yours), or even posted from your bags."] .. "\n",
 		TSMAPI.Design:ColorText("Warehousing", "link") .. " - " .. L["Manages your inventory by allowing you to easily move stuff between your bags, bank, and guild bank."] .. "\n",
-		TSMAPI.Design:ColorText("WoWuction", "link") .. " - " .. L["Allows you to use data from http://wowuction.com in other TSM modules and view its various price points in your item tooltips."] .. "\n",
+		--TSMAPI.Design:ColorText("WoWuction", "link") .. " - " .. L["Allows you to use data from http://wowuction.com in other TSM modules and view its various price points in your item tooltips."] .. "\n",
 	}
 
 	local page = {
@@ -47,43 +47,43 @@ function private:LoadHelpPage(parent)
 			type = "ScrollFrame",
 			layout = "flow",
 			children = {
-				{
-					type = "InlineGroup",
-					title = L["Resources:"],
-					layout = "flow",
-					relativeWidth = 1,
-					noBorder = true,
-					children = {
-						{
-							type = "Label",
-							relativeWidth = .499,
-							text = L["Using our website you can get help with TSM, suggest features, and give feedback."].."\n",
-						},
-						{
-							type = "Image",
-							sizeRatio = .15625,
-							relativeWidth = .5,
-							image = "Interface\\Addons\\TradeSkillMaster\\Media\\banner",
-						},
-						{
-							type = "HeadingLine"
-						},
-						{
-							type = "Image",
-							sizeRatio = .15628,
-							relativeWidth = 1,
-							image = "Interface\\Addons\\TradeSkillMaster\\Media\\AppBanner",
-						},
-						{
-							type = "Label",
-							relativeWidth = 1,
-							text = format("\n" .. L["Check out our completely free, desktop application which has tons of features including deal notification emails, automatic updating of AuctionDB and WoWuction prices, automatic TSM setting backup, and more! You can find this app by going to %s."], TSMAPI.Design:ColorText("http://tradeskillmaster.com/tsm_app", "link")),
-						}
-					},
-				},
-				{
-					type = "Spacer",
-				},
+				-- {
+					-- type = "InlineGroup",
+					-- title = L["Resources:"],
+					-- layout = "flow",
+					-- relativeWidth = 1,
+					-- noBorder = true,
+					-- children = {
+						-- {
+							-- type = "Label",
+							-- relativeWidth = .499,
+							-- text = L["Using our website you can get help with TSM, suggest features, and give feedback."].."\n",
+						-- },
+						-- {
+							-- type = "Image",
+							-- sizeRatio = .15625,
+							-- relativeWidth = .5,
+							-- image = "Interface\\Addons\\TradeSkillMaster\\Media\\banner",
+						-- },
+						-- {
+							-- type = "HeadingLine"
+						-- },
+						-- {
+							-- type = "Image",
+							-- sizeRatio = .15628,
+							-- relativeWidth = 1,
+							-- image = "Interface\\Addons\\TradeSkillMaster\\Media\\AppBanner",
+						-- },
+						-- {
+							-- type = "Label",
+							-- relativeWidth = 1,
+							-- text = format("\n" .. L["Check out our completely free, desktop application which has tons of features including deal notification emails, automatic updating of AuctionDB and WoWuction prices, automatic TSM setting backup, and more! You can find this app by going to %s."], TSMAPI.Design:ColorText("http://tradeskillmaster.com/tsm_app", "link")),
+						-- }
+					-- },
+				-- },
+				-- {
+					-- type = "Spacer",
+				-- },
 				{
 					type = "InlineGroup",
 					title = L["Module Information:"],

@@ -282,8 +282,15 @@ function TSM:GetTooltip(itemString, quantity)
 	if #text > 0 then
 		local lastScan = TSM:GetLastScanTime(itemID)
 		if lastScan then
-			local timeDiff = SecondsToTime(time() - lastScan)
-			tinsert(text, 1, { left = "|cffffff00" .. "TSM AuctionDB:", right = "|cffffffff" .. format(L["%s ago"], timeDiff) })
+			local timeColor = "|cffff0000"
+			if (time() - lastScan) < 60 * 60 * 3 then
+				timeColor = "|cff00ff00"
+			elseif (time() - lastScan) < 60 * 60 * 12 then
+				timeColor = "|cffffff00"
+			end
+			local timeDiff = SecondsToTime(time() - lastScan)		
+			--tinsert(text, 1, { left = "|cffffff00" .. "TSM AuctionDB:", right = "|cffffffff" .. format(L["%s ago"], timeDiff) })
+			tinsert(text, 1, { left = "|cffffff00" .. "TSM AuctionDB:", right = format("%s (%s)", format("|cffffffff".."%d auctions".."|r", TSM.data[itemID].quantity), format(timeColor..L["%s ago"].."|r", timeDiff)) })
 		else
 			tinsert(text, 1, { left = "|cffffff00" .. "TSM AuctionDB:", right = "|cffffffff" .. L["Not Scanned"] })
 		end
@@ -388,29 +395,35 @@ local function decodeScans(rope)
 		local day, marketValueData = (":"):split(data)
 		day = decode(day)
 		scans[day] = {}
-		if strfind(marketValueData, "@") then
-			local avg, count = ("@"):split(marketValueData)
-			avg = decode(avg)
-			count = decode(count)
-			if avg ~= "~" and count ~= "~" then
-				if abs(currentDay - day) <= TSM.MAX_AVG_DAY then
-					scans[day].avg = avg
-					scans[day].count = count
-				else
-					scans[day] = avg
+		
+		--bug fix? ...SkillMaster_AuctionDB\TradeSkillMaster_AuctionDB.lua:398: bad argument #1 to 'strfind' (string expected, got nil)
+		if marketValueData ~= nil then
+		
+			if strfind(marketValueData, "@") then
+				local avg, count = ("@"):split(marketValueData)
+				avg = decode(avg)
+				count = decode(count)
+				if avg ~= "~" and count ~= "~" then
+					if abs(currentDay - day) <= TSM.MAX_AVG_DAY then
+						scans[day].avg = avg
+						scans[day].count = count
+					else
+						scans[day] = avg
+					end
+				end
+			else
+				-- Old method of decoding scans
+				for _, value in ipairs({(";"):split(marketValueData)}) do
+					local decodedValue = decode(value)
+					if decodedValue ~= "~" then
+						tinsert(scans[day], tonumber(decodedValue))
+					end
+				end
+				if day ~= currentDay then
+					scans[day] = TSM.Data:GetAverage(scans[day])
 				end
 			end
-		else
-			-- Old method of decoding scans
-			for _, value in ipairs({(";"):split(marketValueData)}) do
-				local decodedValue = decode(value)
-				if decodedValue ~= "~" then
-					tinsert(scans[day], tonumber(decodedValue))
-				end
-			end
-			if day ~= currentDay then
-				scans[day] = TSM.Data:GetAverage(scans[day])
-			end
+			
 		end
 	end
 
@@ -447,7 +460,7 @@ function TSM:EncodeItemData(itemID, tbl)
 	tbl = tbl or TSM.data
 	local data = tbl[itemID]
 	if data and data.marketValue then
-		data.encoded = strjoin(",", encode(0), encode(data.marketValue), encode(data.lastScan), encode(0), encode(data.minBuyout), encodeScans(data.scans))
+		data.encoded = strjoin(",", encode(0), encode(data.marketValue), encode(data.lastScan), encode(0), encode(data.minBuyout), encodeScans(data.scans), encode(data.quantity))
 	end
 end
 
@@ -455,11 +468,12 @@ function TSM:DecodeItemData(itemID, tbl)
 	tbl = tbl or TSM.data
 	local data = tbl[itemID]
 	if data and data.encoded and not data.marketValue then
-		local a, b, c, d, e, f = (","):split(data.encoded)
+		local a, b, c, d, e, f, g = (","):split(data.encoded)
 		data.marketValue = decode(b)
 		data.lastScan = decode(c)
 		data.minBuyout = decode(e)
-		data.scans = decodeScans(f)
+		data.scans = decodeScans(f)	
+		data.quantity = decode(g)	
 	end
 end
 

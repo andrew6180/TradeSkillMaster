@@ -18,7 +18,7 @@ L[ [=[Automatically rechecks mail every 60 seconds when you have too much mail.
 If you loot all mail with this enabled, it will wait and recheck then keep auto looting.]=] ] = "Automaticamente checa o correio a cada 60 segundos quando você tem cartas demais." -- Needs review
 L["Auto Recheck Mail"] = "Auto-Checar Correio" -- Needs review
 -- L["BE SURE TO SPELL THE NAME CORRECTLY!"] = ""
--- L["Buy: %s | %s | %s"] = ""
+-- L["Buy: %s (%d) | %s | %s"] = ""
 L["Cannot finish auto looting, inventory is full or too many unique items."] = "Não foi possível pegar os itens. Inventório está cheio ou existem itens únicos demais." -- Needs review
 -- L["Chat Message Options"] = ""
 -- L["Clear"] = ""

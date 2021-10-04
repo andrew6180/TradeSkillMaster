@@ -110,20 +110,17 @@ function Modules:ValidateModuleObject(obj)
 		local val = obj[fieldInfo.key]
 		if val then
 			-- make sure it's of the correct type
-			print(val)
 			if type(val) ~= fieldInfo.type then
 				return format("For field '%s', expected type of %s, got %s.", fieldInfo.key, fieldInfo.type, type(val))
 			end
 			-- if there's required subfields, check them
 			if fieldInfo.subFieldInfo then
 				for key, valType in pairs(fieldInfo.subFieldInfo) do
-					print(val[key])
-					print(valType)
 					if valType == "function" then
 						val[key] = Modules:GetFunction(obj, val[key])
 					end
 					if type(val[key]) ~= valType then
-						return format("expected %s type for field %s, got %s", valType, key, type(val[key]))
+						return format("expected %s type for field %s, got %s at index %d", valType, key, type(val[key]), i)
 					end
 				end
 			end
@@ -237,10 +234,10 @@ function TSMAPI:NewModule(obj)
 	if obj.bankUiButton then
 		TSM:RegisterBankUiButton(moduleName, obj.bankUiButton.callback)
 	end
-	-- register sync callback
-	if obj.sync then
-		TSM:RegisterSyncCallback(moduleName, obj.sync.callback)
-	end
+	-- -- register sync callback
+	-- if obj.sync then
+		-- TSM:RegisterSyncCallback(moduleName, obj.sync.callback)
+	-- end
 	
 	-- replace default Print and Printf functions
 	local Print = obj.Print

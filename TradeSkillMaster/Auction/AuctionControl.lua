@@ -34,6 +34,7 @@ local function ValidateAuction(index, list)
 		itemString, count, buyout = unpack(list)
 	elseif type(list) == "string" then
 		itemString = TSMAPI:GetItemString(GetAuctionItemLink(list, index))
+		-- _, _, count, _, _, _, _, _, _, buyout = GetAuctionItemInfo(list, index)
 		_, _, count, _, _, _, _, _, buyout = GetAuctionItemInfo(list, index)
 		data = {itemString, count, buyout}
 	else
@@ -445,7 +446,8 @@ function private:CreateConfirmationFrame(parent)
 	local frame = CreateFrame("Frame", nil, parent)
 	TSMAPI.Design:SetFrameBackdropColor(frame)
 	frame:Hide()
-	frame:SetPoint("CENTER")
+	-- frame:SetPoint("CENTER")
+	frame:SetPoint("BOTTOMRIGHT")
 	frame:SetFrameStrata("DIALOG")
 	frame:SetWidth(300)
 	frame:SetHeight(150)

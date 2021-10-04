@@ -22,7 +22,6 @@ L["2) You should see a window on your right with a list of groups"] = true
 L["3) Select one or more groups and hit either %s or %s"] = true
 L["Bank UI"] = true
 L["Canceled"] = true
-L["Deposit Reagents"] = true
 L["Displays realtime move data."] = true
 L["Empty Bags"] = true
 L["Empty Bags/Restore Bags"] = true

@@ -16,7 +16,6 @@ local buttonFrame = nil
 local groupTree = nil
 
 function Util:OnEnable()
-
 	TSM:RegisterEvent("GUILDBANKFRAME_OPENED", function(event)
 		currentBank = "guildbank"
 	end)
@@ -42,6 +41,9 @@ end
 
 function Util:GetItemPrices(operation, itemString, isResetScan)
 	local prices = {}
+	
+	prices.cost = GetItemPrice("crafting", itemString)
+	
 	prices.undercut = GetItemPrice(operation.undercut, itemString)
 	prices.minPrice = GetItemPrice(operation.minPrice, itemString)
 	prices.maxPrice = GetItemPrice(operation.maxPrice, itemString)

@@ -107,6 +107,7 @@ function private:CreateTSMAHTab(moduleName, callbackShow, callbackHide)
 			local currentTotal = 0
 			local incomingTotal = 0
 			for i=1, GetNumAuctionItems("owner") do
+				-- local count, _, _, _, _, _, _, buyoutAmount = select(3, GetAuctionItemInfo("owner", i))
 				local count, _, _, _, _, _, buyoutAmount = select(3, GetAuctionItemInfo("owner", i))
 				if count == 0 then
 					incomingTotal = incomingTotal + buyoutAmount
@@ -244,7 +245,7 @@ function private:OnTabClick(tab)
 	private:RegisterEvent("PLAYER_MONEY")
 	
 	if TSM.db.profile.openAllBags then
-		OpenAllBags()
+		OpenAllBags(true)
 	end
 	TSMAPI:CreateTimeDelay("hideAHMoneyFrame", 0.1, function() AuctionFrameMoneyFrame:Hide() end)
 	

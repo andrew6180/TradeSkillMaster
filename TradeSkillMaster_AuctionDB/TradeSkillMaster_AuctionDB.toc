@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 30300
 ## Title: |cff00ff00TradeSkillMaster_AuctionDB|r
 ## Notes: Stores auction house data and calculates market prices.
 ## Author: Sapu94, Bart39

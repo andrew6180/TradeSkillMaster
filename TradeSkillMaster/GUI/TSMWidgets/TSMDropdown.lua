@@ -80,8 +80,8 @@ local function Dropdown_TogglePullout(this, button)
 		AceGUI:ClearFocus()
 	else
 		self.open = true
-		self.pullout:SetWidth(self.frame:GetWidth())
-		--self.pullout:SetWidth(1200)
+		-- self.pullout:SetWidth(self.dropdown:GetWidth())
+		self.pullout:SetWidth(self.frame:GetWidth()-8)
 		self.pullout:Open("TOPLEFT", self.frame, "BOTTOMLEFT", 0, self.label:IsShown() and -2 or 0)
 		AceGUI:SetFocus(self)
 	end

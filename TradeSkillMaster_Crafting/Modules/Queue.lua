@@ -47,10 +47,10 @@ function Queue:CreateRestockQueue(groupInfo)
 						local maxQueueCount = max(opSettings.maxRestock - TSM.Inventory:GetTotalQuantity(itemString), 0)
 						local numToQueue = 0
 
-						if spellID and not opSettings.minProfit then
+						if not opSettings.minProfit then
 							-- no minimum, so queue as many as we can
 							numToQueue = maxQueueCount
-						elseif spellID then
+						else
 							-- queue it if the profit is at least the min profit
 							local cheapestSpellID, cost, _, profit = TSM.Cost:GetLowestCraftPrices(itemString)
 							local minProfit = TSM:GetCustomPrice(opSettings.minProfit, itemString)
@@ -72,6 +72,9 @@ function Queue:CreateRestockQueue(groupInfo)
 		end
 	end
 	
+	if numItems==0 then
+		TSM:Printf("There are no items to restock.")
+	end
 	TSMAPI:FireEvent("CRAFTING:QUEUE:RESTOCKED", numItems)
 end
 

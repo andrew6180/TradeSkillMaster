@@ -5,10 +5,6 @@
 ## Version: v2.0.8
 ## SavedVariables: TradeSkillMaster_ItemTrackerDB
 ## Dependency: TradeSkillMaster
-## X-Curse-Packaged-Version: v2.0.8
-## X-Curse-Project-Name: TradeSkillMaster_ItemTracker
-## X-Curse-Project-ID: tradeskillmaster_itemtracker
-## X-Curse-Repository-ID: wow/tradeskillmaster_itemtracker/mainline
 
 Locale\enUS.lua
 Locale\frFR.lua
@@ -22,6 +18,6 @@ Locale\zhTW.lua
 Locale\ptBR.lua
 
 TradeSkillMaster_ItemTracker.lua
-##Modules\sync.lua
+Modules\sync.lua
 Modules\data.lua
 Modules\config.lua

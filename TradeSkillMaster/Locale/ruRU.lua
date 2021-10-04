@@ -359,7 +359,7 @@ L["Override Module Operations"] = "Перенастроить Операции  
 L["Parent Group Items:"] = "Предметы Родительской Группы:"
 L["Parent/Ungrouped Items:"] = "Предметы Родительской Группы/Без Группы:"
 L["Past Contributors:"] = "Бывшие участники:"
-L["Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."] = "Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."
+L["Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For battle pets, the entire battlepet string should be used. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."] = "Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For battle pets, the entire battlepet string should be used. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."
 -- L["Paste the exported operation settings into this box and hit enter or press the 'Okay' button. Imported settings will irreversibly replace existing settings for this operation."] = ""
 L[ [=[Paste the list of items into the box below and hit enter or click on the 'Okay' button.
 

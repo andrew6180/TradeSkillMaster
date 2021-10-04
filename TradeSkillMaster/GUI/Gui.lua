@@ -25,22 +25,26 @@ local function ShowTooltip(self)
 	elseif type(self.tooltip) == "function" then
 		local text = self.tooltip(self)
 		if type(text) == "string" then
-			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+			GameTooltip:SetOwner(self, "ANCHOR_TOP")
+			--GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 			GameTooltip:SetText(text, 1, 1, 1, 1, true)
 			GameTooltip:Show()
 		end
 	elseif self.tooltip then
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+		--GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:SetText(self.tooltip, 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	elseif self.frame.tooltip then
-		GameTooltip:SetOwner(self.frame, "ANCHOR_BOTTOMRIGHT")
+		GameTooltip:SetOwner(self.frame, "ANCHOR_TOP")
+		--GameTooltip:SetOwner(self.frame, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:SetText(self.frame.tooltip, 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end
 end
 
 local function HideTooltip()
+	-- BattlePetTooltip:Hide()
 	GameTooltip:Hide()
 end
 
@@ -110,29 +114,11 @@ function TSMAPI.GUI:CreateInputBox(parent, name, autoComplete)
 	eb:SetScript("OnEscapePressed", function(self) self:ClearFocus() self:HighlightText(0, 0) end)
 	eb:SetScript("OnEnter", function(self) if self.tooltip then ShowTooltip(self) end end)
 	eb:SetScript("OnLeave", HideTooltip)
-
-	eb.disabled = false
-
-	local SetDisabled = function(editbox, disabled)
-		if editbox.disabled == disabled then return end
-		editbox.disabled = disabled
-
-		TSMAPI.Design:SetWidgetTextColor(editbox, disabled)
-		editbox:EnableMouse(not disabled)
-		if disabled then
-			editbox:ClearFocus()
-		end
-	end
-
-	eb.Disable = function(self) SetDisabled(self, true) end
-	eb.Enable = function(self) SetDisabled(self, false) end
-	eb.IsEnabled = function(self) return not self.disabled end
-
 	return eb
 end
 
 function TSMAPI.GUI:SetAutoComplete(inputBox, params)
-	local autoCompleteHandlers = {"OnTabPressed", "OnEnterPressed", "OnTextChanged", "OnChar", "OnEditFocusLost", "OnEscapePressed"}
+	local autoCompleteHandlers = {"OnTabPressed", "OnEnterPressed", "OnTextChanged", "OnChar", "OnEditFocusLost", "OnEscapePressed"}--, "OnArrowPressed"}
 	if params then
 		if inputBox._priorTSMHandlers then return end -- already done
 		inputBox.autoCompleteParams = params

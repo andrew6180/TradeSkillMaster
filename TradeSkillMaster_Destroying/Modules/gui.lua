@@ -106,7 +106,9 @@ function private:CreateDestroyingFrame()
 			if not data then return end
 			local color = TSMAPI.Design:GetInlineColor("link")
 			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-			GameTooltip:AddLine(data.link)
+			TSMAPI:SafeTooltipLink(data.itemString)
+			-- GameTooltip:AddLine(data.link)
+			GameTooltip:AddLine("- - -")
 			GameTooltip:AddLine(format(L["%sRight-Click|r to ignore this item for this session. Hold %sshift|r to ignore permanently. You can remove items from permanent ignore in the Destroying options."], color, color), 1, 1, 1, 1, true)
 			GameTooltip:Show()
 		end,
@@ -136,17 +138,7 @@ function private:CreateDestroyingFrame()
 				destroyBtn:SetAttribute("macrotext1", format("/cast %s;\n/use %d %d", data.spell, data.bag, data.slot))
 				destroyBtn:Disable()
 				TSMAPI:CancelFrame("destroyEnableDelay")
-				TSMAPI:CreateTimeDelay("destroyEnableDelay", 3, function()
-					if not UnitCastingInfo("player") and not LootFrame:IsVisible() then
-						destroyBtn:Enable()
-					else
-						-- Check delay again
-						TSMAPI:CreateTimeDelay("destroyEnableDelay", 0.5, function()
-							-- Always re enable the button if we get here
-							destroyBtn:Enable()
-						end)
-					end
-				end)
+				TSMAPI:CreateTimeDelay("destroyEnableDelay", 3, function() if not UnitCastingInfo("player") and not LootFrame:IsVisible() then destroyBtn:Enable() end end)
 				private.highStack = data.numDestroys > 1
 				private.currentSpell = data.spell
 			end
@@ -201,7 +193,7 @@ function private:UpdateST(forceShow)
 	for bag, slot, itemString, quantity in TSMAPI:GetBagIterator(nil, TSM.db.global.includeSoulbound) do
 		if not private.ignore[itemString] and not TSM.db.global.ignore[itemString] then
 			local spell, perDestroy = TSM:IsDestroyable(bag, slot, itemString)
-			local link = TSMGetContainerItemLink(bag, slot)
+			local link = GetContainerItemLink(bag, slot)
 			if spell and quantity >= perDestroy then
 				local row = {
 					cols = {
@@ -277,7 +269,7 @@ function private:LootChanged()
 	if not LootFrame:IsVisible() then
 		if private.frame and private.frame:IsVisible() then
 			local quantity = select(2, GetContainerItemInfo(private.tempData.bag, private.tempData.slot))
-			if quantity ~= private.tempData.quantity or quantity ~= private.tempData.perDestroy then
+			if quantity == private.tempData.quantity or quantity == private.tempData.perDestroy then
 				TSMAPI:CancelFrame("destroyEnableDelay")
 				private.frame.destroyBtn:Enable()
 			end

@@ -155,6 +155,7 @@ end
 
 function Util:StartFilterScan(filters, callback)
 	if type(filters) ~= "table" then return end
+	
 	private:PrepareForScan(callback)
 	if #filters == 1 then
 		for _, _, itemString in TSMAPI:GetBagIterator() do

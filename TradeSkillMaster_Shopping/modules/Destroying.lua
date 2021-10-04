@@ -6,7 +6,7 @@ local private = {sources={}}
 
 
 function Destroying:OnEnable()
-	TSMAPI:CreateTimeDelay("shoppingDestroyingUpdateTargets", 0, private.UpdateTargetItems, 1)
+	TSMAPI:CreateTimeDelay("shoppingDestroyingUpdateTargets", 0, private.UpdateTargetItems, 60) --1)
 	TSM.db.global.destroyingTargetItems = TSM.db.global.destroyingTargetItems or {}
 end
 
@@ -52,6 +52,7 @@ function private:UpdateTargetItems()
 			end
 		end
 	end
+	
 	if not update then
 		TSMAPI:CancelFrame("shoppingDestroyingUpdateTargets")
 	end

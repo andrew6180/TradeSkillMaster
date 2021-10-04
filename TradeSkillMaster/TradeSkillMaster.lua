@@ -16,7 +16,6 @@ TSM.moduleNames = {}
 
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster") -- loads the localization table
 TSM._version = GetAddOnMetadata("TradeSkillMaster", "Version") -- current version of the addon
-TSM._debug = false
 
 TSMAPI = {}
 
@@ -122,16 +121,12 @@ local savedDBDefaults = {
 	},
 }
 
-
 -- Called once the player has loaded WOW.
 function TSM:OnInitialize()
 	TSMAPI:RegisterForTracing(TSMAPI, "TSMAPI")
 	
 	TSM.moduleObjects = nil
 	TSM.moduleNames = nil
-
-	-- Blizzard api mappings
-	TSMGetContainerItemLink = GetContainerItemLink
 
 	-- load the savedDB into TSM.db
 	TSM.db = LibStub:GetLibrary("AceDB-3.0"):New("TradeSkillMasterDB", savedDBDefaults, true)
@@ -145,36 +140,8 @@ function TSM:OnInitialize()
 		TSM.operations = TSM.db.profile.operations
 	end
 	
-	--TSM:RegisterEvent("BLACK_MARKET_ITEM_UPDATE", "ScanBMAH")
-	
 	-- Prepare the TradeSkillMasterAppDB database
 	-- We're not using AceDB here on purpose due to bugs in AceDB, but are emulating the parts of it that we need.
-	local json = TradeSkillMasterAppDB
-	TradeSkillMasterAppDB = nil
-	if type(json) == "string" then
-		json = gsub(json, "%[", "{")
-		json = gsub(json, "%]", "}")
-		json = gsub(json, "\"([a-zA-Z]+)\":", "%1=")
-		json = gsub(json, "\"([^\"]+)\":", "[\"%1\"]=")
-		local func, err = loadstring("TSM_APP_DATA_TMP = " .. json .. "")
-		if func then
-			func()
-			TradeSkillMasterAppDB = TSM_APP_DATA_TMP
-			TSM_APP_DATA_TMP = nil
-		end
-	end
-	TradeSkillMasterAppDB = TradeSkillMasterAppDB or {factionrealm={}, profiles={}}
-	TradeSkillMasterAppDB.version = max(TradeSkillMasterAppDB.version or 0, 7)
-	TradeSkillMasterAppDB.region = strsub(GetCVar("realmList"), 1, 2):upper()
-	local factionrealmKey = UnitFactionGroup("player").." - " .. GetRealmName()
-	local profileKey = TSM.db:GetCurrentProfile()
-	TradeSkillMasterAppDB.factionrealm[factionrealmKey] = TradeSkillMasterAppDB.factionrealm[factionrealmKey] or {}
-	TradeSkillMasterAppDB.profiles[profileKey] = TradeSkillMasterAppDB.profiles[profileKey] or {}
-	TSM.appDB = {}
-	TSM.appDB.factionrealm = TradeSkillMasterAppDB.factionrealm[factionrealmKey]
-	TSM.appDB.profile = TradeSkillMasterAppDB.profiles[profileKey]
-	TSM.appDB.profile.groupTest = nil
-	TSM.appDB.keys = {profile=profileKey, factionrealm=factionrealmKey}
 
 	for name, module in pairs(TSM.modules) do
 		TSM[name] = module
@@ -253,11 +220,12 @@ function TSM:RegisterModule()
 	TSM.icons = {
 		{ side = "options", desc = L["TSM Status / Options"], callback = "LoadOptions", icon = "Interface\\Icons\\Achievement_Quests_Completed_04" },
 		{ side = "options", desc = L["Groups"], callback = "LoadGroupOptions", slashCommand = "groups", icon = "Interface\\Icons\\INV_DataCrystal08" },
-		{ side = "options", desc = L["Module Operations / Options"], slashCommand = "operations", callback = "LoadOperationOptions", icon = "Interface\\Icons\\inv_misc_enggizmos_swissarmy" },
-		{ side = "options", desc = L["Tooltip Options"], slashCommand = "tooltips", callback = "LoadTooltipOptions", icon = "Interface\\Icons\\inv_misc_gear_05" },
+		{ side = "options", desc = L["Module Operations / Options"], slashCommand = "operations", callback = "LoadOperationOptions", icon = "Interface\\Icons\\INV_Gizmo_Felironbolts" },
+		{ side = "options", desc = L["Tooltip Options"], slashCommand = "tooltips", callback = "LoadTooltipOptions", icon = "Interface\\Icons\\INV_Misc_Gear_01" },
 	}
 
 	TSM.priceSources = {}
+	
 	-- Auctioneer
 	if select(4, GetAddOnInfo("Auc-Advanced")) == 1 and AucAdvanced then
 		if AucAdvanced.Modules.Util.Appraiser and AucAdvanced.Modules.Util.Appraiser.GetPrice then
@@ -270,22 +238,11 @@ function TSM:RegisterModule()
 			tinsert(TSM.priceSources, { key = "AucMarket", label = L["Auctioneer - Market Value"], callback = AucAdvanced.API.GetMarketValue })
 		end
 	end
+	
 	-- Auctionator
 	if select(4, GetAddOnInfo("Auctionator")) == 1 and Atr_GetAuctionBuyout then
 		tinsert(TSM.priceSources, { key = "AtrValue", label = L["Auctionator - Auction Value"], callback = Atr_GetAuctionBuyout })
 	end
-	-- TheUndermineJournal
-	--if select(4, GetAddOnInfo("TheUndermineJournal")) == 1 and TUJMarketInfo then
-	--	tinsert(TSM.priceSources, { key = "TUJMarket", label = L["TUJ RE - Market Price"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).market end })
-	--	tinsert(TSM.priceSources, { key = "TUJMean", label = L["TUJ RE - Mean"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).marketaverage end })
-	--	tinsert(TSM.priceSources, { key = "TUJGEMarket", label = L["TUJ GE - Market Average"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).gemarketaverage end })
-	--	tinsert(TSM.priceSources, { key = "TUJGEMedian", label = L["TUJ GE - Market Median"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).gemarketmedian end })
-	--end
-	-- TheUndermineJournalGE
-	--if select(4, GetAddOnInfo("TheUndermineJournalGE")) == 1 and TUJMarketInfo then
-	--	tinsert(TSM.priceSources, { key = "TUJGEMarket", label = L["TUJ GE - Market Average"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).marketaverage end })
-	--	tinsert(TSM.priceSources, { key = "TUJGEMedian", label = L["TUJ GE - Market Median"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).marketmedian end })
-	--end
 	-- Vendor Buy Price
 	tinsert(TSM.priceSources, { key = "VendorBuy", label = L["Buy from Vendor"], callback = function(itemLink) return TSMAPI:GetVendorCost(TSMAPI:GetItemString(itemLink)) end })
 
@@ -309,7 +266,7 @@ function TSM:RegisterModule()
 		{ key = "deValue", callback = "GetDisenchantValue" },
 	}
 
-	--TSM.sync = { callback = "SyncCallback" }
+	TSM.sync = { callback = "SyncCallback" }
 
 	TSMAPI:NewModule(TSM)
 end
@@ -446,7 +403,8 @@ function TSM:GetTooltip(itemString, quantity)
 									local value = (matValue or 0) * deData.amountOfMats
 									local name, _, matQuality = TSMAPI:GetSafeItemInfo(item)
 									if matQuality then
-										local colorName = format("|c%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", deData.amountOfMats)
+										-- local colorName = format("|c%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", deData.amountOfMats)
+										local colorName = format("%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", deData.amountOfMats)
 										if value > 0 then
 											if moneyCoinsTooltip then
 												tinsert(text, { left = "    " .. colorName, right = TSMAPI:FormatTextMoneyIcon(value, "|cffffffff", true) })
@@ -489,7 +447,8 @@ function TSM:GetTooltip(itemString, quantity)
 						local value = (TSM:GetCustomPrice(TSM.db.profile.destroyValueSource, targetItem) or 0) * herbs[itemString].rate
 						local name, _, matQuality = TSMAPI:GetSafeItemInfo(targetItem)
 						if matQuality then
-							local colorName = format("|c%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", herbs[itemString].rate)
+							-- local colorName = format("|c%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", herbs[itemString].rate)
+							local colorName = format("%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", herbs[itemString].rate)
 							if value > 0 then
 								if moneyCoinsTooltip then
 									tinsert(text, { left = "    " .. colorName, right = TSMAPI:FormatTextMoneyIcon(value, "|cffffffff", true) })
@@ -529,7 +488,8 @@ function TSM:GetTooltip(itemString, quantity)
 						local value = (TSM:GetCustomPrice(TSM.db.profile.destroyValueSource, targetItem) or 0) * gems[itemString].rate
 						local name, _, matQuality = TSMAPI:GetSafeItemInfo(targetItem)
 						if matQuality then
-							local colorName = format("|c%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", gems[itemString].rate)
+							-- local colorName = format("|c%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", gems[itemString].rate)
+							local colorName = format("%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", gems[itemString].rate)
 							if value > 0 then
 								if moneyCoinsTooltip then
 									tinsert(text, { left = "    " .. colorName, right = TSMAPI:FormatTextMoneyIcon(value, "|cffffffff", true) })

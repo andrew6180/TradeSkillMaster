@@ -246,7 +246,6 @@ function Post:GetPostPrice(itemString, operation)
 	local lowestBuyout, lowestBid, lowestOwner, isWhitelist, isPlayer = TSM.Scan:GetLowestAuction(itemString, operation)
 	local bid, buyout, info
 	local prices = TSM.Util:GetItemPrices(operation, itemString)
-
 	if not lowestOwner then
 		-- No other auctions up, default to normalPrice
 		info = "postingNormal"
@@ -344,7 +343,7 @@ local timeout = CreateFrame("Frame")
 timeout:Hide()
 timeout:SetScript("OnUpdate", function(self, elapsed)
 	self.timeLeft = self.timeLeft - elapsed
-	if self.timeLeft <= 0 or (postQueue[1] and postQueue[1].bag and postQueue[1].slot and not select(3, GetContainerItemInfo(postQueue[1].bag, postQueue[1].slot)) and 0 == AuctionsCreateAuctionButton:IsEnabled()) then
+	if self.timeLeft <= 0 or (postQueue[1] and postQueue[1].bag and postQueue[1].slot and not select(3, GetContainerItemInfo(postQueue[1].bag, postQueue[1].slot)) and not AuctionsCreateAuctionButton:IsEnabled()) then
 		tremove(postQueue, 1)
 		Post:UpdateItem()
 	end
@@ -418,7 +417,7 @@ function Post:UpdateItem()
 end
 
 function Post:DoAction()
-	timeout.timeLeft = 5
+	timeout.timeLeft = 0.1
 	timeout:Show()
 	if not AuctionFrameAuctions.duration then
 		-- Fix in case Blizzard_AuctionUI hasn't set this value yet (which could cause an error)
@@ -450,7 +449,7 @@ function Post:DoAction()
 		Post:SkipItem()
 		return
 	end
-
+	
 	PickupContainerItem(currentItem.bag, currentItem.slot)
 	ClickAuctionSellItemButton(AuctionsItemButton, "LeftButton")
 	StartAuction(currentItem.bid, currentItem.buyout, currentItem.postTime, currentItem.stackSize, 1)

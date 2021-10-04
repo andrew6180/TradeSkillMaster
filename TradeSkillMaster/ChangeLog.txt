@@ -1,3 +1,13 @@
+v2.8.3
+*Made TSMAPI:IsSoulbound() MUCH more efficient which will GREATLY reduce the interface log of all modules..
+
+v2.8.2
+*Added LibChatAnims to fix Blizzard bug with adding chat filters.
+
+v2.8.1
+*Updated connected realms.
+*Added some more validation to price sources to avoid lua errors.
+
 v2.8
 *Fixed issue with TSM error handler.
 *Removed 1.x dealfinding / shopping list support for importing items to groups.

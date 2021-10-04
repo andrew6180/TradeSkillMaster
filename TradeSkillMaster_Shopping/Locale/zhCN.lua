@@ -70,7 +70,8 @@ L["Item SubClass"] = "物品子类型"
 -- L["Items which are below this custom price will be displayed in Sniper searches."] = ""
 L["Left-Click to run this search."] = "左键点击来进行这个搜索"
 L["Log"] = "日志"
--- L["Management"] = ""
+L["Management"] = [=[Management
+]=] -- Needs review
 L["% Market Value"] = "%s 市场价"
 L["Market Value Price Source"] = "市场价来源"
 -- L["% Mat Price"] = ""

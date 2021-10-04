@@ -346,6 +346,7 @@ local function Constructor()
 	icontext:SetFont(TSMAPI.Design:GetContentFont(), 27)
 	icontext:SetTextColor(unpack(ICON_TEXT_COLOR))
 	
+	-- local helpButton = CreateFrame("Button", nil, frame, "MainHelpPlateButton")
 	local helpButton = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 	helpButton:SetPoint("BOTTOMLEFT", -10, -30)
 	helpButton:SetScript("OnEnter", function(self)

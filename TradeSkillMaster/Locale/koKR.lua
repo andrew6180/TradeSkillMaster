@@ -356,7 +356,7 @@ L["Override Module Operations"] = "모듈 작업 오버라이드" -- Needs revie
 L["Parent Group Items:"] = "상위 그룹 아이템:" -- Needs review
 L["Parent/Ungrouped Items:"] = "상위/그룹 없는 아이템:" -- Needs review
 L["Past Contributors:"] = "이전 참여자:" -- Needs review
-L["Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."] = "내보내기 된 아이템을 이 상자에 붙어 넣고 엔터키 또는 'Okay' 버튼을 누르세요. 아이템 리스트의 권장 포맷은 콤마로 분리된 일반 아이템의 아이템ID 목록입니다. 전투 애완동물은 이름의 전체 문자열을 입력해야 합니다. 무작위 마법 부여 아이템은 <아이템ID>:<무작위 마법 부여>입니다. (예: 38472:-29)." -- Needs review
+L["Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For battle pets, the entire battlepet string should be used. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."] = "내보내기 된 아이템을 이 상자에 붙어 넣고 엔터키 또는 'Okay' 버튼을 누르세요. 아이템 리스트의 권장 포맷은 콤마로 분리된 일반 아이템의 아이템ID 목록입니다. 전투 애완동물은 이름의 전체 문자열을 입력해야 합니다. 무작위 마법 부여 아이템은 <아이템ID>:<무작위 마법 부여>입니다. (예: 38472:-29)." -- Needs review
 -- L["Paste the exported operation settings into this box and hit enter or press the 'Okay' button. Imported settings will irreversibly replace existing settings for this operation."] = ""
 L[ [=[Paste the list of items into the box below and hit enter or click on the 'Okay' button.
 

@@ -356,7 +356,7 @@ Once you're done, click on the button below.]=] ] = "" ]==]
 -- L["Parent Group Items:"] = ""
 -- L["Parent/Ungrouped Items:"] = ""
 -- L["Past Contributors:"] = ""
--- L["Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."] = ""
+-- L["Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For battle pets, the entire battlepet string should be used. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."] = ""
 -- L["Paste the exported operation settings into this box and hit enter or press the 'Okay' button. Imported settings will irreversibly replace existing settings for this operation."] = ""
 --[==[ L[ [=[Paste the list of items into the box below and hit enter or click on the 'Okay' button.
 

@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 30300
 ## Title: |cff00ff00TradeSkillMaster_Mailing|r
 ## Notes: Provides Auto-Opening and Auto-Sending features to the mailbox.
 ## Author: Sapu94, Bart39

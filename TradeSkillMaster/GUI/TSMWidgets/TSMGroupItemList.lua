@@ -128,6 +128,7 @@ local function UpdateRows(parent)
 				TSMAPI:SafeTooltipLink(self.data.link)
 				GameTooltip:Show()
 			end)
+			-- row:SetScript("OnLeave", function() GameTooltip:Hide() BattlePetTooltip:Hide() end)
 			row:SetScript("OnLeave", function() GameTooltip:Hide() end)
 			
 			if i > 1 then

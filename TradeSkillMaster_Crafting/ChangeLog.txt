@@ -1,3 +1,12 @@
+v2.5.2
+*Cleaned up some code
+*The rows in the materials list in the queue will now respond to clicks like normal item links.
+*The quantity box in the profession frame will now highlight all of the text when you click into it.
+*Changed how subclasses are programmatically expanded to fix various issues with crafting costs disappearing when they are collapsed.
+
+v2.5.1
+*Added new "/tsm restock_help" slash command which will tell you why an item is not being queued.
+
 v2.5
 *Added mats require to craft an item to Crafting's tooltip.
 *Removed some old, unnecessary ItemTracker checks.

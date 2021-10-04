@@ -1,3 +1,7 @@
+v2.3.6
+*The subclass dropdown in the custom filter sidebar tab will now properly clear when the class dropdown is changed.
+*Removed code for the old TSM app which was increasing logout times.
+
 v2.3.5
 *Fixed issue with calculating price per target item for gems in destroying search.
 *Added events and moduleAPIs for the new TSM Assistant feature.

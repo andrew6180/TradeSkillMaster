@@ -1,11 +1,11 @@
-## Interface: 50400
+## Interface: 30300
 ## Title: |cff00ff00TradeSkillMaster_Shopping|r
 ## Notes: Provides an interface for easily viewing, buying, and posting items.
 ## Author: Sapu94, Bart39
 ## Dependencies: TradeSkillMaster
-## Version: v2.3.5
+## Version: v2.3.6
 ## SavedVariables: TradeSkillMaster_ShoppingDB
-## X-Curse-Packaged-Version: v2.3.5
+## X-Curse-Packaged-Version: v2.3.6
 ## X-Curse-Project-Name: TradeSkillMaster_Shopping
 ## X-Curse-Project-ID: tradeskillmaster_shopping
 ## X-Curse-Repository-ID: wow/tradeskillmaster_shopping/mainline

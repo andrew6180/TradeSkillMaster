@@ -15,7 +15,7 @@ local private = { recheckTime = 1, allowTimerStart = true, lootIndex = 1, freeSl
 
 function Inbox:OnEnable()
 	Inbox:RegisterEvent("MAIL_SHOW")
-	TSMAPI:CreateEventBucket("MAIL_INBOX_UPDATE", private.InboxUpdate, 0.2)
+	TSMAPI:CreateEventBucket("MAIL_INBOX_UPDATE", private.InboxUpdate, 0.3)
 	Inbox:RegisterEvent("MAIL_CLOSED")
 end
 
@@ -56,9 +56,7 @@ function Inbox:CreateTab(parent)
 				OpenMailFrame.updateButtonPositions = true
 				OpenMail_Update()
 				ShowUIPanel(OpenMailFrame)
-				if OpenMailFrameInset then
-					OpenMailFrameInset:SetPoint("TOPLEFT", 4, -80)
-				end
+				OpenMailFrame:SetPoint("TOPLEFT", InboxFrame, "TOPRIGHT", 32, 0)
 				PlaySound("igSpellBookOpen")
 			else
 				InboxFrame.openMailID = 0
@@ -260,15 +258,21 @@ function private:InboxUpdate()
 	for i = 1, numMail do
 		mailInfo[i] = ""
 		local isInvoice = select(4, GetInboxText(i))
-		local _, _, sender, subject, money, cod, daysLeft, hasItem = GetInboxHeaderInfo(i)
+		--local _, _, sender, subject, money, cod, _, hasItem = GetInboxHeaderInfo(index)
+		local _, _, sender, subject, money, cod, daysLeft, hasItem, _, _, _, _, _, itemQuantity = GetInboxHeaderInfo(i)
 		if isInvoice then
-			local invoiceType, itemName, playerName, bid, _, _, ahcut = GetInboxInvoiceInfo(i)
+			local invoiceType, itemName, playerName, bid, buyout, deposit, ahcut, _, _, _, quantity = GetInboxInvoiceInfo(i)
+			
+			-- fix MoP difference
+			if (quantity == nil) then quantity = itemQuantity end
+			
 			if invoiceType == "buyer" then
 				local itemLink = GetInboxItemLink(i, 1) or itemName
-				mailInfo[i] = format(L["Buy: %s | %s | %s"], itemLink, TSMAPI:FormatTextMoney(bid, redColor), FormatDaysLeft(daysLeft, i))
+				mailInfo[i] = format(L["Buy: %s (%d) | %s | %s"], itemLink, quantity or 0, TSMAPI:FormatTextMoney(bid, redColor), FormatDaysLeft(daysLeft, i))
 			elseif invoiceType == "seller" then
 				collectGold = collectGold + bid - ahcut
-				mailInfo[i] = format(L["Sale: %s | %s | %s"], itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor), FormatDaysLeft(daysLeft, i))
+				--mailInfo[i] = format(L["Sale: %s (%d) | %s | %s"], itemName, quantity, TSMAPI:FormatTextMoney(bid - ahcut, greenColor), FormatDaysLeft(daysLeft, i))
+				mailInfo[i] = format("Sale: %s | %s | %s", itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor), FormatDaysLeft(daysLeft, i))
 			elseif invoiceType == "seller_temp_invoice" then
 				mailInfo[i] = format("Pending Sale: %s | %s | %s", itemName, TSMAPI:FormatTextMoney(bid - ahcut, yellowColor), FormatDaysLeft(daysLeft, i))
 			end
@@ -482,15 +486,21 @@ end
 
 function private:LootMailItem(index)
 	if TSM.db.global.inboxMessages then
-		local _, _, sender, subject, money, cod, _, hasItem = GetInboxHeaderInfo(index)
+		--local _, _, sender, subject, money, cod, _, hasItem = GetInboxHeaderInfo(index)
+		local _, _, sender, subject, money, cod, _, hasItem, _, _, _, _, _, itemQuantity = GetInboxHeaderInfo(index)
 		sender = sender or "?"
 		if select(4, GetInboxText(index)) then
 			-- it's an invoice
-			local invoiceType, itemName, playerName, bid, _, _, ahcut = GetInboxInvoiceInfo(index)
+			local invoiceType, itemName, playerName, bid, _, _, ahcut, _, _, _, quantity = GetInboxInvoiceInfo(index)
+
+			-- fix MoP difference
+			if (quantity == nil) then quantity = itemQuantity end
+			
 			if invoiceType == "buyer" then
 				local itemLink = GetInboxItemLink(index, 1) or itemName
-				TSM:Printf("Collected purchase of %s for %s.", itemLink, TSMAPI:FormatTextMoney(bid, redColor))
+				TSM:Printf(L["Collected purchase of %s (%d) for %s."], itemLink, quantity, TSMAPI:FormatTextMoney(bid, redColor))
 			elseif invoiceType == "seller" then
+				--TSM:Printf(L["Collected sale of %s (%d) for %s."], itemName, quantity, TSMAPI:FormatTextMoney(bid - ahcut, greenColor))
 				TSM:Printf("Collected sale of %s for %s.", itemName, TSMAPI:FormatTextMoney(bid - ahcut, greenColor))
 			elseif invoiceType == "seller_temp_invoice" then
 				TSM:Printf("Removing pending sale: %s (%s)", itemName, TSMAPI:FormatTextMoney(bid - ahcut, yellowColor))
@@ -657,7 +667,7 @@ function private:GetBagSlots()
 			genericSpace[bag] = GetContainerNumFreeSlots(bag) or 0
 		end
 		for slot = 1, GetContainerNumSlots(bag) do
-			local iLink = TSMGetContainerItemLink(bag, slot)
+			local iLink = GetContainerItemLink(bag, slot)
 			if iLink then
 				if not partSlots[bag] then
 					partSlots[bag] = {}
@@ -697,4 +707,5 @@ function Inbox:MAIL_CLOSED()
 	private:StopAutoLooting()
 	TSMAPI:CancelFrame("inboxLootTextDelay")
 	TSMAPI:CancelFrame("mailSkipDelay")
+	Inbox:UnregisterEvent("UI_ERROR_MESSAGE") --sometimes shows error messages even when closed, so unregister that event.
 end

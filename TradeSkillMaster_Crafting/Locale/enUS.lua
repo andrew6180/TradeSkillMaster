@@ -117,7 +117,6 @@ L["Opens the Crafting window to the first profession."] = true
 L["Operation Name"] = true
 L["Operations"] = true
 L["Options"] = true
-L["Other"] = true
 L["Override Default Craft Value Method"] = true
 L["Percent to subtract from buyout when calculating profits (5% will compensate for AH cut)."] = true
 L["Please switch to the Shopping Tab to perform the gathering search."] = true

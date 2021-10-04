@@ -24,7 +24,6 @@ function Data:Initialize()
 	TSMAPI:RegisterForBankChange(function(...) Data:GetBankData(...) end)
 
 	TSM.CURRENT_PLAYER, TSM.CURRENT_GUILD = UnitName("player"), GetGuildInfo("player")
-	print(TSM.CURRENT_PLAYER)
 	Data:StoreCurrentGuildInfo()
 end
 
@@ -53,7 +52,7 @@ function Data:StoreCurrentGuildInfo(noDelay)
 	end
 	TSM.characters[TSM.CURRENT_PLAYER].guild = TSM.CURRENT_GUILD
 	TSM.characters[TSM.CURRENT_PLAYER].lastUpdate.guild = time()
-	--TSM.Sync:BroadcastUpdateRequest()
+	TSM.Sync:BroadcastUpdateRequest()
 end
 
 function Data:ThrottleEvent(event)
@@ -112,7 +111,7 @@ function Data:GetBagData(state)
 		end
 	end
 	TSM.characters[TSM.CURRENT_PLAYER].lastUpdate.bags = time()
-	--TSM.Sync:BroadcastUpdateRequest()
+	TSM.Sync:BroadcastUpdateRequest()
 end
 
 -- scan the player's bank
@@ -126,7 +125,7 @@ function Data:GetBankData(state)
 		end
 	end
 	TSM.characters[TSM.CURRENT_PLAYER].lastUpdate.bank = time()
-	--TSM.Sync:BroadcastUpdateRequest()
+	TSM.Sync:BroadcastUpdateRequest()
 end
 
 -- scan the guild bank
@@ -155,7 +154,7 @@ function Data:GetGuildBankData()
 	if GuildBankFrame and GuildBankFrame:IsVisible() then
 		TSM.guilds[TSM.CURRENT_GUILD].lastUpdate = time()
 	end
-	--TSM.Sync:BroadcastUpdateRequest()
+	TSM.Sync:BroadcastUpdateRequest()
 end
 
 function Data:ScanPlayerAuctions()
@@ -166,6 +165,7 @@ function Data:ScanPlayerAuctions()
 		local link = GetAuctionItemLink("owner", i)
 		local itemString = TSMAPI:GetItemString(link)
 		local baseItemString = TSMAPI:GetBaseItemString(link)
+		--local name, _, quantity, _, _, _, _, _, _, buyout, _, _, _, wasSold, _, wasSold_54 = GetAuctionItemInfo("owner", i)
 		local name, _, quantity, _, _, _, _, _, buyout, _, _, _, wasSold = GetAuctionItemInfo("owner", i)
 		if wasSold == 0 and itemString then
 			TSM.characters[TSM.CURRENT_PLAYER].auctions[itemString] = (TSM.characters[TSM.CURRENT_PLAYER].auctions[itemString] or 0) + quantity
@@ -175,7 +175,7 @@ function Data:ScanPlayerAuctions()
 		end
 	end
 	TSM.characters[TSM.CURRENT_PLAYER].lastUpdate.auctions = time()
-	--TSM.Sync:BroadcastUpdateRequest()
+	TSM.Sync:BroadcastUpdateRequest()
 end
 
 
@@ -204,7 +204,7 @@ local function UpdateMailQuantitiesThread(self)
 					self:Yield()
 				end
 				TSM.characters[player].lastUpdate.mail = time()
-				--TSM.Sync:BroadcastUpdateRequest()
+				TSM.Sync:BroadcastUpdateRequest()
 			end
 		else
 			self:Sleep(1)
@@ -305,6 +305,7 @@ do
 	local tmpBuyouts = {}
 	local function OnAuctionBid(listType, index, bidPlaced)
 		local link = GetAuctionItemLink(listType, index)
+		--local name, _, count, _, _, _, _, _, _, buyout = GetAuctionItemInfo(listType, index)
 		local name, _, count, _, _, _, _, _, buyout = GetAuctionItemInfo(listType, index)
 		if bidPlaced == buyout then
 			tinsert(tmpBuyouts, { name = name, link = link, count = count })

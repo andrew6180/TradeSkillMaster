@@ -86,6 +86,7 @@ function private.Create(parent)
 	classDropdown:SetPoint("TOPLEFT", 5, -y)
 	classDropdown:SetPoint("TOPRIGHT", 0, -y)
 	classDropdown:SetCallback("OnValueChanged", function(_,_,value)
+			frame.subClassDropdown:SetValue()
 			frame.subClassDropdown:SetList({GetAuctionItemSubClasses(value)})
 			frame.subClassDropdown:SetDisabled(false)
 		end)
@@ -184,7 +185,7 @@ end
 
 function private:StartSearch(frame)
 	local filter = frame.filterInputBox:GetText()
-	
+
 	local minLevel = frame.levelMinBox:GetNumber()
 	local maxLevel = frame.levelMaxBox:GetNumber()
 	if maxLevel > 0 then

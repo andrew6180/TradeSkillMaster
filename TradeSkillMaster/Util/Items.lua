@@ -10,8 +10,14 @@
 
 local TSM = select(2, ...)
 
+
 function TSMAPI:SafeTooltipLink(link)
-	GameTooltip:SetHyperlink(link)
+	-- if strmatch(link, "battlepet") then
+		-- local _, speciesID, level, breedQuality, maxHealth, power, speed, battlePetID = strsplit(":", link)
+		-- BattlePetToolTip_Show(tonumber(speciesID), tonumber(level), tonumber(breedQuality), tonumber(maxHealth), tonumber(power), tonumber(speed), gsub(gsub(link, "^(.*)%[", ""), "%](.*)$", ""))
+	-- else
+		GameTooltip:SetHyperlink(link)
+	-- end
 end
 
 function TSMAPI:GetItemString(item)
@@ -28,18 +34,15 @@ function TSMAPI:GetItemString(item)
 	end
 	
 	local itemInfo = {strfind(item, "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%-?%d*):?(%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")}
-
 	if not itemInfo[11] then return nil, "invalid link" end
 	itemInfo[11] = tonumber(itemInfo[11]) or 0
 	
-	local it = nil
 	if itemInfo[4] == "item" then
 		for i=6, 10 do itemInfo[i] = 0 end
-		it = table.concat(itemInfo, ":", 4, 11)
+		return table.concat(itemInfo, ":", 4, 11)
 	else
-		it = table.concat(itemInfo, ":", 4, 7)
+		return table.concat(itemInfo, ":", 4, 7)
 	end
-	return it
 end
 
 function TSMAPI:GetBaseItemString(itemString, doGroupLookup)
@@ -55,9 +58,7 @@ function TSMAPI:GetBaseItemString(itemString, doGroupLookup)
 		parts[i] = 0
 	end
 	local baseItemString = table.concat(parts, ":")
-	if not doGroupLookup then
-		return baseItemString
-	end
+	if not doGroupLookup then return baseItemString end
 	
 	if TSM.db.profile.items[itemString] and TSM.db.profile.items[baseItemString] then
 		return itemString
@@ -69,10 +70,31 @@ function TSMAPI:GetBaseItemString(itemString, doGroupLookup)
 end
 
 local itemInfoCache = {}
+local PET_CAGE_ITEM_INFO = {isDefault=true, 0, "Battle Pets", "", 1, "", "", 0}
 function TSMAPI:GetSafeItemInfo(link)
 	if type(link) ~= "string" then return end
 	
 	if not itemInfoCache[link] then
+		-- if strmatch(link, "battlepet:") then
+			-- local _, speciesID, level, quality, health, power, speed, petID = strsplit(":", link)
+			-- if not tonumber(speciesID) then return end
+			-- level, quality, health, power, speed, petID = level or 0, quality or 0, health or 0, power or 0, speed or 0, petID or "0"
+			
+			-- local name, texture = C_PetJournal.GetPetInfoBySpeciesID(tonumber(speciesID))
+			-- if name == "" then return end
+			-- level, quality = tonumber(level), tonumber(quality)
+			-- petID = strsub(petID, 1, (strfind(petID, "|") or #petID)-1)
+			-- link = ITEM_QUALITY_COLORS[quality].hex.."|Hbattlepet:"..speciesID..":"..level..":"..quality..":"..health..":"..power..":"..speed..":"..petID.."|h["..name.."]|h|r"
+			-- if PET_CAGE_ITEM_INFO.isDefault then
+				-- local data = {select(5, GetItemInfo(82800))}
+				-- if #data > 0 then
+					-- PET_CAGE_ITEM_INFO = data
+				-- end
+			-- end
+			-- local minLvl, iType, _, stackSize, _, _, vendorPrice = unpack(PET_CAGE_ITEM_INFO)
+			-- local subType, equipLoc = 0, ""
+			-- itemInfoCache[link] = {name, link, quality, level, minLvl, iType, subType, stackSize, equipLoc, texture, vendorPrice}
+		-- elseif strmatch(link, "item:") then
 		if strmatch(link, "item:") then
 			itemInfoCache[link] = {GetItemInfo(link)}
 		end
@@ -89,10 +111,6 @@ end
 function TSMAPI:GetItemID(itemLink)
 	if not itemLink or type(itemLink) ~= "string" then return nil, "invalid args" end
 	
-	-- Remove any random enchant information
-	--local parts = {("/"):split(itemLink)}
-	--itemLink = parts[1]
-
 	local test = select(2, strsplit(":", itemLink))
 	if not test then return nil, "invalid link" end
 	
@@ -119,49 +137,63 @@ local function GetTooltipCharges(tooltip)
 	end
 end
 local scanTooltip
-local resultsCache = {lastClear=GetTime()}
+local resultsCache = {}
 function TSMAPI:IsSoulbound(bag, slot)
-	if GetTime() - resultsCache.lastClear > 0.5 then
-		resultsCache = {lastClear=GetTime()}
-	end
-	
 	if not scanTooltip then
 		scanTooltip = CreateFrame("GameTooltip", "TSMSoulboundScanTooltip", UIParent, "GameTooltipTemplate")
 		scanTooltip:SetOwner(UIParent, "ANCHOR_NONE")
 	end
 	scanTooltip:ClearLines()
 	
-	local slotID
+	local slotID, link
 	if type(bag) == "string" then
+		-- if strfind(bag, "battlepet") then return end
 		slotID = bag
 		scanTooltip:SetHyperlink(slotID)
 	elseif bag and slot then
 		slotID = bag.."@"..slot
+		link = GetContainerItemLink(bag, slot)
+		if resultsCache[slotID] then
+			if resultsCache[slotID].link and resultsCache[slotID].link == link then
+				return resultsCache[slotID].soulbound
+			elseif not resultsCache[slotID].link and (GetTime() - (resultsCache[slotID].lastUpdate or 0)) < 0.5 then
+				return resultsCache[slotID].soulbound
+			end
+		end
 		local itemID = GetContainerItemID(bag, slot)
 		local maxCharges
 		if itemID then
+			-- scanTooltip:SetItemByID(itemID)
 			scanTooltip:SetHyperlink("item:"..itemID)
 			maxCharges = GetTooltipCharges(scanTooltip)
 		end
 		scanTooltip:SetBagItem(bag, slot)
 		if maxCharges then
 			if GetTooltipCharges(scanTooltip) ~= maxCharges then
-				resultsCache[slotID] = true
-				return resultsCache[slotID]
+				resultsCache[slotID] = {soulbound=true}
+				return resultsCache[slotID].soulbound
 			end
 		end
 	else
 		return
 	end
 	
-	if resultsCache[slotID] ~= nil then return resultsCache[slotID] end
-	resultsCache[slotID] = false
+	if resultsCache[slotID] then
+		if resultsCache[slotID].link and resultsCache[slotID].link == link then
+			return resultsCache[slotID].soulbound
+		elseif not resultsCache[slotID].link and (GetTime() - (resultsCache[slotID].lastUpdate or 0)) < 0.5 then
+			return resultsCache[slotID].soulbound
+		end
+	end
+	resultsCache[slotID] = {soulbound=false, link=link}
 	for id=1, scanTooltip:NumLines() do
 		local text = _G["TSMSoulboundScanTooltipTextLeft" .. id]
-		if text and ((text:GetText() == ITEM_BIND_ON_PICKUP and id < 4) or text:GetText() == ITEM_SOULBOUND or text:GetText() == ITEM_BIND_QUEST) then
-			resultsCache[slotID] = true
+		text = text and text:GetText()
+		if text and ((text == ITEM_BIND_ON_PICKUP and id < 4) or text == ITEM_SOULBOUND or text == ITEM_BIND_QUEST) then
+			resultsCache[slotID] = {soulbound=true}
 			break
 		end
 	end
-	return resultsCache[slotID]
+	resultsCache[slotID].lastUpdate = GetTime()
+	return resultsCache[slotID].soulbound
 end

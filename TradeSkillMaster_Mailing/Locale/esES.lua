@@ -20,7 +20,7 @@ If you loot all mail with this enabled, it will wait and recheck then keep auto 
 Si despojas todos los correos con esta opción activada, se esperará y comprobará guardando los despojos automáticamente.]=] -- Needs review
 L["Auto Recheck Mail"] = "Comprobar automáticamente los correos" -- Needs review
 -- L["BE SURE TO SPELL THE NAME CORRECTLY!"] = ""
--- L["Buy: %s | %s | %s"] = ""
+-- L["Buy: %s (%d) | %s | %s"] = ""
 -- L["Cannot finish auto looting, inventory is full or too many unique items."] = ""
 -- L["Chat Message Options"] = ""
 -- L["Clear"] = ""

@@ -94,13 +94,13 @@ local function setSrcBagFunctions(bagType)
 		TSM.pickupContainerItemSrc = function(bag, slot) PickupContainerItem(bag, slot)
 		end
 		TSM.getContainerItemIDSrc = function(bag, slot)
-			local tmpLink = TSMGetContainerItemLink(bag, slot)
+			local tmpLink = GetContainerItemLink(bag, slot)
 			local quantity = select(2, GetContainerItemInfo(bag, slot))
 			return TSMAPI:GetBaseItemString(tmpLink, true), quantity
 		end
 		TSM.getContainerNumSlotsSrc = function(bag) return GetContainerNumSlots(bag)
 		end
-		TSM.getContainerItemLinkSrc = function(bag, slot) return TSMGetContainerItemLink(bag, slot)
+		TSM.getContainerItemLinkSrc = function(bag, slot) return GetContainerItemLink(bag, slot)
 		end
 		TSM.getContainerNumFreeSlotsSrc = function(bag) return GetContainerNumFreeSlots(bag)
 		end
@@ -130,13 +130,13 @@ local function setDestBagFunctions(bagType)
 		TSM.pickupContainerItemDest = function(bag, slot) PickupContainerItem(bag, slot)
 		end
 		TSM.getContainerItemIDDest = function(bag, slot)
-			local tmpLink = TSMGetContainerItemLink(bag, slot)
+			local tmpLink = GetContainerItemLink(bag, slot)
 			local quantity = select(2, GetContainerItemInfo(bag, slot))
 			return TSMAPI:GetBaseItemString(tmpLink, true), quantity
 		end
 		TSM.getContainerNumSlotsDest = function(bag) return GetContainerNumSlots(bag)
 		end
-		TSM.getContainerItemLinkDest = function(bag, slot) return TSMGetContainerItemLink(bag, slot)
+		TSM.getContainerItemLinkDest = function(bag, slot) return GetContainerItemLink(bag, slot)
 		end
 		TSM.getContainerNumFreeSlotsDest = function(bag) return GetContainerNumFreeSlots(bag)
 		end

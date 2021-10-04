@@ -28,9 +28,9 @@
 -- end
 -- @class file
 -- @name AceAddon-3.0.lua
--- @release $Id: AceAddon-3.0.lua 980 2010-10-27 14:20:11Z nevcairiel $
+-- @release $Id: AceAddon-3.0.lua 1084 2013-04-27 20:14:11Z nevcairiel $
 
-local MAJOR, MINOR = "AceAddon-3.0", 10
+local MAJOR, MINOR = "AceAddon-3.0", 12
 local AceAddon, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceAddon then return end -- No Upgrade needed.
@@ -107,6 +107,16 @@ local Enable, Disable, EnableModule, DisableModule, Embed, NewModule, GetModule,
 
 -- used in the addon metatable
 local function addontostring( self ) return self.name end 
+
+-- Check if the addon is queued for initialization
+local function queuedForInitialization(addon)
+	for i = 1, #AceAddon.initializequeue do
+		if AceAddon.initializequeue[i] == addon then
+			return true
+		end
+	end
+	return false
+end
 
 --- Create a new AceAddon-3.0 addon.
 -- Any libraries you specified will be embeded, and the addon will be scheduled for 
@@ -314,7 +324,12 @@ end
 -- MyModule:Enable()
 function Enable(self)
 	self:SetEnabledState(true)
-	return AceAddon:EnableAddon(self)
+
+	-- nevcairiel 2013-04-27: don't enable an addon/module if its queued for init still
+	-- it'll be enabled after the init process
+	if not queuedForInitialization(self) then
+		return AceAddon:EnableAddon(self)
+	end
 end
 
 --- Disables the Addon, if possible, return true or false depending on success.
@@ -619,7 +634,8 @@ function AceAddon:IterateModulesOfAddon(addon) return pairs(addon.modules) end
 
 -- Event Handling
 local function onEvent(this, event, arg1)
-	if event == "ADDON_LOADED" or event == "PLAYER_LOGIN" then
+	-- 2011-08-17 nevcairiel - ignore the load event of Blizzard_DebugTools, so a potential startup error isn't swallowed up
+	if (event == "ADDON_LOADED"  and arg1 ~= "Blizzard_DebugTools") or event == "PLAYER_LOGIN" then
 		-- if a addon loads another addon, recursion could happen here, so we need to validate the table on every iteration
 		while(#AceAddon.initializequeue > 0) do
 			local addon = tremove(AceAddon.initializequeue, 1)

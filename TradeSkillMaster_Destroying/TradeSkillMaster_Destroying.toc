@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 30300
 ## Title: |cff00ff00TradeSkillMaster_Destroying|r
 ## Notes: Makes bulk and one-off milling, prospecting, and disenchanting easier.
 ## Author: Sapu94, Bart39

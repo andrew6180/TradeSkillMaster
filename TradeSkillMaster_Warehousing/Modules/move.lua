@@ -79,19 +79,12 @@ function move:getContainerTable(cnt)
 
 	if cnt == "bank" then
 		local numSlots, _ = GetNumBankSlots()
-		local maxSlot, increment = 1, 3
-		if IsReagentBankUnlocked() then
-			maxSlot = 2
-			increment = 2
-		end
 
-		for i = 1, numSlots + maxSlot do
+		for i = 1, numSlots + 1 do
 			if i == 1 then
 				t[i] = -1
-			elseif i == 2 and maxSlot == 2 then
-				t[i] = -3
 			else
-				t[i] = i + increment
+				t[i] = i + 3
 			end
 		end
 
@@ -109,16 +102,13 @@ function move:getContainerTable(cnt)
 	elseif cnt == "bags" then
 		for i = 1, NUM_BAG_SLOTS + 1 do t[i] = i - 1
 		end
+
 		return t
 	end
 end
 
 function move:areBanksVisible()
-	if BagnonFrameGuildBank and BagnonFrameGuildBank:IsVisible() then
-		return true
-	elseif BagnonFrameguild and BagnonFrameguild:IsVisible() then
-		return true
-	elseif BagnonFrameinventory and BagnonFrameinventory:IsVisible() then
+	if BagnonFrameguildbank and BagnonFrameguildbank:IsVisible() then
 		return true
 	elseif BagnonFramebank and BagnonFramebank:IsVisible() then
 		return true
@@ -158,13 +148,7 @@ function move:areBanksVisible()
 		return true
 	elseif NivayacBniv_Bank and NivayacBniv_Bank:IsVisible() then
 		return true
-	elseif DufUIBank and DufUIBank:IsVisible() then
-		return true
-	elseif SVUI_BankContainerFrame and SVUI_BankContainerFrame:IsVisible() then
-		return true
-	elseif LiteBagBank and LiteBagBank:IsVisible() then
-		return true
-	elseif LiteBagInventory and LiteBagInventory:IsVisible() then
+	elseif DufUIBank and DufUIBank:IsVisble() then
 		return true
 	end
 	TSM:Print(L["Canceled"])

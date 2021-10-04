@@ -25,9 +25,11 @@ private.tooltipInfo = {}
 -- **************************************************************************
 
 function TSM:SetupTooltips()
+	-- tooltipLib:AddCallback({type = "battlepet", callback = private.LoadTooltip})
 	tooltipLib:AddCallback({type = "item", callback = private.LoadTooltip})
 	tooltipLib:RegisterTooltip(GameTooltip)
 	tooltipLib:RegisterTooltip(ItemRefTooltip)
+	-- tooltipLib:RegisterTooltip(BattlePetTooltip)
 	local orig = OpenMailAttachment_OnEnter
 	OpenMailAttachment_OnEnter = function(self, index)
 		private.lastMailTooltipUpdate = private.lastMailTooltipUpdate or 0

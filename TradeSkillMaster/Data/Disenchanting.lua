@@ -256,12 +256,14 @@ data.disenchant = {
 						{
 							minItemLevel = 130,
 							maxItemLevel = 151,
-							amountOfMats = 1.5
+							-- amountOfMats = 1.5 
+							amountOfMats = 1.875 -- 2-3, 75% chance = 2.5*0.75
 						},
 						{
 							minItemLevel = 152,
 							maxItemLevel = 200,
-							amountOfMats = 3.375
+							-- amountOfMats = 3.375
+							amountOfMats = 4.125 -- 4-7, 75% chance = 5.5*0.75	
 						},
 					},
 				},
@@ -270,139 +272,141 @@ data.disenchant = {
 						{
 							minItemLevel = 130,
 							maxItemLevel = 151,
-							amountOfMats = 0.55
+							-- amountOfMats = 0.55
+							amountOfMats = 0.55 -- 2-3, 22% chance = 2.5*0.22
 						},
 						{
 							minItemLevel = 152,
 							maxItemLevel = 200,
-							amountOfMats = 1.1
+							-- amountOfMats = 1.1
+							amountOfMats = 1.21 -- 4-7, 22% chance = 5.5*0.22
 						},
 					},
 				},
 			},
 		},
-		["item:52555:0:0:0:0:0:0"] = {
-			-- Hypnotic Dust
-			name = GetItemInfo("item:52555:0:0:0:0:0:0"),
-			minLevel = 77,
-			maxLevel = 85,
-			itemTypes = {
-				[ARMOR] = {
-					[2] = {
-						{
-							minItemLevel = 272,
-							maxItemLevel = 275,
-							amountOfMats = 1.125
-						},
-						{
-							minItemLevel = 276,
-							maxItemLevel = 290,
-							amountOfMats = 1.5
-						},
-						{
-							minItemLevel = 291,
-							maxItemLevel = 305,
-							amountOfMats = 1.875
-						},
-						{
-							minItemLevel = 306,
-							maxItemLevel = 315,
-							amountOfMats = 2.25
-						},
-						{
-							minItemLevel = 316,
-							maxItemLevel = 325,
-							amountOfMats = 2.625
-						},
-						{
-							minItemLevel = 326,
-							maxItemLevel = 350,
-							amountOfMats = 3
-						},
-					},
-				},
-				[WEAPON] = {
-					[2] = {
-						{
-							minItemLevel = 272,
-							maxItemLevel = 275,
-							amountOfMats = 0.375
-						},
-						{
-							minItemLevel = 276,
-							maxItemLevel = 290,
-							amountOfMats = 0.5
-						},
-						{
-							minItemLevel = 291,
-							maxItemLevel = 305,
-							amountOfMats = 0.625
-						},
-						{
-							minItemLevel = 306,
-							maxItemLevel = 315,
-							amountOfMats = 0.75
-						},
-						{
-							minItemLevel = 316,
-							maxItemLevel = 325,
-							amountOfMats = 0.875
-						},
-						{
-							minItemLevel = 326,
-							maxItemLevel = 350,
-							amountOfMats = 1
-						},
-					},
-				},
-			},
-		},
-		["item:74249:0:0:0:0:0:0"] = {
-			-- Spirit Dust
-			name = GetItemInfo("item:74249:0:0:0:0:0:0"),
-			minLevel = 83,
-			maxLevel = 88,
-			itemTypes = {
-				[ARMOR] = {
-					[2] = {
-						{
-							minItemLevel = 364,
-							maxItemLevel = 390,
-							amountOfMats = 2.125
-						},
-						{
-							minItemLevel = 391,
-							maxItemLevel = 410,
-							amountOfMats = 2.55
-						},
-						{
-							minItemLevel = 411,
-							maxItemLevel = 450,
-							amountOfMats = 3.4
-						},
-					},
-				},
-				[WEAPON] = {
-					[2] = {
-						{
-							minItemLevel = 377,
-							maxItemLevel = 390,
-							amountOfMats = 2.125
-						},
-						{
-							minItemLevel = 391,
-							maxItemLevel = 410,
-							amountOfMats = 2.55
-						},
-						{
-							minItemLevel = 411,
-							maxItemLevel = 450,
-							amountOfMats = 3.4
-						},
-					},
-				},
-			},
-		},
+		-- ["item:52555:0:0:0:0:0:0"] = {
+			-- -- Hypnotic Dust
+			-- name = GetItemInfo("item:52555:0:0:0:0:0:0"),
+			-- minLevel = 77,
+			-- maxLevel = 85,
+			-- itemTypes = {
+				-- [ARMOR] = {
+					-- [2] = {
+						-- {
+							-- minItemLevel = 272,
+							-- maxItemLevel = 275,
+							-- amountOfMats = 1.125
+						-- },
+						-- {
+							-- minItemLevel = 276,
+							-- maxItemLevel = 290,
+							-- amountOfMats = 1.5
+						-- },
+						-- {
+							-- minItemLevel = 291,
+							-- maxItemLevel = 305,
+							-- amountOfMats = 1.875
+						-- },
+						-- {
+							-- minItemLevel = 306,
+							-- maxItemLevel = 315,
+							-- amountOfMats = 2.25
+						-- },
+						-- {
+							-- minItemLevel = 316,
+							-- maxItemLevel = 325,
+							-- amountOfMats = 2.625
+						-- },
+						-- {
+							-- minItemLevel = 326,
+							-- maxItemLevel = 350,
+							-- amountOfMats = 3
+						-- },
+					-- },
+				-- },
+				-- [WEAPON] = {
+					-- [2] = {
+						-- {
+							-- minItemLevel = 272,
+							-- maxItemLevel = 275,
+							-- amountOfMats = 0.375
+						-- },
+						-- {
+							-- minItemLevel = 276,
+							-- maxItemLevel = 290,
+							-- amountOfMats = 0.5
+						-- },
+						-- {
+							-- minItemLevel = 291,
+							-- maxItemLevel = 305,
+							-- amountOfMats = 0.625
+						-- },
+						-- {
+							-- minItemLevel = 306,
+							-- maxItemLevel = 315,
+							-- amountOfMats = 0.75
+						-- },
+						-- {
+							-- minItemLevel = 316,
+							-- maxItemLevel = 325,
+							-- amountOfMats = 0.875
+						-- },
+						-- {
+							-- minItemLevel = 326,
+							-- maxItemLevel = 350,
+							-- amountOfMats = 1
+						-- },
+					-- },
+				-- },
+			-- },
+		-- },
+		-- ["item:74249:0:0:0:0:0:0"] = {
+			-- -- Spirit Dust
+			-- name = GetItemInfo("item:74249:0:0:0:0:0:0"),
+			-- minLevel = 83,
+			-- maxLevel = 88,
+			-- itemTypes = {
+				-- [ARMOR] = {
+					-- [2] = {
+						-- {
+							-- minItemLevel = 364,
+							-- maxItemLevel = 390,
+							-- amountOfMats = 2.125
+						-- },
+						-- {
+							-- minItemLevel = 391,
+							-- maxItemLevel = 410,
+							-- amountOfMats = 2.55
+						-- },
+						-- {
+							-- minItemLevel = 411,
+							-- maxItemLevel = 450,
+							-- amountOfMats = 3.4
+						-- },
+					-- },
+				-- },
+				-- [WEAPON] = {
+					-- [2] = {
+						-- {
+							-- minItemLevel = 377,
+							-- maxItemLevel = 390,
+							-- amountOfMats = 2.125
+						-- },
+						-- {
+							-- minItemLevel = 391,
+							-- maxItemLevel = 410,
+							-- amountOfMats = 2.55
+						-- },
+						-- {
+							-- minItemLevel = 411,
+							-- maxItemLevel = 450,
+							-- amountOfMats = 3.4
+						-- },
+					-- },
+				-- },
+			-- },
+		-- },
 	},
 	{
 		desc = L["Essences"],
@@ -648,12 +652,14 @@ data.disenchant = {
 						{
 							minItemLevel = 130,
 							maxItemLevel = 151,
-							amountOfMats = 0.1
+							-- amountOfMats = 0.1
+							amountOfMats = 0.11 -- 1-2 Lesser, 22% Chance = 1.5*0.22/3
 						},
 						{
 							minItemLevel = 152,
 							maxItemLevel = 200,
-							amountOfMats = 0.3
+							-- amountOfMats = 0.3
+							amountOfMats = 0.33 -- 1-2 Greater, 22% Chance = 1.5*0.22
 						},
 					},
 				},
@@ -662,139 +668,141 @@ data.disenchant = {
 						{
 							minItemLevel = 130,
 							maxItemLevel = 151,
-							amountOfMats = 0.375
+							-- amountOfMats = 0.375
+							amountOfMats = 0.375 -- 1-2 Lesser, 75% chance = 1.5*0.75/3
 						},
 						{
 							minItemLevel = 152,
 							maxItemLevel = 200,
-							amountOfMats = 1.125
+							-- amountOfMats = 1.125
+							amountOfMats = 1.125 -- 1-2 Greater, 75% chance = 1.5*0.75
 						},
 					},
 				},
 			},
 		},
-		["item:52719:0:0:0:0:0:0"] = {
-			-- Greater Celestial Essence
-			name = GetItemInfo("item:52719:0:0:0:0:0:0"),
-			minLevel = 77,
-			maxLevel = 85,
-			itemTypes = {
-				[ARMOR] = {
-					[2] = {
-						{
-							minItemLevel = 201,
-							maxItemLevel = 275,
-							amountOfMats = 0.125
-						},
-						{
-							minItemLevel = 276,
-							maxItemLevel = 290,
-							amountOfMats = 0.167
-						},
-						{
-							minItemLevel = 291,
-							maxItemLevel = 305,
-							amountOfMats = 0.208
-						},
-						{
-							minItemLevel = 306,
-							maxItemLevel = 315,
-							amountOfMats = 0.375
-						},
-						{
-							minItemLevel = 316,
-							maxItemLevel = 325,
-							amountOfMats = 0.625
-						},
-						{
-							minItemLevel = 326,
-							maxItemLevel = 350,
-							amountOfMats = 0.75
-						},
-					},
-				},
-				[WEAPON] = {
-					[2] = {
-						{
-							minItemLevel = 201,
-							maxItemLevel = 275,
-							amountOfMats = 0.375
-						},
-						{
-							minItemLevel = 276,
-							maxItemLevel = 290,
-							amountOfMats = 0.5
-						},
-						{
-							minItemLevel = 291,
-							maxItemLevel = 305,
-							amountOfMats = 0.625
-						},
-						{
-							minItemLevel = 306,
-							maxItemLevel = 315,
-							amountOfMats = 1.125
-						},
-						{
-							minItemLevel = 316,
-							maxItemLevel = 325,
-							amountOfMats = 1.875
-						},
-						{
-							minItemLevel = 326,
-							maxItemLevel = 350,
-							amountOfMats = 2.25
-						},
-					},
-				},
-			},
-		},
-		["item:74250:0:0:0:0:0:0"] = {
-			-- Mysterious Essence
-			name = GetItemInfo("item:74250:0:0:0:0:0:0"),
-			minLevel = 83,
-			maxLevel = 88,
-			itemTypes = {
-				[ARMOR] = {
-					[2] = {
-						{
-							minItemLevel = 364,
-							maxItemLevel = 390,
-							amountOfMats = 0.15
-						},
-						{
-							minItemLevel = 391,
-							maxItemLevel = 410,
-							amountOfMats = 0.225
-						},
-						{
-							minItemLevel = 411,
-							maxItemLevel = 450,
-							amountOfMats = 0.3
-						},
-					},
-				},
-				[WEAPON] = {
-					[2] = {
-						{
-							minItemLevel = 377,
-							maxItemLevel = 390,
-							amountOfMats = 0.15
-						},
-						{
-							minItemLevel = 391,
-							maxItemLevel = 410,
-							amountOfMats = 0.225
-						},
-						{
-							minItemLevel = 411,
-							maxItemLevel = 450,
-							amountOfMats = 0.3
-						},
-					},
-				},
-			},
-		},
+		-- ["item:52719:0:0:0:0:0:0"] = {
+			-- -- Greater Celestial Essence
+			-- name = GetItemInfo("item:52719:0:0:0:0:0:0"),
+			-- minLevel = 77,
+			-- maxLevel = 85,
+			-- itemTypes = {
+				-- [ARMOR] = {
+					-- [2] = {
+						-- {
+							-- minItemLevel = 201,
+							-- maxItemLevel = 275,
+							-- amountOfMats = 0.125
+						-- },
+						-- {
+							-- minItemLevel = 276,
+							-- maxItemLevel = 290,
+							-- amountOfMats = 0.167
+						-- },
+						-- {
+							-- minItemLevel = 291,
+							-- maxItemLevel = 305,
+							-- amountOfMats = 0.208
+						-- },
+						-- {
+							-- minItemLevel = 306,
+							-- maxItemLevel = 315,
+							-- amountOfMats = 0.375
+						-- },
+						-- {
+							-- minItemLevel = 316,
+							-- maxItemLevel = 325,
+							-- amountOfMats = 0.625
+						-- },
+						-- {
+							-- minItemLevel = 326,
+							-- maxItemLevel = 350,
+							-- amountOfMats = 0.75
+						-- },
+					-- },
+				-- },
+				-- [WEAPON] = {
+					-- [2] = {
+						-- {
+							-- minItemLevel = 201,
+							-- maxItemLevel = 275,
+							-- amountOfMats = 0.375
+						-- },
+						-- {
+							-- minItemLevel = 276,
+							-- maxItemLevel = 290,
+							-- amountOfMats = 0.5
+						-- },
+						-- {
+							-- minItemLevel = 291,
+							-- maxItemLevel = 305,
+							-- amountOfMats = 0.625
+						-- },
+						-- {
+							-- minItemLevel = 306,
+							-- maxItemLevel = 315,
+							-- amountOfMats = 1.125
+						-- },
+						-- {
+							-- minItemLevel = 316,
+							-- maxItemLevel = 325,
+							-- amountOfMats = 1.875
+						-- },
+						-- {
+							-- minItemLevel = 326,
+							-- maxItemLevel = 350,
+							-- amountOfMats = 2.25
+						-- },
+					-- },
+				-- },
+			-- },
+		-- },
+		-- ["item:74250:0:0:0:0:0:0"] = {
+			-- -- Mysterious Essence
+			-- name = GetItemInfo("item:74250:0:0:0:0:0:0"),
+			-- minLevel = 83,
+			-- maxLevel = 88,
+			-- itemTypes = {
+				-- [ARMOR] = {
+					-- [2] = {
+						-- {
+							-- minItemLevel = 364,
+							-- maxItemLevel = 390,
+							-- amountOfMats = 0.15
+						-- },
+						-- {
+							-- minItemLevel = 391,
+							-- maxItemLevel = 410,
+							-- amountOfMats = 0.225
+						-- },
+						-- {
+							-- minItemLevel = 411,
+							-- maxItemLevel = 450,
+							-- amountOfMats = 0.3
+						-- },
+					-- },
+				-- },
+				-- [WEAPON] = {
+					-- [2] = {
+						-- {
+							-- minItemLevel = 377,
+							-- maxItemLevel = 390,
+							-- amountOfMats = 0.15
+						-- },
+						-- {
+							-- minItemLevel = 391,
+							-- maxItemLevel = 410,
+							-- amountOfMats = 0.225
+						-- },
+						-- {
+							-- minItemLevel = 411,
+							-- maxItemLevel = 450,
+							-- amountOfMats = 0.3
+						-- },
+					-- },
+				-- },
+			-- },
+		-- },
 	},
 	{
 		desc = L["Shards"],
@@ -1223,6 +1231,7 @@ data.disenchant = {
 		},
 		["item:34052:0:0:0:0:0:0"] = {
 			-- Dream Shard
+			-- 2 is uncommon, 3 is rare, 4 is epic
 			name = GetItemInfo("item:34052:0:0:0:0:0:0"),
 			minLevel = 68,
 			maxLevel = 80,
@@ -1232,24 +1241,26 @@ data.disenchant = {
 						{
 							minItemLevel = 121,
 							maxItemLevel = 151,
-							amountOfMats = 0.0167
+							-- amountOfMats = 0.0167
+							amountOfMats = 0.01 -- 1 Small, 3% Chance = 1/3*0.03
 						},
 						{
 							minItemLevel = 152,
 							maxItemLevel = 200,
-							amountOfMats = 0.05
+							-- amountOfMats = 0.05
+							amountOfMats = 0.03 -- 1 Large, 3% Chance = 1*0.03
 						},
 					},
 					[3] = {
 						{
 							minItemLevel = 121,
 							maxItemLevel = 164,
-							amountOfMats = 0.33
+							amountOfMats = 0.333 -- 1 Small, 100% Chance = 1/3*1
 						},
 						{
 							minItemLevel = 165,
 							maxItemLevel = 200,
-							amountOfMats = 1
+							amountOfMats = 1 -- 1 Large, 100% Chance = 1*1
 						},
 					},
 				},
@@ -1258,153 +1269,155 @@ data.disenchant = {
 						{
 							minItemLevel = 121,
 							maxItemLevel = 151,
-							amountOfMats = 0.0167
+							-- amountOfMats = 0.0167
+							amountOfMats = 0.01 -- 1 Small, 3% Chance = 1/3*0.03
 						},
 						{
 							minItemLevel = 152,
 							maxItemLevel = 200,
-							amountOfMats = 0.05
+							-- amountOfMats = 0.05
+							amountOfMats = 0.03 -- 1 Large, 3% Chance = 1*0.03
 						},
 					},
 					[3] = {
 						{
 							minItemLevel = 121,
 							maxItemLevel = 164,
-							amountOfMats = 0.33
+							amountOfMats = 0.333 -- 1 Small, 100% Chance = 1/3*1
 						},
 						{
 							minItemLevel = 165,
 							maxItemLevel = 200,
-							amountOfMats = 1
+							amountOfMats = 1 -- 1 Large, 100% Chance = 1*1
 						},
 					},
 				},
 			},
 		},
-		["item:52720:0:0:0:0:0:0"] = {
-			-- Small Heavenly Shard
-			name = GetItemInfo("item:52720:0:0:0:0:0:0"),
-			minLevel = 78,
-			maxLevel = 85,
-			itemTypes = {
-				[ARMOR] = {
-					[3] = {
-						{
-							minItemLevel = 282,
-							maxItemLevel = 316,
-							amountOfMats = 1
-						},
-					},
-				},
-				[WEAPON] = {
-					[3] = {
-						{
-							minItemLevel = 282,
-							maxItemLevel = 316,
-							amountOfMats = 1
-						},
-					},
-				},
-			},
-		},
-		["item:52721:0:0:0:0:0:0"] = {
-			-- Heavenly Shard
-			name = GetItemInfo("item:52721:0:0:0:0:0:0"),
-			minLevel = 78,
-			maxLevel = 85,
-			itemTypes = {
-				[ARMOR] = {
-					[3] = {
-						{
-							minItemLevel = 282,
-							maxItemLevel = 316,
-							amountOfMats = 0.33
-						},
-						{
-							minItemLevel = 317,
-							maxItemLevel = 377,
-							amountOfMats = 1
-						},
-					},
-				},
-				[WEAPON] = {
-					[3] = {
-						{
-							minItemLevel = 282,
-							maxItemLevel = 316,
-							amountOfMats = 0.33
-						},
-						{
-							minItemLevel = 317,
-							maxItemLevel = 377,
-							amountOfMats = 1
-						},
-					},
-				},
-			},
-		},
-		["item:74252:0:0:0:0:0:0"] = {
-			--Small Ethereal Shard
-			name = GetItemInfo("item:74252:0:0:0:0:0:0"),
-			minLevel = 85,
-			maxLevel = 90,
-			itemTypes = {
-				[ARMOR] = {
-					[3] = {
-						{
-							minItemLevel = 384,
-							maxItemLevel = 429,
-							amountOfMats = 1
-						},
-					},
-				},
-				[WEAPON] = {
-					[3] = {
-						{
-							minItemLevel = 384,
-							maxItemLevel = 429,
-							amountOfMats = 1
-						},
-					},
-				},
-			},
-		},
-		["item:74247:0:0:0:0:0:0"] = {
-			--Ethereal Shard
-			name = GetItemInfo("item:74247:0:0:0:0:0:0"),
-			minLevel = 85,
-			maxLevel = 90,
-			itemTypes = {
-				[ARMOR] = {
-					[3] = {
-						{
-							minItemLevel = 384,
-							maxItemLevel = 429,
-							amountOfMats = 0.33
-						},
-						{
-							minItemLevel = 430,
-							maxItemLevel = 500,
-							amountOfMats = 1
-						},
-					},
-				},
-				[WEAPON] = {
-					[3] = {
-						{
-							minItemLevel = 384,
-							maxItemLevel = 429,
-							amountOfMats = 0.33
-						},
-						{
-							minItemLevel = 430,
-							maxItemLevel = 500,
-							amountOfMats = 1
-						},
-					},
-				},
-			},
-		},
+		-- ["item:52720:0:0:0:0:0:0"] = {
+			-- -- Small Heavenly Shard
+			-- name = GetItemInfo("item:52720:0:0:0:0:0:0"),
+			-- minLevel = 78,
+			-- maxLevel = 85,
+			-- itemTypes = {
+				-- [ARMOR] = {
+					-- [3] = {
+						-- {
+							-- minItemLevel = 282,
+							-- maxItemLevel = 316,
+							-- amountOfMats = 1
+						-- },
+					-- },
+				-- },
+				-- [WEAPON] = {
+					-- [3] = {
+						-- {
+							-- minItemLevel = 282,
+							-- maxItemLevel = 316,
+							-- amountOfMats = 1
+						-- },
+					-- },
+				-- },
+			-- },
+		-- },
+		-- ["item:52721:0:0:0:0:0:0"] = {
+			-- -- Heavenly Shard
+			-- name = GetItemInfo("item:52721:0:0:0:0:0:0"),
+			-- minLevel = 78,
+			-- maxLevel = 85,
+			-- itemTypes = {
+				-- [ARMOR] = {
+					-- [3] = {
+						-- {
+							-- minItemLevel = 282,
+							-- maxItemLevel = 316,
+							-- amountOfMats = 0.33
+						-- },
+						-- {
+							-- minItemLevel = 317,
+							-- maxItemLevel = 377,
+							-- amountOfMats = 1
+						-- },
+					-- },
+				-- },
+				-- [WEAPON] = {
+					-- [3] = {
+						-- {
+							-- minItemLevel = 282,
+							-- maxItemLevel = 316,
+							-- amountOfMats = 0.33
+						-- },
+						-- {
+							-- minItemLevel = 317,
+							-- maxItemLevel = 377,
+							-- amountOfMats = 1
+						-- },
+					-- },
+				-- },
+			-- },
+		-- },
+		-- ["item:74252:0:0:0:0:0:0"] = {
+			-- --Small Ethereal Shard
+			-- name = GetItemInfo("item:74252:0:0:0:0:0:0"),
+			-- minLevel = 85,
+			-- maxLevel = 90,
+			-- itemTypes = {
+				-- [ARMOR] = {
+					-- [3] = {
+						-- {
+							-- minItemLevel = 384,
+							-- maxItemLevel = 429,
+							-- amountOfMats = 1
+						-- },
+					-- },
+				-- },
+				-- [WEAPON] = {
+					-- [3] = {
+						-- {
+							-- minItemLevel = 384,
+							-- maxItemLevel = 429,
+							-- amountOfMats = 1
+						-- },
+					-- },
+				-- },
+			-- },
+		-- },
+		-- ["item:74247:0:0:0:0:0:0"] = {
+			-- --Ethereal Shard
+			-- name = GetItemInfo("item:74247:0:0:0:0:0:0"),
+			-- minLevel = 85,
+			-- maxLevel = 90,
+			-- itemTypes = {
+				-- [ARMOR] = {
+					-- [3] = {
+						-- {
+							-- minItemLevel = 384,
+							-- maxItemLevel = 429,
+							-- amountOfMats = 0.33
+						-- },
+						-- {
+							-- minItemLevel = 430,
+							-- maxItemLevel = 500,
+							-- amountOfMats = 1
+						-- },
+					-- },
+				-- },
+				-- [WEAPON] = {
+					-- [3] = {
+						-- {
+							-- minItemLevel = 384,
+							-- maxItemLevel = 429,
+							-- amountOfMats = 0.33
+						-- },
+						-- {
+							-- minItemLevel = 430,
+							-- maxItemLevel = 500,
+							-- amountOfMats = 1
+						-- },
+					-- },
+				-- },
+			-- },
+		-- },
 	},
 	{
 		desc = L["Crystals"],
@@ -1506,58 +1519,58 @@ data.disenchant = {
 				},
 			},
 		},
-		["item:52722:0:0:0:0:0:0"] = {
-			-- Maelstrom Crystal
-			name = GetItemInfo("item:52722:0:0:0:0:0:0"),
-			minLevel = 85,
-			maxLevel = 85,
-			itemTypes = {
-				[ARMOR] = {
-					[4] = {
-						{
-							minItemLevel = 300,
-							maxItemLevel = 419,
-							amountOfMats = 1.000
-						},
-					},
-				},
-				[WEAPON] = {
-					[4] = {
-						{
-							minItemLevel = 285,
-							maxItemLevel = 419,
-							amountOfMats = 1.000
-						},
-					},
-				},
-			},
-		},
-		["item:74248:0:0:0:0:0:0"] = {
-			-- Sha Crystal
-			name = GetItemInfo("item:74248:0:0:0:0:0:0"),
-			minLevel = 85,
-			maxLevel = 90,
-			itemTypes = {
-				[ARMOR] = {
-					[4] = {
-						{
-							minItemLevel = 420,
-							maxItemLevel = 600,
-							amountOfMats = 1.000
-						},
-					},
-				},
-				[WEAPON] = {
-					[4] = {
-						{
-							minItemLevel = 420,
-							maxItemLevel = 600,
-							amountOfMats = 1.000
-						},
-					},
-				},
-			},
-		},
+		-- ["item:52722:0:0:0:0:0:0"] = {
+			-- -- Maelstrom Crystal
+			-- name = GetItemInfo("item:52722:0:0:0:0:0:0"),
+			-- minLevel = 85,
+			-- maxLevel = 85,
+			-- itemTypes = {
+				-- [ARMOR] = {
+					-- [4] = {
+						-- {
+							-- minItemLevel = 300,
+							-- maxItemLevel = 419,
+							-- amountOfMats = 1.000
+						-- },
+					-- },
+				-- },
+				-- [WEAPON] = {
+					-- [4] = {
+						-- {
+							-- minItemLevel = 285,
+							-- maxItemLevel = 419,
+							-- amountOfMats = 1.000
+						-- },
+					-- },
+				-- },
+			-- },
+		-- },
+		-- ["item:74248:0:0:0:0:0:0"] = {
+			-- -- Sha Crystal
+			-- name = GetItemInfo("item:74248:0:0:0:0:0:0"),
+			-- minLevel = 85,
+			-- maxLevel = 90,
+			-- itemTypes = {
+				-- [ARMOR] = {
+					-- [4] = {
+						-- {
+							-- minItemLevel = 420,
+							-- maxItemLevel = 600,
+							-- amountOfMats = 1.000
+						-- },
+					-- },
+				-- },
+				-- [WEAPON] = {
+					-- [4] = {
+						-- {
+							-- minItemLevel = 420,
+							-- maxItemLevel = 600,
+							-- amountOfMats = 1.000
+						-- },
+					-- },
+				-- },
+			-- },
+		-- },
 	},
 }
 
@@ -1566,23 +1579,23 @@ data.notDisenchantable = {
 	["item:11289:0:0:0:0:0:0"] = true,
 	["item:11288:0:0:0:0:0:0"] = true,
 	["item:11287:0:0:0:0:0:0"] = true,
-	["item:60223:0:0:0:0:0:0"] = true,
-	["item:52252:0:0:0:0:0:0"] = true,
+	-- ["item:60223:0:0:0:0:0:0"] = true,
+	-- ["item:52252:0:0:0:0:0:0"] = true,
 	["item:20406:0:0:0:0:0:0"] = true,
 	["item:20407:0:0:0:0:0:0"] = true,
 	["item:20408:0:0:0:0:0:0"] = true,
 	["item:21766:0:0:0:0:0:0"] = true,
-	["item:52485:0:0:0:0:0:0"] = true,
-	["item:52486:0:0:0:0:0:0"] = true,
-	["item:52487:0:0:0:0:0:0"] = true,
-	["item:52488:0:0:0:0:0:0"] = true,
-	["item:97826:0:0:0:0:0:0"] = true,
-	["item:97827:0:0:0:0:0:0"] = true,
-	["item:97828:0:0:0:0:0:0"] = true,
-	["item:97829:0:0:0:0:0:0"] = true,
-	["item:97830:0:0:0:0:0:0"] = true,
-	["item:97831:0:0:0:0:0:0"] = true,
-	["item:97832:0:0:0:0:0:0"] = true,
+	-- ["item:52485:0:0:0:0:0:0"] = true,
+	-- ["item:52486:0:0:0:0:0:0"] = true,
+	-- ["item:52487:0:0:0:0:0:0"] = true,
+	-- ["item:52488:0:0:0:0:0:0"] = true,
+	-- ["item:97826:0:0:0:0:0:0"] = true,
+	-- ["item:97827:0:0:0:0:0:0"] = true,
+	-- ["item:97828:0:0:0:0:0:0"] = true,
+	-- ["item:97829:0:0:0:0:0:0"] = true,
+	-- ["item:97830:0:0:0:0:0:0"] = true,
+	-- ["item:97831:0:0:0:0:0:0"] = true,
+	-- ["item:97832:0:0:0:0:0:0"] = true,
 }
 
 function TSMAPI:GetEnchantingConversionNum(targetID, matID)

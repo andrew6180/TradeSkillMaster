@@ -87,6 +87,7 @@ end
 
 function private:CreateScrollingTable(container, dataType, dataFunc, stCols, tab, subTab)
 	local stParent = container.children[1].children[#container.children[1].children].frame
+
 	if not scrollingTables[dataType] then
 		local handlers = {
 			OnClick = function(_, data, self)
@@ -164,8 +165,7 @@ end
 function GUI:Load(parent)
 	local simpleGroup = AceGUI:Create("SimpleGroup")
 	simpleGroup:SetLayout("Fill")
-	parent:AddChild(simpleGroup)
-
+	parent:AddChild(simpleGroup)	
 	local tabGroup = AceGUI:Create("TSMTabGroup")
 	tabGroup:SetLayout("Fill")
 	tabGroup:SetTabs({ { text = L["Revenue"], value = 1 }, { text = L["Expenses"], value = 2 }, { text = L["Failed Auctions"], value = 3 }, { text = L["Items"], value = 4 }, { text = L["Summary"], value = 5 }, { text = L["Player Gold"], value = 6 }, { text = L["Options"], value = 7 } })
@@ -191,11 +191,11 @@ function GUI:Load(parent)
 			GUI:DrawOptions(self)
 		end
 		tabGroup.children[1]:DoLayout()
-	end)
+	end)	
+	simpleGroup:SetWidth(parent.frame:GetWidth() + 32) --fix blank space
 	simpleGroup:AddChild(tabGroup)
 	TSM.Data:PopulateDataCaches()
 	tabGroup:SelectTab(1)
-
 	GUI:HookScript(simpleGroup.frame, "OnHide", function()
 		GUI:UnhookAll()
 		private:HideScrollingTables()
@@ -207,11 +207,10 @@ end
 
 function GUI:DrawRevenueTab(container)
 	local simpleGroup = AceGUI:Create("SimpleGroup")
-	simpleGroup:SetLayout("Fill")
+	simpleGroup:SetLayout("Fill")		
 	container:AddChild(simpleGroup)
-
 	local tabNum = 1
-	local tabGroup = AceGUI:Create("TSMTabGroup")
+	local tabGroup = AceGUI:Create("TSMTabGroup")	
 	tabGroup:SetLayout("Fill")
 	tabGroup:SetTabs({ { text = L["Sales"], value = 1 }, { text = L["Other Income"], value = 2 }, { text = L["Resale"], value = 3 } })
 	tabGroup:SetCallback("OnGroupSelected", function(self, _, value)
@@ -237,9 +236,8 @@ end
 
 function GUI:DrawExpenseTab(container)
 	local simpleGroup = AceGUI:Create("SimpleGroup")
-	simpleGroup:SetLayout("Fill")
+	simpleGroup:SetLayout("Fill")			
 	container:AddChild(simpleGroup)
-
 	local tabNum = 2
 	local tabGroup = AceGUI:Create("TSMTabGroup")
 	tabGroup:SetLayout("Fill")
@@ -284,13 +282,13 @@ function GUI:DrawFailedAucsTab(container)
 	end)
 	simpleGroup:AddChild(tabGroup)
 	TSM.Data:PopulateDataCaches()
-	tabGroup:SelectTab(1)
+	tabGroup:SelectTab(1)		
 end
 
 function GUI:DrawItemSummary(container)
 	GUI:CreateFiltersWidgetsItem(container, "itemSummary", {"Auction", "COD", "Trade", "Vendor"})
 	local stCols = TSM.db.factionrealm.priceFormat == "avg" and ITEM_SUMMARY_ST_COLS_AVG or ITEM_SUMMARY_ST_COLS_TOTAL
-	private:CreateScrollingTable(container, "itemSummary", TSM.Data.GetItemSummarySTData, stCols, 4)
+	private:CreateScrollingTable(container, "itemSummary", TSM.Data.GetItemSummarySTData, stCols, 4)	
 end
 
 function GUI:DrawItemLookup(container, itemString, returnTab, returnSubTab)
@@ -636,9 +634,9 @@ function GUI:DrawGoldSummary(container)
 						},
 					},
 				},
-				{
-					type = "HeadingLine",
-				},
+				-- {
+					-- type = "HeadingLine",
+				-- },
 				{
 					type = "InlineGroup",
 					layout = "Flow",
@@ -821,6 +819,7 @@ function private:GetGoldGraphPoints(goldLog)
 	end
 	return data, minX, maxX, minY, maxY
 end
+
 function private:GetGoldGraphSumData()
 	local currentMinute = floor(time() / 60)
 	local players = {}
@@ -884,6 +883,7 @@ function private:GetGoldGraphSumData()
 	if #temp == 0 then return end
 	return private:GetGoldGraphPoints(temp)
 end
+
 function GUI:DrawGoldGraph(container)
 	TSM.db.factionrealm.goldGraphCharacter = TSM.db.factionrealm.goldGraphCharacter or UnitName("player")
 	local player = TSM.db.factionrealm.goldGraphCharacter
@@ -948,12 +948,13 @@ function GUI:DrawGoldGraph(container)
 			children = {
 				{
 					type = "Label",
-					text = format(L["Below is a graph of the your character's gold on hand over time.\n\nThe x-axis is time and goes from %s to %s\nThe y-axis is thousands of gold."], startDate, endDate),
+					--text = format(L["Below is a graph of the your character's gold on hand over time.\n\nThe x-axis is time and goes from %s to %s\nThe y-axis is thousands of gold."], startDate, endDate),
+					text = format("Below is a graph of the your character's gold on hand over time.\nThe x-axis is time and goes from %s to %s. The y-axis is thousands of gold.", startDate, endDate),
 					relativeWidth = 1,
 				},
-				{
-					type = "Spacer",
-				},
+				-- {
+					-- type = "Spacer",
+				-- },
 				{
 					type = "Dropdown",
 					label = L["Character to Graph"],
@@ -962,14 +963,16 @@ function GUI:DrawGoldGraph(container)
 					list = dropdownList,
 					callback = function() container:ReloadTab() end,
 				},
+				-- {
+					-- type = "HeadingLine"
+				-- },
 				{
-					type = "HeadingLine"
+					type = "Spacer",
 				},
 				{
 					type = "ScrollFrame",
-					layout = "fill",
-					fullHeight = true,
-					fullWidth = true,
+					fullHeight = false, --true
+					layout = "flow"
 				},
 			},
 		},
@@ -977,20 +980,21 @@ function GUI:DrawGoldGraph(container)
 
 	TSMAPI:BuildPage(container, page)
 
-	local parent = container.children[1].children[5].frame
+	local parent = container.children[1].children[#container.children[1].children].frame
+	
+	parent:SetWidth(container.frame:GetWidth() - 80)
+	parent:SetHeight(container.frame:GetHeight() - 140)
 
-	if not GUI.lineGraph then
-		local graph = LibStub("LibGraph-2.0"):CreateGraphLine(nil, parent, "CENTER", nil, nil, nil, container.children[1].frame:GetWidth(), parent:GetHeight() - 160)
+	--if not GUI.lineGraph then
+		local graph = LibStub("LibGraph-2.0"):CreateGraphLine(nil, parent, "CENTER", nil, nil, nil, parent:GetWidth(), parent:GetHeight())
 		graph:SetGridColor({ 0.8, 0.8, 0.8, 0.6 })
 		graph:SetYLabels(true)
 		GUI.lineGraph = graph
-	end
+	--end
 	GUI.lineGraph:Show()
 	GUI.lineGraph:SetParent(parent)
 	GUI.lineGraph:ClearAllPoints()
 	GUI.lineGraph:SetAllPoints(parent)
-	local level = GUI.lineGraph:GetFrameLevel(container.children[1].children[1].frame)
-	GUI.lineGraph:SetFrameLevel(level - 1)
 
 	GUI.lineGraph:ResetData()
 	local ySpacing = max(ceil((maxY - minY) / 20), 0.5)

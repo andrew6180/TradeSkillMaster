@@ -38,15 +38,11 @@ function bankui:OnEnable()
 	end)
 end
 
-local function createButton(text, small)
+local function createButton(text, parent, func)
 	local btn = TSMAPI.GUI:CreateButton(bFrame, 15, "Button")
 	btn:SetText(text)
 	btn:SetHeight(17)
-	if small then
-		btn:SetWidth(110)
-	else
-		btn:SetWidth(230)
-	end
+	btn:SetWidth(230)
 	return btn
 end
 
@@ -77,23 +73,20 @@ function bankui:createTab(parent)
 	buttonFrame:SetPoint("BOTTOMLEFT")
 	buttonFrame:SetPoint("BOTTOMRIGHT")
 
-	buttonFrame.btnToBank = createButton(L["Move Group To Bank"], nil)
-	buttonFrame.btnToBank:SetPoint("BOTTOM", buttonFrame, "BOTTOM", 0, 99)
+	buttonFrame.btnToBags = createButton(L["Move Group To Bags"], buttonFrame, nil)
+	buttonFrame.btnToBags:SetPoint("BOTTOM", buttonFrame, "BOTTOM", 0, 75)
 
-	buttonFrame.btnToBags = createButton(L["Move Group To Bags"], nil)
-	buttonFrame.btnToBags:SetPoint("BOTTOM", buttonFrame, "BOTTOM", 0, 77)
+	buttonFrame.btnToBank = createButton(L["Move Group To Bank"], buttonFrame, nil)
+	buttonFrame.btnToBank:SetPoint("BOTTOM", buttonFrame, "BOTTOM", 0, 95)
 
-	buttonFrame.btnRestock = createButton(L["Restock Bags"], nil)
-	buttonFrame.btnRestock:SetPoint("BOTTOM", buttonFrame, "BOTTOM", 0, 50)
+	buttonFrame.btnRestock = createButton(L["Restock Bags"], buttonFrame, nil)
+	buttonFrame.btnRestock:SetPoint("BOTTOM", buttonFrame, "BOTTOM", 0, 45)
 
-	buttonFrame.btnReagents = createButton(L["Deposit Reagents"], nil)
-	buttonFrame.btnReagents:SetPoint("BOTTOM", buttonFrame, "BOTTOM", 0, 28)
+	buttonFrame.btnEmpty = createButton(L["Empty Bags"], buttonFrame, nil)
+	buttonFrame.btnEmpty:SetPoint("BOTTOM", buttonFrame, "BOTTOM", 0, 25)
 
-	buttonFrame.btnEmpty = createButton(L["Empty Bags"], buttonFrame, true)
-	buttonFrame.btnEmpty:SetPoint("BOTTOM", buttonFrame, "BOTTOM", -60, 5)
-
-	buttonFrame.btnRestore = createButton(L["Restore Bags"], buttonFrame, true)
-	buttonFrame.btnRestore:SetPoint("BOTTOM", buttonFrame, "BOTTOM", 60, 5)
+	buttonFrame.btnRestore = createButton(L["Restore Bags"], buttonFrame, nil)
+	buttonFrame.btnRestore:SetPoint("BOTTOM", buttonFrame, "BOTTOM", 0, 5)
 
 	bankui:updateButtons()
 
@@ -108,39 +101,27 @@ function bankui:updateButtons()
 		TSM.move:groupTree(groupTree:GetSelectedGroupInfo(), "bags")
 	end)
 
-	--------------------------
-	-- Empty / Restore Bags --
-	--------------------------
+	-------------------------
+	-- Empty / Restore Bags--
+	-------------------------
 	buttonFrame.btnEmpty:SetScript("OnClick", function(self) TSM.move:EmptyRestore(currentBank) end)
 
 	buttonFrame.btnRestore:SetScript("OnClick", function(self)
 		TSM.move:EmptyRestore(currentBank, true)
 	end)
 
-	------------------
-	-- Move to Bags --
-	------------------
+	-------------------
+	-- Move to Bags  --
+	-------------------
 	buttonFrame.btnToBags:SetScript("OnClick", function(self)
 		TSM.move:groupTree(groupTree:GetSelectedGroupInfo(), currentBank)
 	end)
 
-	-------------
-	-- Restock --
-	-------------
+	-------------------
+	-- Restock  --
+	-------------------
 	buttonFrame.btnRestock:SetScript("OnClick", function(self)
 		TSM.move:restockGroup(groupTree:GetSelectedGroupInfo())
 	end)
 
-	----------------------
-	-- Deposit Reagents --
-	----------------------
-	buttonFrame.btnReagents:SetScript("OnClick", function(self)
-		if currentBank == "bank" then
-			if IsReagentBankUnlocked() then
-				DepositReagentBank()
-			else
-				TSMAPI:ShowStaticPopupDialog("CONFIRM_BUY_REAGENTBANK_TAB");
-			end
-		end
-	end)
 end

@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 30300
 ## Title: |cff00ff00TradeSkillMaster_Auctioning|r
 ## Notes: Manages the posting, canceling, and resetting of auctions.
 ## Author: Sapu94, Bart39

@@ -117,6 +117,7 @@ end
 
 function Data:ProcessData(scanData, groupItems)
 	if TSM.processingData then return TSMAPI:CreateTimeDelay(0.2, function() Data:ProcessData(scanData, groupItems) end) end
+	
 
 	-- wipe all the minBuyout data
 	if groupItems then
@@ -152,7 +153,7 @@ function Data:ProcessData(scanData, groupItems)
 				break
 			end
 			
-			local itemID, data = unpack(scanDataList[index])
+			local itemID, data = unpack(scanDataList[index])		
 			TSM:DecodeItemData(itemID)
 			TSM.data[itemID] = TSM.data[itemID] or {scans={}, lastScan = 0}
 			local marketValue = Data:CalculateMarketValue(data.records)
@@ -173,6 +174,7 @@ function Data:ProcessData(scanData, groupItems)
 			
 			TSM.data[itemID].lastScan = TSM.db.factionrealm.lastCompleteScan
 			TSM.data[itemID].minBuyout = data.minBuyout > 0 and data.minBuyout or nil
+			TSM.data[itemID].quantity = data.quantity
 			Data:UpdateMarketValue(TSM.data[itemID])
 			TSM:EncodeItemData(itemID)
 			

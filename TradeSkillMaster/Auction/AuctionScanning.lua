@@ -57,6 +57,7 @@ function private:ScanAuctionPage(resolveSellers)
 	for i = 1, shown do
 		-- checks to make sure all the data has been sent to the client
 		-- if not, the data is bad and we'll wait / try again
+		-- local count, _, _, _, _, _, _, buyout, _, _, _, seller = select(3, GetAuctionItemInfo("list", i))
 		local count, _, _, _, _, _, buyout, _, _, seller = select(3, GetAuctionItemInfo("list", i))
 		local itemString = TSMAPI:GetItemString(GetAuctionItemLink("list", i))
 		auctions[i] = { itemString = itemString, index = i, count = count, buyout = buyout, seller = seller }
@@ -73,6 +74,7 @@ function IsDuplicatePage()
 
 	local numLinks, prevLink = 0, nil
 	for i = 1, GetNumAuctionItems("list") do
+		-- local _, _, count, _, _, _, _, minBid, minInc, buyout, bid, _, _, seller = GetAuctionItemInfo("list", i)
 		local _, _, count, _, _, _, minBid, minInc, buyout, bid, _, seller = GetAuctionItemInfo("list", i)
 		local link = GetAuctionItemLink("list", i)
 		local temp = private.pageTemp[i]
@@ -103,6 +105,7 @@ local function PopulatePageTemp()
 	for i = 1, shown do
 		-- checks to make sure all the data has been sent to the client
 		-- if not, the data is bad and we'll wait / try again
+		-- local _, _, count, _, _, _, _, minBid, minInc, buyout, bid, _, seller = GetAuctionItemInfo("list", i)
 		local _, _, count, _, _, _, minBid, minInc, buyout, bid, _, seller = GetAuctionItemInfo("list", i)
 		local link = GetAuctionItemLink("list", i)
 
@@ -194,6 +197,8 @@ function private:SendQuery()
 
 		-- Query the auction house (then waits for AUCTION_ITEM_LIST_UPDATE to fire)
 		AuctionScanning:RegisterEvent("AUCTION_ITEM_LIST_UPDATE", eventHandler)
+		-- [exact]  cardinal ruby  0   0  nil  0   0  0  0   0
+		-- [normal] cardinal ruby nil nil nil nil nil 0 nil nil
 		QueryAuctionItems(private.query.name, private.query.minLevel, private.query.maxLevel, private.query.invType, private.query.class, private.query.subClass, private.query.page, private.query.usable, private.query.quality)
 	else
 		-- run delay timer then try again to scan
@@ -206,7 +211,7 @@ function private:ScanAuctions()
 	if not private.isScanning then return end
 	local shown, total = GetNumAuctionItems("list")
 	local totalPages = ceil(total / NUM_AUCTION_ITEMS_PER_PAGE)
-
+	
 	if private.scanType == "numPages" then
 		local cacheData = TSM.db.factionrealm.numPagesCache[private.query.cacheKey]
 		cacheData.lastScan = time()
@@ -303,9 +308,10 @@ end
 
 -- Add a new record to the private.data table
 function private:AddAuctionRecord(index)
+	-- local name, texture, count, _, _, _, _, minBid, minIncrement, buyout, bid, highBidder, highBidder_full, seller, seller_full = GetAuctionItemInfo("list", index)
 	local name, texture, count, _, _, _, minBid, minIncrement, buyout, bid, highBidder, seller = GetAuctionItemInfo("list", index)
-	--seller = TSM:GetAuctionPlayer(seller, seller_full)
-	--highBidder = TSM:GetAuctionPlayer(highBidder, highBidder_full)
+	seller = TSM:GetAuctionPlayer(seller, null)
+	highBidder = TSM:GetAuctionPlayer(highBidder, null)
 	local timeLeft = GetAuctionItemTimeLeft("list", index)
 	local link = GetAuctionItemLink("list", index)
 	local itemString = TSMAPI:GetItemString(link)
@@ -475,8 +481,9 @@ end
 
 local function IsTargetAuction(index)
 	local itemString = TSMAPI:GetItemString(GetAuctionItemLink("list", index))
-	local _, _, count, _, _, _, minBid, bidIncrement, buyout, bidAmount, _, seller = GetAuctionItemInfo("list", index)
-	--seller = TSM:GetAuctionPlayer(seller, seller_full)
+	-- local _, _, count, _, _, _, _, minBid, bidIncrement, buyout, bidAmount, _, _, seller, seller_full = GetAuctionItemInfo("list", index)
+	local _, _, count, _, _, _,  minBid, bidIncrement, buyout, bidAmount, _, _, seller = GetAuctionItemInfo("list", index)
+	seller = TSM:GetAuctionPlayer(seller, null)
 	local bid = bidAmount == 0 and minBid or bidAmount
 	local tmp = { itemString = itemString, count = count, bid = bid, buyout = buyout, seller = seller }
 	return CompareTableKeys(tmp, findPrivate.targetInfo)

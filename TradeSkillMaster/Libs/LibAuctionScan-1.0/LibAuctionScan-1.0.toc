@@ -1,0 +1,12 @@
+## Interface: 30300
+## Title: LibAuctionScan-1.0
+## Notes: Manages the scanning of the auction house in a reliable an efficient manner.
+## Author: Sapu94
+## Version: v1.0.14
+## X-Curse-Packaged-Version: v1.0.14
+## X-Curse-Project-Name: LibAuctionScan-1.0
+## X-Curse-Project-ID: libauctionscan-1-0
+## X-Curse-Repository-ID: wow/libauctionscan-1-0/mainline
+
+
+Load.xml

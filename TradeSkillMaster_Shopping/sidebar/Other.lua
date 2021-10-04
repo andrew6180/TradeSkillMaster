@@ -144,7 +144,7 @@ function private:StartVendorSearch()
 end
 
 do
-	TSM:AddSidebarFeature(L["Other"], private.Create)
+	TSM:AddSidebarFeature(OTHER, private.Create)
 end
 
 function private:StartDisenchantSearch()

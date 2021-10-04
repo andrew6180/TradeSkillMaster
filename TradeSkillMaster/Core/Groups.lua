@@ -570,6 +570,7 @@ function TSMAPI:DrawOperationManagement(TSMObj, container, operationName)
 									end
 								end
 								self:SetText()
+								ModuleOptionsRefresh(TSMObj, operationName)
 							end,
 						},
 						{
@@ -1215,7 +1216,7 @@ function private:DrawGroupItemsPage(container, groupPath)
 				for bag, slot, itemString in TSMAPI:GetBagIterator() do
 					if not usedLinks[itemString] then
 						local baseItemString = TSMAPI:GetBaseItemString(itemString)
-						local link = TSMGetContainerItemLink(bag, slot)
+						local link = GetContainerItemLink(bag, slot)
 						if itemString ~= baseItemString and TSM.db.global.ignoreRandomEnchants then -- a random enchant item
 							itemString = baseItemString
 							link = select(2, TSMAPI:GetSafeItemInfo(itemString))
@@ -1323,6 +1324,8 @@ function TSM:ImportGroup(importStr, groupPath)
 		elseif strfind(noSpaceStr, "^group:") then
 			subPath = strsub(str, strfind(str, ":")+1, -1)
 			subPath = gsub(subPath, TSM.GROUP_SEP.."[ ]*"..TSM.GROUP_SEP, ",")
+		elseif strfind(noSpaceStr, "p") then
+			itemString = gsub(noSpaceStr, "p", "battlepet")
 		elseif strfind(noSpaceStr, ":") then
 			local itemID, randomEnchant = (":"):split(noSpaceStr)
 			if not tonumber(itemID) or not tonumber(randomEnchant) then return end
@@ -1402,6 +1405,9 @@ function TSM:ExportGroup(groupPath)
 			else
 				tinsert(items, itemID)
 			end
+		elseif strfind(itemString, "^battlepet:") then
+			itemString = gsub(itemString, "battlepet", "p")
+			tinsert(items, itemString)
 		end
 	end
 	return table.concat(items, ",")
@@ -1439,7 +1445,7 @@ function private:DrawGroupImportExportPage(container, groupPath)
 									private:SelectGroup(groupPath)
 									TSMAPI:FireEvent("TSM:GROUPS:ADDITEMS", {num=num, group=groupPath, isImport=true})
 								end,
-							tooltip = L["Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."],
+							tooltip = L["Paste the exported items into this box and hit enter or press the 'Okay' button. The recommended format for the list of items is a comma separated list of itemIDs for general items. For battle pets, the entire battlepet string should be used. For randomly enchanted items, the format is <itemID>:<randomEnchant> (ex: 38472:-29)."],
 						},
 						{
 							type = "CheckBox",

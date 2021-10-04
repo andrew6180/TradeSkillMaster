@@ -75,6 +75,8 @@ local defaultEnable = {
 	SetTradeSkillItem = true,
 	SetHyperlink = true,
 	SetHyperlinkAndCount = true, -- Creating a tooltip via lib:SetHyperlinkAndCount()
+	SetBattlePet = true,
+	SetBattlePetAndCount = true,
 }
 
 --[[ The following callback types are always enabled regardless of the event ]]
@@ -250,6 +252,77 @@ local function OnTooltipCleared(tooltip)
 	end
 end
 
+-- Run when a BattlePet is loaded into a BettlePetTooltip
+-- Requires special handling as BattlePetTooltips aren't real tooltips and lack most of the scripts and methods we normally use
+-- Hooked directly from BattlePetTooltipTemplate_SetBattlePet
+local function OnTooltipSetBattlePet(tooltip, data)
+	local reg = lib.tooltipRegistry[tooltip]
+	if not reg then return end
+
+	-- OnTooltipCleared is normally called via OnHide for BattlePets
+	-- clean up here in case a new BattlePet is loaded into a visible tooltip, in which case OnHide would not have been triggered
+	if reg.hasItem then
+		OnTooltipCleared(tooltip)
+	end
+	if lib.sortedCallbacks and #lib.sortedCallbacks > 0 then
+		-- extract values from data
+		local speciesID = data.speciesID
+		local level = data.level
+		local breedQuality = data.breedQuality
+		local maxHealth = data.maxHealth
+		local power = data.power
+		local speed = data.speed
+		local battlePetID = data.battlePetID or "0x0000000000000000"
+		local name = data.name
+		local customName = data.customName
+		local petType = data.petType
+		local colcode, r, g, b
+		if breedQuality == -1 then
+			colcode = NORMAL_FONT_COLOR_CODE
+			r, g, b = NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b
+		else
+			local coltable = ITEM_QUALITY_COLORS[breedQuality] or ITEM_QUALITY_COLORS[0]
+			colcode = coltable.hex
+			r, g, b = coltable.r, coltable.g, coltable.b
+		end
+
+		-- for certain events there may already be info stored in reg - e.g. SetBattlePetAndCount
+		local quantity = reg.quantity or 1
+		local link = reg.item
+		if not link then
+			-- it's a bit of a pain that we need to reconstruct a link here, just so it can be chopped up again...
+			link = format("%s|Hbattlepet:%d:%d:%d:%d:%d:%d:%s|h[%s]|h|r", colcode, speciesID, level, breedQuality, maxHealth, power, speed, battlePetID, customName or name)
+		end
+
+		reg.hasItem = true
+		local extraTip = lib:GetFreeExtraTipObject()
+		reg.extraTip = extraTip
+		extraTip:Attach(tooltip)
+		extraTip:AddLine(name, r, g, b)
+
+		reg.additional.name = name
+		reg.additional.link = link
+		reg.additional.speciesID = speciesID
+		reg.additional.quality = breedQuality
+		reg.additional.quantity = quantity
+		reg.additional.level = level
+		reg.additional.customName = customName -- nil if no custom name
+		reg.additional.petType = petType
+		reg.additional.maxHealth = maxHealth
+		reg.additional.power = power
+		reg.additional.speed = speed
+		reg.additional.battlePetID = battlePetID -- if not 0 it's a pet in your journal
+
+		reg.additional.event = reg.additional.event or "SetBattlePet"
+
+		ProcessCallbacks(reg, "battlepet", tooltip, link, quantity, name, speciesID, breedQuality, level)
+		if reg.extraTipUsed then
+			reg.extraTip:Show()
+			ProcessCallbacks(reg, "extrashow", tooltip, reg.extraTip)
+		end
+	end
+end
+
 -- Function that gets run when a registered tooltip's size changes.
 local function OnSizeChanged(tooltip,w,h)
 	local self = lib
@@ -403,6 +476,18 @@ end
 function lib:RegisterTooltip(tooltip)
 	local specialTooltip
 	if not tooltip or type(tooltip) ~= "table" or type(tooltip.GetObjectType) ~= "function" then return end
+	if tooltip:GetObjectType() ~= "GameTooltip" then
+		if tooltip:GetObjectType() == "Frame" then
+			-- is it a BattlePetTooltip? check for some of the entries from BattlePetTooltipTemplate
+			if tooltip.BattlePet and tooltip.PetType and tooltip.PetTypeTexture then
+				specialTooltip = "battlepet"
+			else
+				return
+			end
+		else
+			return
+		end
+	end
 
 	if not self.tooltipRegistry then
 		self.tooltipRegistry = {}
@@ -413,16 +498,25 @@ function lib:RegisterTooltip(tooltip)
 		local reg = {}
 		self.tooltipRegistry[tooltip] = reg
 		reg.additional = {}
-		hookscript(tooltip,"OnTooltipSetItem",OnTooltipSetItem)
-		hookscript(tooltip,"OnTooltipSetUnit",OnTooltipSetUnit)
-		hookscript(tooltip,"OnTooltipSetSpell",OnTooltipSetSpell)
-		hookscript(tooltip,"OnTooltipCleared",OnTooltipCleared)
-		hookscript(tooltip,"OnSizeChanged",OnSizeChanged)
-		for k,v in pairs(tooltipMethodPrehooks) do
-			hook(tooltip,k,v)
-		end
-		for k,v in pairs(tooltipMethodPosthooks) do
-			hook(tooltip,k,nil,v)
+
+		if specialTooltip == "battlepet" then
+			reg.NoColumns = true -- This is not a GameTooltip so it has no Text columns. Cannot support certain functions such as embedding
+			hookscript(tooltip,"OnHide",OnTooltipCleared)
+			hookscript(tooltip,"OnSizeChanged",OnSizeChanged)
+			hookglobal("BattlePetTooltipTemplate_SetBattlePet", OnTooltipSetBattlePet) -- yes we hook the same function every time - hookglobal protects against multiple hooks
+		else
+			hookscript(tooltip,"OnTooltipSetItem",OnTooltipSetItem)
+			hookscript(tooltip,"OnTooltipSetUnit",OnTooltipSetUnit)
+			hookscript(tooltip,"OnTooltipSetSpell",OnTooltipSetSpell)
+			hookscript(tooltip,"OnTooltipCleared",OnTooltipCleared)
+			hookscript(tooltip,"OnSizeChanged",OnSizeChanged)
+
+			for k,v in pairs(tooltipMethodPrehooks) do
+				hook(tooltip,k,v)
+			end
+			for k,v in pairs(tooltipMethodPosthooks) do
+				hook(tooltip,k,nil,v)
+			end
 		end
 		return true
 	end
@@ -707,6 +801,90 @@ function lib:SetHyperlinkAndCount(tooltip, link, quantity, detail)
 	reg.ignoreOnCleared = nil
 	return true
 end
+
+--[[-
+	Set a (BattlePet) tooltip to (battlepetpet)link
+	Although Pet Cages cannot be stacked, some Addons may wish to group identical Pets together for display purposes
+	@param tooltip Frame(BattlePetTooltipTemplate) object
+	@param link battlepet link to display in the tooltip
+	@param quantity quantity of the item to display (optional)
+	@param detail additional detail items to set for the callbacks (optional)
+	@return true if successful
+	@since 1.325
+	
+	-- ref: BattlePetToolTip_Show in FrameXML\BattlePetTooltip.lua
+	-- ref: FloatingBattlePet_Show in FrameXML\FloatingPetBattleTooltip.lua
+]]
+local BATTLE_PET_TOOLTIP = {}
+function lib:SetBattlePetAndCount(tooltip, link, quantity, detail)
+	if not link then return end
+	local reg = self.tooltipRegistry[tooltip]
+	if not reg or not reg.NoColumns then return end -- identify BattlePet tooltips by their NoColumns flag
+	local head, speciesID, level, breedQuality, maxHealth, power, speed, tail = strsplit(":", link)
+	if not tail or head:sub(-9) ~= "battlepet" then return end
+	speciesID = tonumber(speciesID)
+	if not speciesID or speciesID < 1 then return end
+	local name, icon, petType = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
+	if not name then return end
+
+	-- set up the battlepet table
+	BATTLE_PET_TOOLTIP.speciesID = speciesID
+	BATTLE_PET_TOOLTIP.name = name
+	BATTLE_PET_TOOLTIP.level = tonumber(level)
+	BATTLE_PET_TOOLTIP.breedQuality = tonumber(breedQuality)
+	BATTLE_PET_TOOLTIP.petType = petType
+	BATTLE_PET_TOOLTIP.maxHealth = tonumber(maxHealth)
+	BATTLE_PET_TOOLTIP.power = tonumber(power)
+	BATTLE_PET_TOOLTIP.speed = tonumber(speed)
+	local customName = strmatch(tail, "%[(.+)%]")
+	if (customName ~= BATTLE_PET_TOOLTIP.name) then
+		BATTLE_PET_TOOLTIP.customName = customName
+	else
+		BATTLE_PET_TOOLTIP.customName = nil
+	end
+
+	-- set up reg
+	OnTooltipCleared(tooltip)
+	reg.quantity = quantity
+	reg.item = link
+	reg.additional.event = "SetBattlePetAndCount"
+	reg.additional.eventLink = link
+	if detail then
+		for k,v in pairs(detail) do
+			reg.additional[k] = v
+		end
+	end
+
+	-- load the tooltip (will trigger a call to OnTooltipSetBattlePet)
+	reg.ignoreOnCleared = true
+	BattlePetTooltipTemplate_SetBattlePet(tooltip, BATTLE_PET_TOOLTIP)
+
+	local owned = C_PetJournal.GetOwnedBattlePetString(speciesID)
+	tooltip.Owned:SetText(owned)
+	if owned == nil then
+		if tooltip.Delimiter then
+			-- if .Delimiter is present it requires special handling (FloatingBattlePetTooltip)
+			tooltip:SetSize(260,150)
+			tooltip.Delimiter:ClearAllPoints()
+			tooltip.Delimiter:SetPoint("TOPLEFT",tooltip.SpeedTexture,"BOTTOMLEFT",-6,-5)
+		else
+			tooltip:SetSize(260,122)
+		end
+	else
+		if tooltip.Delimiter then
+			tooltip:SetSize(260,164)
+			tooltip.Delimiter:ClearAllPoints()
+			tooltip.Delimiter:SetPoint("TOPLEFT",tooltip.SpeedTexture,"BOTTOMLEFT",-6,-19)
+		else
+			tooltip:SetSize(260,136)
+		end
+	end
+
+	tooltip:Show()
+	reg.ignoreOnCleared = nil
+	return true
+end
+
 --[[-
 	Get the additional information from a tooltip event.
 	Often additional event details are available about the situation under which the tooltip was invoked, such as:

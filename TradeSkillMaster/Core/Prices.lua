@@ -126,6 +126,10 @@ local function ParsePriceString(str, badPriceSource)
 			local s, e = strfind(convertParams, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)")
 			convertItem = strsub(convertParams, s, e)
 			source = strsub(convertParams, 1, s - 1)
+		elseif strfind(convertParams, "battlepet:") then
+			local s, e = strfind(convertParams, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)")
+			convertItem = strsub(convertParams, s, e)
+			source = strsub(convertParams, 1, s - 1)
 		else
 			source = convertParams
 		end
@@ -163,6 +167,8 @@ local function ParsePriceString(str, badPriceSource)
 		local s, e
 		if strfind(str, "item:") then
 			s, e = strfind(str, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)")
+		elseif strfind(str, "battlepet:") then
+			s, e = strfind(str, "battlepet:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)")
 		else
 			break
 		end
@@ -242,6 +248,9 @@ local function ParsePriceString(str, badPriceSource)
 				-- we're hoping this is a valid comma within a function, will be caught by loadstring otherwise
 			end
 		elseif MATH_FUNCTIONS[word] then
+			if not parts[i+1] or parts[i+1] ~= "(" then
+				return nil, format(L["Invalid word: '%s'"], word)
+			end
 			-- valid math function
 		elseif word == "~convert~" then
 			-- valid convert statement

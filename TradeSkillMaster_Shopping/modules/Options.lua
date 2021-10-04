@@ -104,7 +104,7 @@ function Options:DrawGeneralSettings(container)
 							label = L["Min Disenchant Level"],
 							settingInfo = { TSM.db.global, "minDeSearchLvl" },
 							min = 1,
-							max = 600,
+							max = 450,
 							step = 1,
 							isPercent = false,
 							relativeWidth = 0.5,
@@ -121,7 +121,7 @@ function Options:DrawGeneralSettings(container)
 							label = L["Max Disenchant Level"],
 							settingInfo = { TSM.db.global, "maxDeSearchLvl" },
 							min = 1,
-							max = 600,
+							max = 450,
 							step = 1,
 							isPercent = false,
 							callback = function(self, _, value)

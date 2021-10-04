@@ -34,10 +34,7 @@ function Scan.ProcessGetAllScan(self)
 	while true do
 		temp = min(temp + 1, 100)
 		self:Sleep(0.2)
-		if not Scan.isScanning then 
-			TSM:Print("Ending Scan early")
-			return 
-		end
+		if not Scan.isScanning then return end
 		if Scan.getAllLoaded then
 			break
 		end
@@ -50,14 +47,15 @@ function Scan.ProcessGetAllScan(self)
 		if i % 100 == 0 then
 			self:Yield()
 			if GetNumAuctionItems("list") ~= Scan.getAllLoaded then
-				TSM:Print("GetAll Scan didnt run because " .. GetNumAuctionItems("list") .. " not equal " .. tostring(Scan.getAllLoaded))
+				--TSM:Print(L["GetAll scan did not run successfully due to issues on Blizzard's end. Using the TSM application for your scans is recommended."])
+				TSM:Print("GetAll scan did not run successfully.")
 				Scan:DoneScanning()
 				return
 			end
 		end
 		
 		local itemID = TSMAPI:GetItemID(GetAuctionItemLink("list", i))
-
+		--local _, _, count, _, _, _, _, _, _, buyout = GetAuctionItemInfo("list", i)
 		local _, _, count, _, _, _, _, _, buyout = GetAuctionItemInfo("list", i)
 		if itemID and buyout and buyout > 0 then
 			data[itemID] = data[itemID] or {records={}, minBuyout=math.huge, quantity=0}
@@ -82,25 +80,24 @@ end
 
 function Scan:AUCTION_ITEM_LIST_UPDATE()
 	Scan:UnregisterEvent("AUCTION_ITEM_LIST_UPDATE")
-	local num= GetNumAuctionItems("list")
+	local num, total = GetNumAuctionItems("list")
+	
+	--if num ~= total or num == 0 then
 	if num == 0 then
-		TSM:Print("GetAll scan returned 0 items. You must wait 15 minutes.")
+		--TSM:Print(L["GetAll scan did not run successfully due to issues on Blizzard's end. Using the TSM application for your scans is recommended."])
+		TSM:Print("GetAll scan did not run successfully.")
 		Scan:DoneScanning()
 		return
 	end
 	Scan.getAllLoaded = num
-	TSM:Print(Scan.getAllLoaded .. " auctions loaded")
 end
 
 function Scan:GetAllScanQuery()
 	local canScan, canGetAll = CanSendAuctionQuery()
 	if not canGetAll then return TSM:Print(L["Can't run a GetAll scan right now."]) end
-	if not canScan then 
-		TSM:Print(L["Can't run a GetAll scan right now."])
-		return TSMAPI:CreateTimeDelay(0.5, Scan.GetAllScanQuery) 
-	end
+	if not canScan then return TSMAPI:CreateTimeDelay(0.5, Scan.GetAllScanQuery) end
+	QueryAuctionItems("", nil, nil, nil, nil, nil, nil, nil, nil, true)
 	Scan:RegisterEvent("AUCTION_ITEM_LIST_UPDATE")
-	QueryAuctionItems("", nil, nil, 0, 0, 0, 0, 0, 0, true)
 	TSMAPI.Threading:Start(Scan.ProcessGetAllScan, 1, function() Scan:DoneScanning() end)
 end
 

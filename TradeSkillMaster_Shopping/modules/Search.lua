@@ -124,7 +124,8 @@ function private:CreateSearchBar(parent)
 	end
 	
 	local function OnUpdate(self)
-		if self:IsEnabled() and not TSMAPI:AHTabIsVisible("Shopping") then
+		-- if self:IsEnabled() and not TSMAPI:AHTabIsVisible("Shopping") then
+		if not TSMAPI:AHTabIsVisible("Shopping") then
 			self:ClearFocus()
 		end
 	end
@@ -133,8 +134,8 @@ function private:CreateSearchBar(parent)
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
 		GameTooltip:SetMinimumWidth(400)
 		GameTooltip:AddLine(L["Enter what you want to search for in this box. You can also use the following options for more complicated searches."].."\n", 1, 1, 1, 1)
-		GameTooltip:AddLine(format("|cffffff00"..L["Multiple Search Terms:|r You can search for multiple things at once by simply separated them with a ';'. For example '%selementium ore; obsidium ore|r' will search for both elementium and obsidium ore."].."\n", TSMAPI.Design:GetInlineColor("link2")), 1, 1, 1, 1)
-		GameTooltip:AddLine(format("|cffffff00"..L["Inline Filters:|r You can easily add common search filters to your search such as rarity, level, and item type. For example '%sarmor/leather/epic/85/i350/i377|r' will search for all leather armor of epic quality that requires level 85 and has an ilvl between 350 and 377 inclusive. Also, '%sinferno ruby/exact|r' will display only raw inferno rubys (none of the cuts)."].."\n", TSMAPI.Design:GetInlineColor("link2"), TSMAPI.Design:GetInlineColor("link2")), 1, 1, 1, 1)
+		GameTooltip:AddLine(format("|cffffff00"..L["Multiple Search Terms:|r You can search for multiple things at once by simply separated them with a ';'. For example '%scopper ore; gold ore|r' will search for both copper and gold ore."].."\n", TSMAPI.Design:GetInlineColor("link2")), 1, 1, 1, 1)
+		GameTooltip:AddLine(format("|cffffff00"..L["Inline Filters:|r You can easily add common search filters to your search such as rarity, level, and item type. For example '%sarmor/leather/epic/80/i200/i285|r' will search for all leather armor of epic quality that requires level 80 and has an ilvl between 200 and 285 inclusive. Also, '%sinferno ruby/exact|r' will display only raw inferno rubys (none of the cuts)."].."\n", TSMAPI.Design:GetInlineColor("link2"), TSMAPI.Design:GetInlineColor("link2")), 1, 1, 1, 1)
 		GameTooltip:Show()
 	end
 
@@ -268,13 +269,13 @@ function private:CreateSearchBar(parent)
 		self.isDisabled = true
 		self.editBox:ClearFocus()
 		self.editBox:HighlightText(0, 0)
-		self.editBox:Disable()
+		-- self.editBox:Disable()
 		self.button:Disable()
 		self.stop:Enable()
 	end
 	searchBarFrame.Enable = function(self)
 		self.isDisabled = nil
-		self.editBox:Enable()
+		-- self.editBox:Enable()
 		self.button:Enable()
 		self.stop:Disable()
 	end
@@ -324,7 +325,7 @@ end
 function Search:StartFilterSearch(filter, callback, isCrafting)
 	TSM.isCrafting = isCrafting
 	TSM.searchCallback = callback
-	if strfind(filter, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?%-?([0-9]*)$") then
+	if strfind(filter, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?%-?([0-9]*)$") then --or strfind(filter, "battlepet:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)$") then
 		filter = TSMAPI:GetSafeItemInfo(filter) or filter
 	end
 	if TSM.isCrafting then
@@ -355,6 +356,7 @@ function Search:StartFilterSearch(filter, callback, isCrafting)
 		end
 	end
 	TSMAPI:FireEvent("SHOPPING:SEARCH:STARTFILTERSCAN")
+	
 	if isItemList then
 		TSM.Util:StartItemScan(itemList, ScanCallback)
 	else
@@ -500,12 +502,10 @@ local function GetSearchFilterOptions(searchTerm)
 		elseif TSMAPI:UnformatTextMoney(str) then
 			maxPrice = TSMAPI:UnformatTextMoney(str)
 		elseif i == 1 then
-			if strfind(str, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?%-?([0-9]*)$") then
+			if strfind(str, "item:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?%-?([0-9]*)$") then --or strfind(str, "battlepet:([0-9]+):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*):?([0-9]*)$") then
 				queryString = TSMAPI:GetSafeItemInfo(str)
-				--print("Safe queryString: ", queryString)
 			else
 				queryString = str
-				--print("queryString: ", queryString)
 			end
 		else
 			return false, L["Unknown Filter"]
@@ -524,7 +524,8 @@ local function GetSearchFilterOptions(searchTerm)
 		minILevel = oldMaxILevel
 	end
 	
-	return true, queryString or "", class, subClass, minLevel, maxLevel, minILevel, maxILevel, rarity, usableOnly, exactOnly, evenOnly, maxQuantity, maxPrice
+	return true, queryString or "", class or 0, subClass or 0, minLevel or 0, maxLevel or 0, minILevel or 0, maxILevel or 0, rarity or -1, usableOnly or 0, exactOnly or nil, evenOnly or nil, maxQuantity or 0, maxPrice
+	--return true, queryString or "", class or 0, subClass or 0, minLevel or 0, maxLevel or 0, minILevel or 0, maxILevel or 0, rarity or 0, usableOnly or 0, exactOnly or nil, evenOnly or nil, maxQuantity or 0, maxPrice
 end
 
 -- gets all the filters for a given search term (possibly semicolon-deliminated list of search terms)
@@ -553,7 +554,7 @@ function Search:GetFilters(searchQuery)
 			end
 		else
 			local isValid, queryString, class, subClass, minLevel, maxLevel, minILevel, maxILevel, rarity, usableOnly, exactOnly, evenOnly, maxQuantity, maxPrice = GetSearchFilterOptions(searchTerm)
-			
+					
 			if not isValid then
 				TSM:Print(L["Skipped the following search term because it's invalid."])
 				TSM:Print("\""..searchTerm.."\": "..queryString)

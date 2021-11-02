@@ -53,6 +53,7 @@ function private:CreateMailTab()
 		MailFrameTab1:Hide()
 		MailFrameTab2:Hide()
 		MailFrameTab3:Hide()
+		InboxCloseButton:Hide()
 		
 		
 		private.frame:Show()
@@ -70,9 +71,12 @@ function private:CreateMailTab()
 	local function OnOtherTabClick()
 		if not private.frame then return end
 		private.frame:Hide()
+		InboxFrame:Show()
 		MailFrameTab1:Show()
 		MailFrameTab2:Show()
 		MailFrameTab3:Show()
+		InboxCloseButton:Show()
+		PanelTemplates_SetTab(MailFrame, 1)
 	end
 	
 	--MailTab:Hook("MailFrameTab_OnClick", OnOtherTabClick, true)
@@ -128,6 +132,14 @@ function private:CreateMailTab()
 	closeBtn:SetHeight(20)
 	closeBtn:SetText("X")
 	closeBtn:SetScript("OnClick", CloseMail)
+
+	local switchBtn = TSMAPI.GUI:CreateButton(frame, 15)
+	switchBtn:SetPoint("TOPRIGHT", closeBtn, "TOPLEFT", -4, 0)
+	switchBtn:SetHeight(20)
+	switchBtn:SetWidth(85)
+	switchBtn:SetText("Default UI")
+	switchBtn:SetScript("OnClick", OnOtherTabClick)
+	frame.switchBtn = switchBtn
 	
 	local line = TSMAPI.GUI:CreateVerticalLine(frame, 0)
 	line:ClearAllPoints()

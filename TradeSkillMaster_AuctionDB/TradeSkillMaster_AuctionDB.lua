@@ -339,6 +339,7 @@ for i = 1, base do
 end
 
 local function decode(h)
+	if not h then return end
 	if strfind(h, "~") then return end
 	local result = 0
 

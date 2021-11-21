@@ -6,3 +6,14 @@ Most porting done by [Various Authors](https://github.com/ajseward/TradeSkillMas
 Large amount of fixes done by [BlueAo - Warmane](https://forum.warmane.com/showthread.php?t=412904)
 
 This is mostly just making sure the 'go to github' version is the most up to date and patched.
+
+# If you are expericing lua errors and you were previously using another TSM port
+Other popular ports use different versions of TSM completely incompatible with this one.
+
+If you are experiecing lua errors **and** you were previously using another version:
+
+Navigate to `<WoW Folder>\WTF\Account\<Account Name>\SavedVariables` and delete any file relating to TSM.
+
+Example:
+
+![https://i.imgur.com/bEpccPg.png](https://i.imgur.com/bEpccPg.png)

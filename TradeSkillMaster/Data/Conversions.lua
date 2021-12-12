@@ -561,12 +561,6 @@ local conversions = {
 	["item:21886:0:0:0:0:0:0"] = { -- Primal Life
 		["item:22575:0:0:0:0:0:0"] = {rate=1/10, source="transform"},
 	},
-	["item:22574:0:0:0:0:0:0"] = { -- Mote of Fire
-		["item:21884:0:0:0:0:0:0"] = {rate=10, source="transform"},
-	},
-	["item:21884:0:0:0:0:0:0"] = { -- Primal Fire
-		["item:22574:0:0:0:0:0:0"] = {rate=1/10, source="transform"},
-	},
 	["item:22573:0:0:0:0:0:0"] = { -- Mote of Earth
 		["item:22452:0:0:0:0:0:0"] = {rate=10, source="transform"},
 	},

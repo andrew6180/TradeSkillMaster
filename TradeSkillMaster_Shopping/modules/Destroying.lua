@@ -146,7 +146,7 @@ function private.StartMillingSearch(target, filter, lastAttempt)
 	private.target = inkItemString
 	if TSM.isCrafting then
 		local func = TSMAPI:ParseCustomPrice("matprice")
-		price = func and func(matItemString) or nil
+		local price = func and func(matItemString) or nil
 		private.targetMarketValue = price
 		TSM.Util:ShowSearchFrame(true, L["% Mat Price"])
 	else
@@ -171,7 +171,7 @@ function private.StartProspectingSearch(target, filter, lastAttempt)
 	private.target = target
 	if TSM.isCrafting then
 		local func = TSMAPI:ParseCustomPrice("matprice")
-		price = func and func(target) or nil
+		local price = func and func(target) or nil
 		private.targetMarketValue = price
 		TSM.Util:ShowSearchFrame(true, L["% Max Price"])
 	else
@@ -220,7 +220,7 @@ function private.StartDisenchantingSearch(target, filter, lastAttempt)
 	private.target = target
 	if TSM.isCrafting then
 		local func = TSMAPI:ParseCustomPrice("matprice")
-		price = func and func(target) or nil
+		local price = func and func(target) or nil
 		private.targetMarketValue = price
 		TSM.Util:ShowSearchFrame(true, L["% Max Price"])
 	else

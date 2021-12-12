@@ -502,7 +502,7 @@ tables.Huffman_uncompressed = {}
 tables.Huffman_large_uncompressed = {} -- will always be as big as the larges string ever decompressed. Bad, but clearing i every timetakes precious time.
 
 function LibCompress:DecompressHuffman(compressed)
-	if not type(uncompressed)=="string" then
+	if not type(compressed)=="string" then
 		return nil, "Can only uncompress strings"
 	end
 
@@ -763,7 +763,7 @@ function LibCompress:GetEncodeTable(reservedChars, escapeChars, mapChars)
 	end
 	
 	-- list of characters that must be encoded
-	encodeBytes = reservedChars..escapeChars..mapChars
+	local encodeBytes = reservedChars..escapeChars..mapChars
 	
 	-- build list of bytes not available as a suffix to a prefix byte
 	local taken = {}
@@ -802,7 +802,7 @@ function LibCompress:GetEncodeTable(reservedChars, escapeChars, mapChars)
 	
 	-- map single byte to double-byte
 	escapeCharIndex = escapeCharIndex +1
-	escapeChar = string.sub(escapeChars, escapeCharIndex, escapeCharIndex)
+	local escapeChar = string.sub(escapeChars, escapeCharIndex, escapeCharIndex)
 	r = 0 -- suffix char value to the escapeChar
 	decode_search = {}
 	decode_translate = {}

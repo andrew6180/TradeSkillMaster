@@ -767,7 +767,7 @@ function lib:AddMoneyLine(tooltip,text,money,r,g,b,embed,concise)
 		reg.extraTip:AddDoubleLine(text,moneyText,r,g,b,1,1,1)
 		reg.extraTipUsed = true
 	else
-		tooltip:AddDoubleLine(text,moneyText,lr,lg,lb,1,1,1)
+		tooltip:AddDoubleLine(text,moneyText,r,g,b,1,1,1)
 	end
 end
 
@@ -798,89 +798,6 @@ function lib:SetHyperlinkAndCount(tooltip, link, quantity, detail)
 	reg.ignoreSetHyperlink = true
 	tooltip:SetHyperlink(link)
 	reg.ignoreSetHyperlink = nil
-	reg.ignoreOnCleared = nil
-	return true
-end
-
---[[-
-	Set a (BattlePet) tooltip to (battlepetpet)link
-	Although Pet Cages cannot be stacked, some Addons may wish to group identical Pets together for display purposes
-	@param tooltip Frame(BattlePetTooltipTemplate) object
-	@param link battlepet link to display in the tooltip
-	@param quantity quantity of the item to display (optional)
-	@param detail additional detail items to set for the callbacks (optional)
-	@return true if successful
-	@since 1.325
-	
-	-- ref: BattlePetToolTip_Show in FrameXML\BattlePetTooltip.lua
-	-- ref: FloatingBattlePet_Show in FrameXML\FloatingPetBattleTooltip.lua
-]]
-local BATTLE_PET_TOOLTIP = {}
-function lib:SetBattlePetAndCount(tooltip, link, quantity, detail)
-	if not link then return end
-	local reg = self.tooltipRegistry[tooltip]
-	if not reg or not reg.NoColumns then return end -- identify BattlePet tooltips by their NoColumns flag
-	local head, speciesID, level, breedQuality, maxHealth, power, speed, tail = strsplit(":", link)
-	if not tail or head:sub(-9) ~= "battlepet" then return end
-	speciesID = tonumber(speciesID)
-	if not speciesID or speciesID < 1 then return end
-	local name, icon, petType = C_PetJournal.GetPetInfoBySpeciesID(speciesID)
-	if not name then return end
-
-	-- set up the battlepet table
-	BATTLE_PET_TOOLTIP.speciesID = speciesID
-	BATTLE_PET_TOOLTIP.name = name
-	BATTLE_PET_TOOLTIP.level = tonumber(level)
-	BATTLE_PET_TOOLTIP.breedQuality = tonumber(breedQuality)
-	BATTLE_PET_TOOLTIP.petType = petType
-	BATTLE_PET_TOOLTIP.maxHealth = tonumber(maxHealth)
-	BATTLE_PET_TOOLTIP.power = tonumber(power)
-	BATTLE_PET_TOOLTIP.speed = tonumber(speed)
-	local customName = strmatch(tail, "%[(.+)%]")
-	if (customName ~= BATTLE_PET_TOOLTIP.name) then
-		BATTLE_PET_TOOLTIP.customName = customName
-	else
-		BATTLE_PET_TOOLTIP.customName = nil
-	end
-
-	-- set up reg
-	OnTooltipCleared(tooltip)
-	reg.quantity = quantity
-	reg.item = link
-	reg.additional.event = "SetBattlePetAndCount"
-	reg.additional.eventLink = link
-	if detail then
-		for k,v in pairs(detail) do
-			reg.additional[k] = v
-		end
-	end
-
-	-- load the tooltip (will trigger a call to OnTooltipSetBattlePet)
-	reg.ignoreOnCleared = true
-	BattlePetTooltipTemplate_SetBattlePet(tooltip, BATTLE_PET_TOOLTIP)
-
-	local owned = C_PetJournal.GetOwnedBattlePetString(speciesID)
-	tooltip.Owned:SetText(owned)
-	if owned == nil then
-		if tooltip.Delimiter then
-			-- if .Delimiter is present it requires special handling (FloatingBattlePetTooltip)
-			tooltip:SetSize(260,150)
-			tooltip.Delimiter:ClearAllPoints()
-			tooltip.Delimiter:SetPoint("TOPLEFT",tooltip.SpeedTexture,"BOTTOMLEFT",-6,-5)
-		else
-			tooltip:SetSize(260,122)
-		end
-	else
-		if tooltip.Delimiter then
-			tooltip:SetSize(260,164)
-			tooltip.Delimiter:ClearAllPoints()
-			tooltip.Delimiter:SetPoint("TOPLEFT",tooltip.SpeedTexture,"BOTTOMLEFT",-6,-19)
-		else
-			tooltip:SetSize(260,136)
-		end
-	end
-
-	tooltip:Show()
 	reg.ignoreOnCleared = nil
 	return true
 end

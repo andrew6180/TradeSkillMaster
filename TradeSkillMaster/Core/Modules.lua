@@ -120,7 +120,7 @@ function Modules:ValidateModuleObject(obj)
 						val[key] = Modules:GetFunction(obj, val[key])
 					end
 					if type(val[key]) ~= valType then
-						return format("expected %s type for field %s, got %s at index %d", valType, key, type(val[key]), i)
+						return format("expected %s type for field %s, got %s at index %d", valType, key, type(val[key]), key)
 					end
 				end
 			end
@@ -160,7 +160,6 @@ function TSMAPI:NewModule(obj)
 	
 	-- register the db callback
 	if obj.db and obj.OnTSMDBShutdown then
-		obj.appDB = TSM.appDB
 		obj.db:RegisterCallback("OnDatabaseShutdown", TSM.ModuleOnDatabaseShutdown)
 	end
 	
@@ -247,12 +246,6 @@ function TSMAPI:NewModule(obj)
 end
 
 function TSM:UpdateModuleProfiles()
-	-- set the TradeSkillMasterAppDB profile
-	local profile = TSM.db:GetCurrentProfile()
-	TradeSkillMasterAppDB.profiles[profile] = TradeSkillMasterAppDB.profiles[profile] or {}
-	TSM.appDB.profile = TradeSkillMasterAppDB.profiles[profile]
-	TSM.appDB.keys.profile = profile
-	
 	if TSM.db.global.globalOperations then
 		for moduleName, obj in pairs(moduleObjects) do
 			if obj.operations then
@@ -297,21 +290,6 @@ function TSM:ModuleOnDatabaseShutdown()
 	end
 	-- ensure we're back on the correct profile
 	TSM.db:SetProfile(originalProfile)
-	
-	-- general cleanup of TradeSkillMasterAppDB
-	for name, data in pairs(TradeSkillMasterAppDB.profiles) do
-		if not next(data) then
-			TradeSkillMasterAppDB.profiles[name] = nil
-		end
-	end
-	for name, data in pairs(TradeSkillMasterAppDB.factionrealm) do
-		if not next(data) then
-			TradeSkillMasterAppDB.factionrealm[name] = nil
-		end
-	end
-	
-	TradeSkillMasterAppDB.version = max(TradeSkillMasterAppDB.version, 1)
-	TradeSkillMasterAppDB = LibStub("LibParse"):JSONEncode(TradeSkillMasterAppDB)
 end
 
 function TSM:IsOperationIgnored(module, operationName)

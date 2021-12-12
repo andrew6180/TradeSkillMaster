@@ -51,7 +51,7 @@ function Manage:StartNoScanScan(GUIRef, scanList)
 	local function ProcessNoScanItems()
 		local numLeft = #scanList
 		for i=1, min(numLeft, 10) do
-			Manage:ProcessScannedItem(tremove(scanList, 1), (i ~= endNum and i ~= 1))
+			Manage:ProcessScannedItem(tremove(scanList, 1), (i ~= min(numLeft, 10) and i ~= 1))
 			Manage:UpdateStatus("scan", totalToScan-#scanList, totalToScan)
 		end
 		
@@ -168,7 +168,7 @@ function Manage:SetCurrentItem(currentItem)
 end
 
 function Manage:GetCurrentItem()
-	return currentItem
+	return GUI.infoText:GetInfo()
 end
 
 function Manage:SetInfoText(text)

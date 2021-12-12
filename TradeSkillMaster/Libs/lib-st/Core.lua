@@ -164,8 +164,8 @@ do
 				col.text:SetPoint("BOTTOM", col, "BOTTOM", 0, 0);
 				col.text:SetWidth(self.cols[j].width - 2*lrpadding);
 			end
-			j = #self.cols + 1;
-			col = row.cols[j];
+			local j = #self.cols + 1;
+			local col = row.cols[j];
 			while col do
 				col:Hide();
 				j = j + 1;
@@ -190,7 +190,7 @@ do
 		self.cols = cols;
 		
 		local row = self.head
-		if not row then 
+		if not row then
 			row = CreateFrame("Frame", self.frame:GetName().."Head", self.frame);
 			row:SetPoint("BOTTOMLEFT", self.frame, "TOPLEFT", 4, 0);
 			row:SetPoint("BOTTOMRIGHT", self.frame, "TOPRIGHT", -4, 0);

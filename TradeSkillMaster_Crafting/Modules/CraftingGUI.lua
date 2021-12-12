@@ -306,7 +306,7 @@ function GUI:UpdateTradeSkills()
 --12- Riding
 
 	local skillName, header
-	local tradeSkill1, tradeSkill2, cook, firstAid = nil
+	local tradeSkill1, tradeSkill2, cook, firstAid
 
 	for i = 5, 8 do
 		skillName = GetSkillLineInfo(i)
@@ -2299,7 +2299,7 @@ function GUI:CreateGatheringFrame()
 	
 	local function AvilableOnEnter(_, data, col)
 		if not data.isTitle then
-			link = select(2, TSMAPI:GetSafeItemInfo(data.cols[1].itemString))
+			local link = select(2, TSMAPI:GetSafeItemInfo(data.cols[1].itemString))
 			if link then
 				GameTooltip:SetOwner(col, "ANCHOR_RIGHT")
 				TSMAPI:SafeTooltipLink(link)

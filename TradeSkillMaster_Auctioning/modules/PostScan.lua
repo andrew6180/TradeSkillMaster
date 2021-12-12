@@ -13,7 +13,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_Auctioning") -- l
 local bagInfo, bagState = {}, {}
 local bagInfoUpdate = 0
 local postQueue, currentItem, itemLocations = {}, {}, {}
-local totalToPost, totalPosted, count = 0, 0
+local totalToPost, totalPosted, count = 0, 0, 0
 local isScanning, GUI
 
 function Post:ValidateOperation(itemString, operation)

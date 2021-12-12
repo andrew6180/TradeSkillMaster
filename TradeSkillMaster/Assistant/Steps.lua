@@ -19,7 +19,7 @@ end
 
 function private.OnEvent(event, arg)
 	if not private.stepData then return end
-	order = (private.stepData.recentEvents._order or 0) + 1
+	local order = (private.stepData.recentEvents._order or 0) + 1
 	private.stepData.recentEvents[event] = {arg=arg, order=order}
 	private.stepData.recentEvents._order = order
 end

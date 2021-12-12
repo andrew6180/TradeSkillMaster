@@ -150,16 +150,16 @@ function TSM:GetTooltip(itemString)
 
 		if IsShiftKeyDown() then
 			if moneyCoinsTooltip then
-				tinsert(text, { left = "  " .. L["Sold (Total Price):"], right = format("%s (%s)", "|cffffffff" .. totalSaleNum .. "|r", (TSMAPI:FormatTextMoneyIcon(totalSalePrice, "|cffffffff", true) or "|cffffffff" .. "?")) })
+				tinsert(text, { left = "  " .. L["Sold (Total Price):"], right = format("%s (%s)", "|cffffffff" .. totalSaleNum .. "|r", (TSMAPI:FormatTextMoneyIcon(totalSalePrice, "|cffffffff", true) or ("|cffffffff" .. "?"))) })
 			else
-				tinsert(text, { left = "  " .. L["Sold (Total Price):"], right = format("%s (%s)", "|cffffffff" .. totalSaleNum .. "|r", (TSMAPI:FormatTextMoney(totalSalePrice, "|cffffffff", true) or "|cffffffff" .. "?")) })
+				tinsert(text, { left = "  " .. L["Sold (Total Price):"], right = format("%s (%s)", "|cffffffff" .. totalSaleNum .. "|r", (TSMAPI:FormatTextMoney(totalSalePrice, "|cffffffff", true) or ("|cffffffff" .. "?"))) })
 			end
 		else
 			local maxPrice = TSM:GetMaxSellPrice(itemString)
 			if moneyCoinsTooltip then
-				tinsert(text, { left = "  " .. L["Sold (Avg/Max Price):"], right = format("%s (%s / %s)", "|cffffffff" .. totalSaleNum .. "|r", (TSMAPI:FormatTextMoneyIcon(avgSalePrice, "|cffffffff", true) or "|cffffffff" .. "?"), (TSMAPI:FormatTextMoneyIcon(maxPrice, "|cffffffff", true) or "|cffffffff" .. "?")) })
+				tinsert(text, { left = "  " .. L["Sold (Avg/Max Price):"], right = format("%s (%s / %s)", "|cffffffff" .. totalSaleNum .. "|r", (TSMAPI:FormatTextMoneyIcon(avgSalePrice, "|cffffffff", true) or ("|cffffffff" .. "?")), (TSMAPI:FormatTextMoneyIcon(maxPrice, "|cffffffff", true) or ("|cffffffff" .. "?"))) })
 			else
-				tinsert(text, { left = "  " .. L["Sold (Avg/Max Price):"], right = format("%s (%s / %s)", "|cffffffff" .. totalSaleNum .. "|r", (TSMAPI:FormatTextMoney(avgSalePrice, "|cffffffff", true) or "|cffffffff" .. "?"), (TSMAPI:FormatTextMoney(maxPrice, "|cffffffff", true) or "|cffffffff" .. "?")) })
+				tinsert(text, { left = "  " .. L["Sold (Avg/Max Price):"], right = format("%s (%s / %s)", "|cffffffff" .. totalSaleNum .. "|r", (TSMAPI:FormatTextMoney(avgSalePrice, "|cffffffff", true) or ("|cffffffff" .. "?")), (TSMAPI:FormatTextMoney(maxPrice, "|cffffffff", true) or ("|cffffffff" .. "?"))) })
 			end
 		end
 		if lastSold > 0 then
@@ -179,7 +179,7 @@ function TSM:GetTooltip(itemString)
 	end
 
 	if totalSaleNum > 0 and totalFailed > 0 then
-		local saleRate = TSM:Round(totalSaleNum / (totalSaleNum + totalFailed or 0), 0.01)
+		local saleRate = TSM:Round(totalSaleNum / (totalSaleNum + (totalFailed or 0)), 0.01)
 		tinsert(text, { left = "  " .. L["Sale Rate:"], right = "|cffffffff" .. saleRate })
 	end
 
@@ -193,17 +193,17 @@ function TSM:GetTooltip(itemString)
 
 		if IsShiftKeyDown() then
 			if moneyCoinsTooltip then
-				tinsert(text, { left = "  " .. L["Purchased (Total Price):"], right = format("%s (%s)", "|cffffffff" .. totalNum .. "|r", (TSMAPI:FormatTextMoneyIcon(totalPrice, "|cffffffff", true) or "|cffffffff" .. "?")) })
+				tinsert(text, { left = "  " .. L["Purchased (Total Price):"], right = format("%s (%s)", "|cffffffff" .. totalNum .. "|r", (TSMAPI:FormatTextMoneyIcon(totalPrice, "|cffffffff", true) or ("|cffffffff" .. "?"))) })
 			else
-				tinsert(text, { left = "  " .. L["Purchased (Total Price):"], right = format("%s (%s)", "|cffffffff" .. totalNum .. "|r", (TSMAPI:FormatTextMoney(totalPrice, "|cffffffff", true) or "|cffffffff" .. "?")) })
+				tinsert(text, { left = "  " .. L["Purchased (Total Price):"], right = format("%s (%s)", "|cffffffff" .. totalNum .. "|r", (TSMAPI:FormatTextMoney(totalPrice, "|cffffffff", true) or ("|cffffffff" .. "?"))) })
 			end
 		else
 			local avgPrice = TSM:GetAvgBuyPrice(itemString)
 			local maxPrice = TSM:GetMaxBuyPrice(itemString)
 			if moneyCoinsTooltip then
-				tinsert(text, { left = "  " .. L["Purchased (Avg/Max Price):"], right = format("%s (%s / %s)", "|cffffffff" .. totalNum .. "|r", (TSMAPI:FormatTextMoneyIcon(avgPrice, "|cffffffff", true) or "|cffffffff" .. "?"), (TSMAPI:FormatTextMoneyIcon(maxPrice, "|cffffffff", true) or "|cffffffff" .. "?")) })
+				tinsert(text, { left = "  " .. L["Purchased (Avg/Max Price):"], right = format("%s (%s / %s)", "|cffffffff" .. totalNum .. "|r", (TSMAPI:FormatTextMoneyIcon(avgPrice, "|cffffffff", true) or ("|cffffffff" .. "?")), (TSMAPI:FormatTextMoneyIcon(maxPrice, "|cffffffff", true) or ("|cffffffff" .. "?"))) })
 			else
-				tinsert(text, { left = "  " .. L["Purchased (Avg/Max Price):"], right = format("%s (%s / %s)", "|cffffffff" .. totalNum .. "|r", (TSMAPI:FormatTextMoney(avgPrice, "|cffffffff", true) or "|cffffffff" .. "?"), (TSMAPI:FormatTextMoney(maxPrice, "|cffffffff", true) or "|cffffffff" .. "?")) })
+				tinsert(text, { left = "  " .. L["Purchased (Avg/Max Price):"], right = format("%s (%s / %s)", "|cffffffff" .. totalNum .. "|r", (TSMAPI:FormatTextMoney(avgPrice, "|cffffffff", true) or ("|cffffffff" .. "?")), (TSMAPI:FormatTextMoney(maxPrice, "|cffffffff", true) or ("|cffffffff" .. "?"))) })
 			end
 		end
 		if lastPurchased then
@@ -335,11 +335,6 @@ function TSM:OnTSMDBShutdown()
 		if type(data) == "table" then
 			TSM.db.factionrealm.goldLog[player] = LibParse:CSVEncode(TSM.GOLD_LOG_KEYS, data)
 		end
-	end
-	
-	if TSM.appDB then
-		TSM.appDB.factionrealm.accountingSales = appDBSales
-		TradeSkillMasterAppDB.version = max(TradeSkillMasterAppDB.version, 2)
 	end
 end
 

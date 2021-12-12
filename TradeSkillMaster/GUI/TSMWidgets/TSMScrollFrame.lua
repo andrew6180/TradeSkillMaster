@@ -134,7 +134,7 @@ local methods = {
 	end,
 
 	["LayoutFinished"] = function(self, width, height)
-		self.content:SetHeight(height or 0 + 20)
+		self.content:SetHeight(height or (0 + 20))
 		self.scrollframe:SetScript("OnUpdate", FixScrollOnUpdate)
 		
 		-- no idea why, but this MUST be here to avoid glitches with the scrollbar not showing up when it should

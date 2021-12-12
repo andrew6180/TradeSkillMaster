@@ -14,8 +14,6 @@ local AceGUI = LibStub("AceGUI-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_Auctioning") -- loads the localization table
 TSM.operationLookup = {}
 TSM.operationNameLookup = {}
-local status = TSM.status
-local statusLog, logIDs, lastSeenLogID = {}, {}
 
 
 local savedDBDefaults = {

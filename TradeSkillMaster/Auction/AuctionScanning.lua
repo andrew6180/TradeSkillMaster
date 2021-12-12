@@ -483,7 +483,7 @@ local function IsTargetAuction(index)
 	local itemString = TSMAPI:GetItemString(GetAuctionItemLink("list", index))
 	-- local _, _, count, _, _, _, _, minBid, bidIncrement, buyout, bidAmount, _, _, seller, seller_full = GetAuctionItemInfo("list", index)
 	local _, _, count, _, _, _,  minBid, bidIncrement, buyout, bidAmount, _, _, seller = GetAuctionItemInfo("list", index)
-	seller = TSM:GetAuctionPlayer(seller, null)
+	seller = TSM:GetAuctionPlayer(seller, nil)
 	local bid = bidAmount == 0 and minBid or bidAmount
 	local tmp = { itemString = itemString, count = count, bid = bid, buyout = buyout, seller = seller }
 	return CompareTableKeys(tmp, findPrivate.targetInfo)

@@ -13,6 +13,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_Auctioning") -- l
 local resetData, summarySTCache, showCache, itemsReset, justBought = {}, {}, {}, {}, {}
 local isScanning, doneScanningText, currentItem, GUI
 local summaryST, auctionST, resetButtons
+local currentAuction
 
 function Reset:Show(frame)
 	summaryST = summaryST or Reset:CreateSummaryST(frame.content)
@@ -91,7 +92,7 @@ function Reset:CreateSummaryST(parent)
 	local handlers = {
 		OnEnter = function(_, data, self)
 			if not data.operation then return end
-			local prices = TSM.Util:GetItemPrices(operation, data.itemString, true)
+			local prices = TSM.Util:GetItemPrices(data.operation, data.itemString, true)
 			GameTooltip:SetOwner(self, "ANCHOR_NONE")
 			GameTooltip:SetPoint("BOTTOMLEFT", self, "TOPLEFT")
 			GameTooltip:AddLine(data.itemLink)				
@@ -421,7 +422,7 @@ function Reset:ShouldShow(data)
 		result.validCost = false
 	end
 	
-	if data.quantity > data.operation.resetMaxQuantity or data.quantity > (data.operation.resetMaxInventory - Reset:GetTotalQuantity(itemString)) then
+	if data.quantity > data.operation.resetMaxQuantity or data.quantity > (data.operation.resetMaxInventory - Reset:GetTotalQuantity(data.itemString)) then
 		result.validQuantity = false
 	end
 	
@@ -488,7 +489,7 @@ function Reset:GetSummarySTRow(data)
 		targetPrice = data.targetPrice,
 		num = data.quantity,
 		profit = data.profit,
-		operation = operation,
+		operation = data.operation,
 	}
 	
 	return row

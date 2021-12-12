@@ -16,7 +16,7 @@ local inventoryTotals = {}
 
 
 local notified = {}
-function Queue:ValidateOperation(operation)
+function Queue:ValidateOperation(operation, opName)
 	if not operation then return end
 
 	if operation.minRestock > operation.maxRestock then
@@ -38,7 +38,7 @@ function Queue:CreateRestockQueue(groupInfo)
 		for _, opName in ipairs(data.operations) do
 			TSMAPI:UpdateOperation("Crafting", opName)
 			local opSettings = TSM.operations[opName]
-			if Queue:ValidateOperation(opSettings) then
+			if Queue:ValidateOperation(opSettings, opName) then
 				-- it's a valid operation
 				for itemString in pairs(data.items) do
 					itemString = TSMAPI:GetItemString(itemString)

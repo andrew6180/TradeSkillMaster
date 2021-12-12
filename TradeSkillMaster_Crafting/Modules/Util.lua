@@ -361,9 +361,9 @@ end
 
 function Util:FormatTime(seconds)
 	if seconds == 0 then return end
-	hours = floor(seconds/3600)
-	mins = floor((seconds%3600)/60)
-	secs = seconds % 60
+	local hours = floor(seconds/3600)
+	local mins = floor((seconds%3600)/60)
+	local secs = seconds % 60
 	
 	local str = ""
 	if hours > 0 then

@@ -127,7 +127,7 @@ local methods = {
 	end,
 
 	["LayoutFinished"] = function(self, width, height)
-		self.content:SetHeight(height or 0 + 20)
+		self.content:SetHeight(height or 20)
 		self.scrollframe:SetScript("OnUpdate", FixScrollOnUpdate)
 	end,
 

@@ -451,8 +451,8 @@ function Data:ScanCollectedMail(oFunc, attempt, index, subIndex)
 		local saleTime = (time() + (daysLeft - 31) * SECONDS_PER_DAY)
 		if private:CanLootMailIndex(index) then
 			if str and strfind(str, "TSM$") then -- payment for a COD the player sent
-				local codName = strmatch(str, "([^\(]+)"):trim()
-				local qty = strmatch(str, "\(([0-9]+)\)")
+				local codName = strmatch(str, "([^%(]+)"):trim()
+				local qty = strmatch(str, "%(([0-9]+)%)")
 				qty = tonumber(qty)
 				local itemString = TSM.db.global.itemStrings[codName]
 				if itemString then

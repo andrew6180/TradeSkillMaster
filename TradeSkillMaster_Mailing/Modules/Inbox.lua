@@ -495,6 +495,10 @@ function private:LootMailItem(index)
 
 			-- fix MoP difference
 			if (quantity == nil) then quantity = itemQuantity end
+
+			local redColor = "|cffFF0000"
+			local greenColor = "|cff00FF00"
+			local yellowColor = "|cffFFFF00"
 			
 			if invoiceType == "buyer" then
 				local itemLink = GetInboxItemLink(index, 1) or itemName

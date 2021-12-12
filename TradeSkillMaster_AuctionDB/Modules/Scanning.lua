@@ -186,7 +186,7 @@ function Scan:ProcessScanData(scanData)
 	for itemString, obj in pairs(scanData) do
 		if TSMAPI:GetBaseItemString(itemString) == itemString then
 			local itemID = obj:GetItemID()
-			local quantity, minBuyout, records = 0, 0
+			local quantity, minBuyout = 0, 0
 			local records = {}
 			for _, record in ipairs(obj.records) do
 				local itemBuyout = record:GetItemBuyout()

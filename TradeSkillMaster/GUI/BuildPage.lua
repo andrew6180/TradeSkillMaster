@@ -151,8 +151,8 @@ local function AddTooltip(widget, text, title)
 				GameTooltip:SetHyperlink("item:" .. text)
 			elseif tonumber(text) then
 				GameTooltip:SetHyperlink("enchant:"..text)
-			elseif type(tooltip) == "string" and (strfind(tooltip, "item:") or strfind(tooltip, "battlepet:")) then
-				TSMAPI:SafeTooltipLink(tooltip)
+			elseif type(text) == "string" and (strfind(text, "item:")) then
+				TSMAPI:SafeTooltipLink(text)
 			else
 				GameTooltip:AddLine(text, 1, 1, 1, 1)
 			end

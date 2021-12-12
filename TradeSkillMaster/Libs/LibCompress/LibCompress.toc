@@ -1,15 +1,14 @@
-﻿## Interface: 30300
-## X-Curse-Packaged-Version: r49-release
-## X-Curse-Project-Name: LibCompress
-## X-Curse-Project-ID: libcompress
-## X-Curse-Repository-ID: wow/libcompress/mainline
+## Interface: 70300
 
 ## Title: Lib: Compress
 ## Notes: Compression and Decompression library
-## Author: JJSheets and Galmok at Stormrage-EU (Horde)
-## X-Website: http://www.wowace.com
+## Author: Galmok at Stormrage-EU (Horde) and JJSheets
+## Version: r84-release
+## X-Website: http://www.wowace.com/addons/libcompress/
 ## X-Category: Library
-## X-eMail: sheets DOT jeff AT gmail DOT com, galmok AT gmail DOT com
-## X-License: LGPL v2.1
+## X-eMail: galmok AT gmail DOT com, sheets DOT jeff AT gmail DOT com
+## X-License: GPL v2
+## LoadOnDemand: 1
 
+LibStub\LibStub.lua
 lib.xml

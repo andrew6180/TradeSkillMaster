@@ -53,35 +53,35 @@ function Scan.ProcessGetAllScan(self)
 				return
 			end
 		end
-		
+
 		local itemID = TSMAPI:GetItemID(GetAuctionItemLink("list", i))
 		--local _, _, count, _, _, _, _, _, _, buyout = GetAuctionItemInfo("list", i)
 		local _, _, count, _, _, _, _, _, buyout = GetAuctionItemInfo("list", i)
 		if itemID and buyout and buyout > 0 then
 			data[itemID] = data[itemID] or {records={}, minBuyout=math.huge, quantity=0}
-			data[itemID].minBuyout = min(data[itemID].minBuyout, buyout)
+			data[itemID].minBuyout = min(data[itemID].minBuyout, floor(buyout/count))
 			data[itemID].quantity = data[itemID].quantity + count
 			for j=1, count do
 				tinsert(data[itemID].records, floor(buyout/count))
 			end
 		end
 	end
-	
+
 	TSM.db.factionrealm.lastCompleteScan = time()
 	TSM.Data:ProcessData(data)
-	
+
 	TSM.GUI:UpdateStatus(L["Processing data..."])
 	while TSM.processingData do
 		self:Sleep(0.2)
 	end
-	
+
 	TSM:Print(L["It is strongly recommended that you reload your ui (type '/reload') after running a GetAll scan. Otherwise, any other scans (Post/Cancel/Search/etc) will be much slower than normal."])
 end
 
 function Scan:AUCTION_ITEM_LIST_UPDATE()
 	Scan:UnregisterEvent("AUCTION_ITEM_LIST_UPDATE")
 	local num, total = GetNumAuctionItems("list")
-	
+
 	--if num ~= total or num == 0 then
 	if num == 0 then
 		--TSM:Print(L["GetAll scan did not run successfully due to issues on Blizzard's end. Using the TSM application for your scans is recommended."])
@@ -182,7 +182,7 @@ end
 
 function Scan:ProcessScanData(scanData)
 	local data = {}
-	
+
 	for itemString, obj in pairs(scanData) do
 		if TSMAPI:GetBaseItemString(itemString) == itemString then
 			local itemID = obj:GetItemID()
@@ -201,7 +201,7 @@ function Scan:ProcessScanData(scanData)
 			data[itemID] = {records=records, minBuyout=minBuyout, quantity=quantity}
 		end
 	end
-	
+
 	if Scan.isScanning ~= "group" then
 		TSM.db.factionrealm.lastCompleteScan = time()
 	end

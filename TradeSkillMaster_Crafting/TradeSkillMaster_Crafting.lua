@@ -78,6 +78,12 @@ function TSM:OnEnable()
 			elseif itemString == "item:38682" then
 				TSM.db.factionrealm.crafts[spellid].mats["item:38682:0:0:0:0:0:0"] = 1
 				TSM.db.factionrealm.crafts[spellid].mats[itemString] = nil
+			elseif itemString == "item:52510" then
+				TSM.db.factionrealm.crafts[spellid].mats["item:52510:0:0:0:0:0:0"] = 1
+				TSM.db.factionrealm.crafts[spellid].mats[itemString] = nil
+			elseif itemString == "item:52511" then
+				TSM.db.factionrealm.crafts[spellid].mats["item:52511:0:0:0:0:0:0"] = 1
+				TSM.db.factionrealm.crafts[spellid].mats[itemString] = nil
 			end
 		end
 	end
@@ -128,6 +134,18 @@ function TSM:OnEnable()
 		TSM.db.factionrealm.mats["item:38682:0:0:0:0:0:0"] = {}
 		TSM.db.factionrealm.mats["item:38682:0:0:0:0:0:0"].name = name
 		TSM.db.factionrealm.mats["item:38682"] = nil
+	end
+	if TSM.db.factionrealm.mats["item:52510"] then
+		local name = TSMAPI:GetSafeItemInfo("item:52510:0:0:0:0:0:0") or nil
+		TSM.db.factionrealm.mats["item:52510:0:0:0:0:0:0"] = {}
+		TSM.db.factionrealm.mats["item:52510:0:0:0:0:0:0"].name = name
+		TSM.db.factionrealm.mats["item:52510"] = nil
+	end
+	if TSM.db.factionrealm.mats["item:52511"] then
+		local name = TSMAPI:GetSafeItemInfo("item:52511:0:0:0:0:0:0") or nil
+		TSM.db.factionrealm.mats["item:52511:0:0:0:0:0:0"] = {}
+		TSM.db.factionrealm.mats["item:52511:0:0:0:0:0:0"].name = name
+		TSM.db.factionrealm.mats["item:52511"] = nil
 	end
 	
 	local func, err = TSMAPI:ParseCustomPrice(TSM.db.global.defaultCraftPriceMethod, "crafting")
@@ -249,14 +267,14 @@ function TSM:GetTooltip(itemString)
 							if (velName ~= nil) and (not strfind(velName, "III")) then					
 								local VellumReplacePrice = TSM.Cost:GetMatCost(matItemString)
 
-								if strfind(velName, "Weapon Vellum") then						
-									if VellumReplacePrice > TSM.Cost:GetMatCost("item:43146:0:0:0:0:0:0") then 
-										matItemString = "item:43146:0:0:0:0:0:0"
+								if strfind(velName, "Weapon") then						
+									if VellumReplacePrice > TSM.Cost:GetMatCost("item:52511:0:0:0:0:0:0") then 
+										matItemString = "item:52511:0:0:0:0:0:0"
 										name = TSMAPI:GetSafeItemInfo(matItemString)
 									end
 								else
-									if VellumReplacePrice > TSM.Cost:GetMatCost("item:43145:0:0:0:0:0:0") then 
-										matItemString = "item:43145:0:0:0:0:0:0"
+									if VellumReplacePrice > TSM.Cost:GetMatCost("item:52510:0:0:0:0:0:0") then 
+										matItemString = "item:52510:0:0:0:0:0:0"
 										name = TSMAPI:GetSafeItemInfo(matItemString)						
 									end
 								end

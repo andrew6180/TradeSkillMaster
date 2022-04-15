@@ -675,19 +675,13 @@ function GUI:CreateQueueFrame(parent)
 			if strfind(name, "Vellum") then
 				velName = name
 			end
-			if (velName ~= nil) and (not strfind(velName, "III")) then					
-				local VellumReplacePrice = TSM.Cost:GetMatCost(itemIDx)
-
-				if strfind(velName, "Weapon Vellum") then						
-					if VellumReplacePrice > TSM.Cost:GetMatCost("item:43146:0:0:0:0:0:0") then 
-						itemIDx = "item:43146:0:0:0:0:0:0"
-						name = TSMAPI:GetSafeItemInfo(itemIDx)
-					end
+			if (velName ~= nil) then					
+				if strfind(velName, "Weapon") then						
+					itemIDx = "item:52511:0:0:0:0:0:0"
+					name = TSMAPI:GetSafeItemInfo(itemIDx)
 				else
-					if VellumReplacePrice > TSM.Cost:GetMatCost("item:43145:0:0:0:0:0:0") then 
-						itemIDx = "item:43145:0:0:0:0:0:0"
-						name = TSMAPI:GetSafeItemInfo(itemIDx)						
-					end
+					itemIDx = "item:52510:0:0:0:0:0:0"
+					name = TSMAPI:GetSafeItemInfo(itemIDx)						
 				end
 			end
 				
@@ -1455,7 +1449,7 @@ function GUI:CreateCraftInfoFrame(parent)
 		-- Enable display of items created
 		local lNum, hNum = GetTradeSkillNumMade(skillIndex)
 		local numMade = floor(((lNum or 1) + (hNum or 1)) / 2)
-		if altVerb == ENSCRIBE then
+		if altVerb ~= nil and strfind(name,"Enchant ") then
 			numMade = 1
 		end
 		if numMade > 1 then
@@ -1492,15 +1486,14 @@ function GUI:CreateCraftInfoFrame(parent)
 			end
 		end
 
-		if altVerb == ENSCRIBE then
+		-- if altVerb == ENSCRIBE then
+		if altVerb ~= nil and strfind(name,"Enchant ") then
 			createAllBtn:SetText(L["Enchant Vellum"])
-			-- createAllBtn.vellum = TSMAPI:GetSafeItemInfo("item:38682:0:0:0:0:0:0")
 			if strfind(name, "Weapon") or strfind(name, "Staff") then
-				createAllBtn.vellum = TSMAPI:GetSafeItemInfo("item:43146:0:0:0:0:0:0") -- Weapon Vellum III
+				createAllBtn.vellum = TSMAPI:GetSafeItemInfo("item:52511:0:0:0:0:0:0") -- Weapon Vellum
 			else
-				createAllBtn.vellum = TSMAPI:GetSafeItemInfo("item:43145:0:0:0:0:0:0") -- Armor Vellum III
+				createAllBtn.vellum = TSMAPI:GetSafeItemInfo("item:52510:0:0:0:0:0:0") -- Armor Vellum
 			end
-			
 		else
 			createAllBtn:SetText(CREATE_ALL)
 			createAllBtn.vellum = nil
@@ -1824,12 +1817,6 @@ function GUI:UpdateQueue()
 							canCraft = min(canCraft, floor(numHave / quantity))
 						end
 
-						-- local velName
-						-- local VELLUM_ID = "item:38682:0:0:0:0:0:0"
-						-- if TSM.db.factionrealm.crafts[spellID].mats[VELLUM_ID] then
-							-- velName = GetItemInfo(VELLUM_ID) or TSM.db.factionrealm.mats[VELLUM_ID].name
-						-- end
-						
 						local color
 						local craftIndex = skillIndexLookup[spellID]
 						if canCraft >= numQueued then
@@ -2753,7 +2740,7 @@ end
 
 function CheapestVellum(itemPassed)
 
-		-- Get Cheapest vellum, lower vellum types can be replaced by III
+		-- Return one of the two vellum available
 		local MatName = GetItemInfo(itemPassed)
 		-- MatName is sometimes nil ???
 		if MatName ~= nil then			
@@ -2761,12 +2748,11 @@ function CheapestVellum(itemPassed)
 			if strfind(MatName, "Vellum") then
 				velName = MatName
 			end
-			if (velName ~= nil) and (not strfind(velName, "III")) then						
-				local VellumReplacePrice = TSM.Cost:GetMatCost(itemPassed) or 0
-				if strfind(velName, "Weapon Vellum") then						
-					if VellumReplacePrice > (TSM.Cost:GetMatCost("item:43146:0:0:0:0:0:0") or 0) then itemPassed = "item:43146:0:0:0:0:0:0" end
+			if (velName ~= nil) then						
+				if strfind(velName, "Weapon") then						
+					itemPassed = "item:52511:0:0:0:0:0:0"
 				else
-					if VellumReplacePrice > (TSM.Cost:GetMatCost("item:43145:0:0:0:0:0:0") or 0) then itemPassed = "item:43145:0:0:0:0:0:0" end
+					itemPassed = "item:52510:0:0:0:0:0:0"
 				end
 			end
 		end

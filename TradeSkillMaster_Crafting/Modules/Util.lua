@@ -105,31 +105,7 @@ function Util:ScanCurrentProfession()
 				local hasCD = select(2, GetTradeSkillCooldown(index)) and true or nil
 				local mats = {}
 				if currentTradeSkill == TSM.enchantingName and strfind(itemLink, "enchant:") then
-					-- mats[VELLUM_ID] = 1
-					-- local name = TSMAPI:GetSafeItemInfo(VELLUM_ID) or (GetLocale() == "enUS" and "Enchanting Vellum") or nil
-					-- TSM.db.factionrealm.mats[VELLUM_ID] = TSM.db.factionrealm.mats[VELLUM_ID] or {}
-					-- TSM.db.factionrealm.mats[VELLUM_ID].name = TSM.db.factionrealm.mats[VELLUM_ID].name or name
 					local VellumString = "item:"..TSM.VellumInfo[spellID]..":0:0:0:0:0:0"
-					
-					
-					
-					-- -- Get Cheapest vellum, lower vellum types can be replaced by III
-					-- local velName
-					-- if TSM.VellumInfo[spellID] then
-						-- velName = GetItemInfo(TSM.VellumInfo[spellID])
-					-- end
-					-- if (velName ~= nil) and (not strfind(velName, "III")) then						
-						-- local VellumReplacePrice = TSM.Cost:GetMatCost(VellumString)
-
-						-- if strfind(GetSpellInfo(spellID), "Weapon") or strfind(GetSpellInfo(spellID), "Staff")then						
-							-- if VellumReplacePrice > TSM.Cost:GetMatCost("item:43146:0:0:0:0:0:0") then VellumString = "item:43146:0:0:0:0:0:0" end
-						-- else
-							-- if VellumReplacePrice > TSM.Cost:GetMatCost("item:43145:0:0:0:0:0:0") then VellumString = "item:4314:0:0:0:0:0:0" end
-						-- end
-					-- end
-					
-					
-					
 					mats[VellumString] = 1
 					local name = TSMAPI:GetSafeItemInfo(VellumString) or nil
 					TSM.db.factionrealm.mats[VellumString] = TSM.db.factionrealm.mats[VellumString] or {}
@@ -254,33 +230,8 @@ function Util.ScanSyncedProfessionThread(self)
 				local hasCD = select(2, GetTradeSkillCooldown(index)) and true or nil
 				local mats = {}
 				if currentTradeSkill == TSM.enchantingName and strfind(itemLink, "enchant:") then
-					-- mats[VELLUM_ID] = 1
-					-- local name = TSMAPI:GetSafeItemInfo(VELLUM_ID) or (GetLocale() == "enUS" and "Enchanting Vellum") or nil
-					-- TSM.db.factionrealm.mats[VELLUM_ID] = TSM.db.factionrealm.mats[VELLUM_ID] or {}
-					-- TSM.db.factionrealm.mats[VELLUM_ID].name = TSM.db.factionrealm.mats[VELLUM_ID].name or name
-										
 					local VellumString = "item:"..TSM.VellumInfo[spellID]..":0:0:0:0:0:0"
-					
-					
 
-					-- -- Get Cheapest vellum, lower vellum types can be replaced by III
-					-- local velName
-					-- if TSM.VellumInfo[spellID] then
-						-- velName = GetItemInfo(TSM.VellumInfo[spellID])
-					-- end
-					-- if (velName ~= nil) and (not strfind(velName, "III")) then						
-						-- local VellumReplacePrice = TSM.Cost:GetMatCost(VellumString)
-
-						-- if strfind(GetSpellInfo(spellID), "Weapon") or strfind(GetSpellInfo(spellID), "Staff")then						
-							-- if VellumReplacePrice > TSM.Cost:GetMatCost("item:43146:0:0:0:0:0:0") then VellumString = "item:43146:0:0:0:0:0:0" end
-						-- else
-							-- if VellumReplacePrice > TSM.Cost:GetMatCost("item:43145:0:0:0:0:0:0") then VellumString = "item:4314:0:0:0:0:0:0" end
-						-- end
-					-- end
-					
-					
-					
-						
 					mats[VellumString] = 1
 					local name = TSMAPI:GetSafeItemInfo(VellumString) or nil
 					TSM.db.factionrealm.mats[VellumString] = TSM.db.factionrealm.mats[VellumString] or {}

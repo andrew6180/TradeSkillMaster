@@ -253,15 +253,16 @@ function GUI:EventHandler(event, ...)
 			local unit, spellName = ...
 			local spellID = TSM.SpellName2ID[spellName]
 
-			-- if spellID == nil then
-				-- TSM:Printf("Could not find spellID for %s", spellName)
-			-- end
+			if spellID == nil then
+				TSM:Printf("Could not find spellID for %s", spellName)
+			end
 
 			local craft = spellID and TSM.db.factionrealm.crafts[spellID]
 			if unit ~= "player" or not craft then return end
 
 			-- decrements the number of this craft that are queued to be crafted
 			craft.queued = craft.queued - 1
+
 			if GUI.isCrafting and GUI.isCrafting.quantity > 0 then
 				GUI.isCrafting.quantity = GUI.isCrafting.quantity - 1
 				if GUI.isCrafting.quantity == 0 then
@@ -273,11 +274,15 @@ function GUI:EventHandler(event, ...)
 		elseif event == "UNIT_SPELLCAST_INTERRUPTED" or event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_FAILED_QUIET" then
 			-- local unit, _, _, _, spellID = ... -- parameter ... doesn't provide spellID in 3.3.5a
 			local unit, spellName = ...
-			local spellID = TSM.SpellName2ID[spellName]
+			local spellID = TSM.SpellName2ID(spellName)
 
-			-- if spellID == nil then
-				-- TSM:Printf("Could not find spellID for %s", spellName)
-			-- end
+			if spellID == nil then
+				TSM:Printf("Could not find spellID for %s", spellName)
+			end
+
+			if spellID == nil then
+				TSM:Printf("Could not find spellID for %s", spellName)
+			end
 
 			if unit ~= "player" then return end
 			if GUI.isCrafting and spellID == GUI.isCrafting.spellID then

@@ -152,7 +152,7 @@ function GUI:ShowProfessionWindow()
 		end
 		return
 	end
-	
+
 	GUI:ShowSwitchButton()
 	if TSM.db.global.showingDefaultFrame then return end
 	GUI:UpdateTradeSkills()
@@ -217,7 +217,7 @@ end
 
 function GUI:EventHandler(event, ...)
 	if not GUI.frame or not GUI.frame:IsVisible() then return end
-	local unittest = ...	
+	local unittest = ...
 	if unittest == "player" or unittest==nil then --Changing tradeskill frames and stuff has "nil" unit, when other players cast this also triggers with nil
 		if event == "TRADE_SKILL_CLOSE" then
 			GUI.frame:Hide()
@@ -252,11 +252,11 @@ function GUI:EventHandler(event, ...)
 			-- local unit, _, _, _, spellID = ... -- parameter ... doesn't provide spellID in 3.3.5a
 			local unit, spellName = ...
 			local spellID = TSM.SpellName2ID[spellName]
-			
+
 			-- if spellID == nil then
 				-- TSM:Printf("Could not find spellID for %s", spellName)
 			-- end
-			
+
 			local craft = spellID and TSM.db.factionrealm.crafts[spellID]
 			if unit ~= "player" or not craft then return end
 
@@ -267,8 +267,8 @@ function GUI:EventHandler(event, ...)
 				if GUI.isCrafting.quantity == 0 then
 					--GUI:UpdateQueue()
 				end
-			end		
-		
+			end
+
 			-- TSMAPI:CreateTimeDelay("craftingQueueUpdateThrottle", 0.2, GUI.UpdateQueue)
 		elseif event == "UNIT_SPELLCAST_INTERRUPTED" or event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_FAILED_QUIET" then
 			-- local unit, _, _, _, spellID = ... -- parameter ... doesn't provide spellID in 3.3.5a
@@ -278,7 +278,7 @@ function GUI:EventHandler(event, ...)
 			-- if spellID == nil then
 				-- TSM:Printf("Could not find spellID for %s", spellName)
 			-- end
-			
+
 			if unit ~= "player" then return end
 			if GUI.isCrafting and spellID == GUI.isCrafting.spellID then
 				GUI.isCrafting.quantity = 0
@@ -327,8 +327,8 @@ function GUI:UpdateTradeSkills()
 			break
 		end
 	end
-	
-	
+
+
 	for i = 5, 10 do
 		skillName = GetSkillLineInfo(i)
 		if  skillName == "Cooking" then
@@ -336,7 +336,7 @@ function GUI:UpdateTradeSkills()
 		elseif skillName == "First Aid" then
 			firstAid = i
 			break
-		end	
+		end
 	end
 
 	local playerName = UnitName("player")
@@ -458,7 +458,7 @@ function GUI:ClearFilters()
 	SetTradeSkillSubClassFilter(0,1,1)
 	GUI.frame.content.professionsTab.HaveMatsCheckBox:SetValue(false)
 	TradeSkillFrameAvailableFilterCheckButton:SetChecked(false)
-	TradeSkillOnlyShowMakeable(false)	
+	TradeSkillOnlyShowMakeable(false)
 	TradeSkillFrame_Update()
 	-- TradeSkillSetFilter(-1, -1)
 	SetTradeSkillItemNameFilter("")
@@ -608,14 +608,14 @@ function GUI:CreateQueueFrame(parent)
 			else
 				color = "|cff00ff00"
 			end
-			
+
 		end
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
 		-- GameTooltip:SetPoint("LEFT", self, "RIGHT")
 		GameTooltip:SetPoint("LEFT", self, "LEFT")
 		GameTooltip:AddLine(TSM.db.factionrealm.crafts[data.spellID].name .. " (x" .. data.numQueued .. ")")
-			
-		local cost = TSM.Cost:GetCraftPrices(data.spellID)	
+
+		local cost = TSM.Cost:GetCraftPrices(data.spellID)
 		if data.profit then
 			local profitPercent = data.profit / cost * 100
 			local profitPercText = format("%s%.0f%%|r", color, profitPercent)
@@ -646,10 +646,10 @@ function GUI:CreateQueueFrame(parent)
 					else
 						GameTooltip:AddLine("Total Loss: " .. (TSMAPI:FormatTextMoney(totalProfit, color) or "---") .. " (" .. (profitPercTextM or "---") .. ")")
 					end
-				end			
-			end	
+				end
+			end
 		end
-		
+
 		GameTooltip:AddLine(" ")
 		if moneyCoinsTooltip then
 			GameTooltip:AddLine("Crafting Cost: " .. (TSMAPI:FormatTextMoneyIcon(cost, "|cffffff00")))
@@ -664,33 +664,33 @@ function GUI:CreateQueueFrame(parent)
 				GameTooltip:AddLine("Total Cost: " .. (TSMAPI:FormatTextMoney(totalcost, "|cffffff00")))
 			end
 		end
-		
+
 		for itemID, matQuantity in pairs(TSM.db.factionrealm.crafts[data.spellID].mats) do
 			local name = TSMAPI:GetSafeItemInfo(itemID) or (TSM.db.factionrealm.mats[itemID] and TSM.db.factionrealm.mats[itemID].name) or "?"
-			
+
 			local itemIDx = itemID
-			
+
 			-- Get Cheapest vellum, lower vellum types can be replaced by III
 			local velName
 			if strfind(name, "Vellum") then
 				velName = name
 			end
-			if (velName ~= nil) and (not strfind(velName, "III")) then					
+			if (velName ~= nil) and (not strfind(velName, "III")) then
 				local VellumReplacePrice = TSM.Cost:GetMatCost(itemIDx)
 
-				if strfind(velName, "Weapon Vellum") then						
-					if VellumReplacePrice > TSM.Cost:GetMatCost("item:43146:0:0:0:0:0:0") then 
+				if strfind(velName, "Weapon Vellum") then
+					if VellumReplacePrice > TSM.Cost:GetMatCost("item:43146:0:0:0:0:0:0") then
 						itemIDx = "item:43146:0:0:0:0:0:0"
 						name = TSMAPI:GetSafeItemInfo(itemIDx)
 					end
 				else
-					if VellumReplacePrice > TSM.Cost:GetMatCost("item:43145:0:0:0:0:0:0") then 
+					if VellumReplacePrice > TSM.Cost:GetMatCost("item:43145:0:0:0:0:0:0") then
 						itemIDx = "item:43145:0:0:0:0:0:0"
-						name = TSMAPI:GetSafeItemInfo(itemIDx)						
+						name = TSMAPI:GetSafeItemInfo(itemIDx)
 					end
 				end
 			end
-				
+
 			local inventory = TSM.Inventory:GetPlayerBagNum(itemIDx)
 			local need = matQuantity * data.numQueued
 			local color
@@ -766,7 +766,7 @@ function GUI:CreateQueueFrame(parent)
 	local function MatOnLeave(_, data)
 		GameTooltip:Hide()
 	end
-	
+
 	local function MatOnClick(_, data)
 		if IsModifiedClick() then
 			local link = select(2, TSMAPI:GetSafeItemInfo(data.itemString))
@@ -1019,7 +1019,7 @@ function GUI:CreateProfessionsTab(parent)
 	frame.HaveMatsCheckBox = HaveMatsCheckBox
 	HaveMatsCheckBox:SetCallback("OnValueChanged", function(_, _, value)
 			TradeSkillFrameAvailableFilterCheckButton:SetChecked(value)
-			TradeSkillOnlyShowMakeable(value)	
+			TradeSkillOnlyShowMakeable(value)
 		end)
 
 	local RestockBtn = TSMAPI.GUI:CreateButton(frame, 14)
@@ -1110,7 +1110,7 @@ function GUI:CreateProfessionsTab(parent)
 	-- btn:SetText(L["Filters >>"])
 	-- btn:SetScript("OnClick", function(self) ToggleDropDownMenu(1, nil, TradeSkillFilterDropDown, "TSMCraftingFilterButton", btn:GetWidth(), 0) end)
 	-- frame.filterBtn = btn
-	
+
 	local btn = TSMAPI.GUI:CreateButton(frame, 14, "TSMCraftingFilterButton")
 	btn:SetPoint("TOPLEFT", frame.clearFilterBtn, "TOPRIGHT", 5, 0)
 	btn:SetWidth(80)
@@ -1500,7 +1500,7 @@ function GUI:CreateCraftInfoFrame(parent)
 			else
 				createAllBtn.vellum = TSMAPI:GetSafeItemInfo("item:43145:0:0:0:0:0:0") -- Armor Vellum III
 			end
-			
+
 		else
 			createAllBtn:SetText(CREATE_ALL)
 			createAllBtn.vellum = nil
@@ -1533,7 +1533,7 @@ function GUI:CreateGroupsTab(parent)
 	TSMAPI.Design:SetFrameColor(stContainer)
 	local groupTree = TSMAPI:CreateGroupTree(stContainer, "Crafting", "Crafting_Profession")
 	RestockGroups = groupTree
-	
+
 	local function OnCreateBtnClick()
 		if TSM.db.factionrealm.tradeSkills[UnitName("player")][GetTradeSkillLine()] then
 			TSM.db.factionrealm.tradeSkills[UnitName("player")][GetTradeSkillLine()].prompted = nil
@@ -1568,7 +1568,7 @@ end
 
 function GUI:UpdateProfessionsTabST()
 	if not GUI.frame or not GUI.frame:IsVisible() then return end
-	
+
 	local stData = {}
 	TSM:UpdateCraftReverseLookup()
 
@@ -1649,10 +1649,10 @@ function GUI:UpdateProfessionsTabST()
 			end
 
 			local priceText = priceTextCache[spellID]
-			local cost, buyout, profit = TSM.Cost:GetCraftPrices(spellID)		
+			local cost, buyout, profit = TSM.Cost:GetCraftPrices(spellID)
 			if spellID and not priceText then
 				--local cost, buyout, profit = TSM.Cost:GetCraftPrices(spellID)
-						
+
 				if TSM.db.global.priceColumn == 1 then -- Crafting Cost
 					if cost and cost > 0 then
 						priceText = TSMAPI:FormatTextMoney(cost, TSMAPI.Design:GetInlineColor("link"))
@@ -1662,7 +1662,7 @@ function GUI:UpdateProfessionsTabST()
 						priceText = TSMAPI:FormatTextMoney(buyout, TSMAPI.Design:GetInlineColor("link"))
 					end
 				elseif TSM.db.global.priceColumn == 3 then -- Profit
-					if profit then				
+					if profit then
 						-- if profit < 0 then
 							-- priceText = "|cffff0000-|r" .. TSMAPI:FormatTextMoney(-profit, "|cffff0000") .. format(" (%s%.0f%%|r)", "|cffff0000", profitPercent)
 						-- else
@@ -1674,25 +1674,25 @@ function GUI:UpdateProfessionsTabST()
 							priceText = TSMAPI:FormatTextMoney(profit, "|cff00ff00")
 						end
 					end
-				end	
-					
+				end
+
 				if priceText then
 					priceTextCache[spellID] = priceText
 				else
 					priceText = "---"
 				end
 			end
-			
-			local profitPercent = "---"		
+
+			local profitPercent = "---"
 			if profit then
-				profitPercent = profit / cost * 100	
+				profitPercent = profit / cost * 100
 				if profit < 0 then
 					profitPercent = format("%s%.0f%%|r", "|cffff0000", profitPercent)
 				else
 					profitPercent = format("%s%.0f%%|r", "|cff00ff00", profitPercent)
-				end		
+				end
 			end
-			
+
 			local row = {
 				cols = {
 					{
@@ -1723,7 +1723,7 @@ end
 
 function GUI:UpdateSelectedTradeSkill(forceUpdate)
 	if not GUI.frame or not GUI.frame.content or not GUI.frame.content.professionsTab:IsVisible() then return end
-	
+
 	local frame = GUI.frame.content.professionsTab
 	TradeSkillFrame.selectedSkill = TradeSkillFrame.selectedSkill or 1
 	if forceUpdate or frame.st:GetSelection() - 1 ~= TradeSkillFrame.selectedSkill then
@@ -1751,7 +1751,7 @@ function GUI:UpdateQueue()
 	local currentProfession = GetTradeSkillLine()
 	local stData = {}
 	local bagTotals = TSM.Inventory:GetTotals(itemID)
-	
+
 	for profession, crafts in pairs(queuedCrafts) do
 		local professionColor, playerColor
 		local players = {}
@@ -1808,9 +1808,9 @@ function GUI:UpdateQueue()
 						if TSM.VellumInfo[spellID] then
 							velName = GetItemInfo(TSM.VellumInfo[spellID])
 						end
-						
+
 						for itemID, quantity in pairs(TSM.db.factionrealm.crafts[spellID].mats) do
-						
+
 							local MatName = GetItemInfo(itemID)
 							if MatName ~= nil and velName ~= nil and strfind(MatName, "Vellum") then
 								local NewItemString = CheapestVellum(itemID)
@@ -1819,7 +1819,7 @@ function GUI:UpdateQueue()
 									velName = GetItemInfo(itemID)
 								end
 							end
-						
+
 							local numHave = bagTotals[itemID] or 0
 							canCraft = min(canCraft, floor(numHave / quantity))
 						end
@@ -1829,7 +1829,7 @@ function GUI:UpdateQueue()
 						-- if TSM.db.factionrealm.crafts[spellID].mats[VELLUM_ID] then
 							-- velName = GetItemInfo(VELLUM_ID) or TSM.db.factionrealm.mats[VELLUM_ID].name
 						-- end
-						
+
 						local color
 						local craftIndex = skillIndexLookup[spellID]
 						if canCraft >= numQueued then
@@ -1912,16 +1912,16 @@ function GUI:UpdateQueue()
 	local totalMats = {}
 	for _, data in pairs(queuedMats) do
 		for itemString, quantity in pairs(data) do
-		
+
 			local MatName = GetItemInfo(itemString)
-			if MatName ~= nil and strfind(MatName, "Vellum") then		
+			if MatName ~= nil and strfind(MatName, "Vellum") then
 				local NewItemString = CheapestVellum(itemString)
 				if itemString ~= NewItemString then
 					itemString = NewItemString
 				end
 			end
 			totalMats[itemString] = (totalMats[itemString] or 0) + quantity
-			
+
 		end
 	end
 	for itemString, quantity in pairs(totalMats) do
@@ -1971,8 +1971,8 @@ function GUI:UpdateQueue()
 	sort(stData, function(a, b) return a.order < b.order end)
 
 	GUI.frame.queue.matST:SetData(stData)
-	-- TSMAPI:CreateTimeDelay("gatheringUpdateThrottle", 0.3, GUI.UpdateGathering)	
-	
+	-- TSMAPI:CreateTimeDelay("gatheringUpdateThrottle", 0.3, GUI.UpdateGathering)
+
 	TSMAPI:CreateTimeDelay("UpdateCraftButtonThrottle", 0.2, GUI.UpdateCraftButton)
 end
 
@@ -2001,7 +2001,7 @@ function GUI:ShowGroupsTab()
 	GUI.frame.navFrame.groupsBtn:LockHighlight()
 	GUI.frame.content.professionsTab:Hide()
 	GUI.frame.content.groupsTab:Show()
-	
+
 	if QuickRestock then
 		QuickRestock = false
 		TSM.Queue:CreateRestockQueue(RestockGroups:GetSelectedGroupInfo())
@@ -2296,7 +2296,7 @@ function GUI:CreateGatheringFrame()
 			GUI:UpdateGathering()
 		end
 	end
-	
+
 	local function AvilableOnEnter(_, data, col)
 		if not data.isTitle then
 			local link = select(2, TSMAPI:GetSafeItemInfo(data.cols[1].itemString))
@@ -2340,7 +2340,7 @@ function GUI:CreateGatheringFrame()
 			end
 		end
 	end
-	
+
 
 	frame.availableST = TSMAPI:CreateScrollingTable(stContainer3, stCols3, { OnEnter = MatOnEnter, OnLeave = MatOnLeave, OnClick = OnAvailRowClicked }, 12)
 	frame.availableST:SetData({})
@@ -2756,19 +2756,19 @@ function CheapestVellum(itemPassed)
 		-- Get Cheapest vellum, lower vellum types can be replaced by III
 		local MatName = GetItemInfo(itemPassed)
 		-- MatName is sometimes nil ???
-		if MatName ~= nil then			
+		if MatName ~= nil then
 			local velName
 			if strfind(MatName, "Vellum") then
 				velName = MatName
 			end
-			if (velName ~= nil) and (not strfind(velName, "III")) then						
+			if (velName ~= nil) and (not strfind(velName, "III")) then
 				local VellumReplacePrice = TSM.Cost:GetMatCost(itemPassed) or 0
-				if strfind(velName, "Weapon Vellum") then						
+				if strfind(velName, "Weapon Vellum") then
 					if VellumReplacePrice > (TSM.Cost:GetMatCost("item:43146:0:0:0:0:0:0") or 0) then itemPassed = "item:43146:0:0:0:0:0:0" end
 				else
 					if VellumReplacePrice > (TSM.Cost:GetMatCost("item:43145:0:0:0:0:0:0") or 0) then itemPassed = "item:43145:0:0:0:0:0:0" end
 				end
 			end
 		end
-		return itemPassed	
+		return itemPassed
 end

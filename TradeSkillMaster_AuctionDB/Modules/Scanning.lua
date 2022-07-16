@@ -189,6 +189,7 @@ function Scan:ProcessScanData(scanData)
 			local quantity, minBuyout = 0, 0
 			local records = {}
 			for _, record in ipairs(obj.records) do
+				if #records >= 5000 then break end
 				local itemBuyout = record:GetItemBuyout()
 				if itemBuyout and (itemBuyout < minBuyout or minBuyout == 0) then
 					minBuyout = itemBuyout
@@ -213,6 +214,7 @@ function Scan:ProcessImportedData(auctionData)
 	for itemID, auctions in pairs(auctionData) do
 		local quantity, minBuyout, records = 0, 0, {}
 		for _, auction in ipairs(auctions) do
+			if #records >= 5000 then break end
 			local itemBuyout, count = unpack(auction)
 			if itemBuyout and (itemBuyout < minBuyout or minBuyout == 0) then
 				minBuyout = itemBuyout

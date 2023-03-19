@@ -56,7 +56,7 @@ function private:CreateStartScanContent(parent)
 			frame:Disable()
 		elseif not select(2, CanSendAuctionQuery()) then
 			local previous = TSM.db.profile.lastGetAll or time()
-			if previous > (time() - 15*60) then
+			if previous > (time() - 15*60) then  -- 15 minute enforced cooldown between GetAll scans...
 				local diff = previous + 15*60 - time()
 				local diffMin = math.floor(diff/60)
 				local diffSec = diff - diffMin*60

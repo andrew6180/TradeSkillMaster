@@ -115,6 +115,7 @@ L["Reset Filters"] = true
 L["Right-Click to favorite this recent search."] = true
 L["Right-Click to remove from favorite searches."] = true
 L["Saved Searches"] = true
+L["Scanning %d / %d (Page 1 / ?)"] = true
 L["Scanning %d / %d (Page %d / %d)"] = true
 L["Search Filter:"] = true
 L["Select the groups which you would like to include in the search."] = true

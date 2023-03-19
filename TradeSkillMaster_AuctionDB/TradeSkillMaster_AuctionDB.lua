@@ -22,6 +22,7 @@ local savedDBDefaults = {
 		scanData = "",
 		time = 0,
 		lastCompleteScan = 0,
+		lastScanSecondsPerPage = -1,
 		appDataUpdate = 0,
 	},
 	profile = {
@@ -372,9 +373,10 @@ local function encodeScans(scans)
 	local tbl, tbl2 = {}, {}
 	for day, data in pairs(scans) do
 		if type(data) == "table" and data.count and data.avg then
+			-- New method of encoding scans.
 			data = encode(data.avg).."@"..encode(data.count)
 		elseif type(data) == "table" then
-			-- Old method of encoding scans
+			-- Old method of encoding scans.
 			for i = 1, #data do
 				tbl2[i] = encode(data[i])
 			end
@@ -394,37 +396,48 @@ local function decodeScans(rope)
 	local currentDay = TSM.Data:GetDay()
 	for _, data in ipairs(days) do
 		local day, marketValueData = (":"):split(data)
-		day = decode(day)
-		scans[day] = {}
-		
-		--bug fix? ...SkillMaster_AuctionDB\TradeSkillMaster_AuctionDB.lua:398: bad argument #1 to 'strfind' (string expected, got nil)
-		if marketValueData ~= nil then
-		
-			if strfind(marketValueData, "@") then
-				local avg, count = ("@"):split(marketValueData)
-				avg = decode(avg)
-				count = decode(count)
-				if avg ~= "~" and count ~= "~" then
-					if abs(currentDay - day) <= TSM.MAX_AVG_DAY then
-						scans[day].avg = avg
-						scans[day].count = count
-					else
-						scans[day] = avg
+		-- BUG FIXED: Guard against incorrectly encoded "day" or "marketValueData",
+		-- which can happen extremely rarely due to some very rare, random bug
+		-- somewhere else in TSM (or perhaps due to mixing different versions
+		-- of TSM data). The cause of the rare corruption hasn't been found.
+		-- NOTE: We simply skip any "days/market values" that cannot be decoded,
+		-- which thereby ensures that we get a cleaned-up "decode" of the data,
+		-- so that TSM will then write the fixed data when it next "re-encodes"
+		-- the "decoded in-memory representation" of this item's data!
+		if day ~= nil and day ~= "" and marketValueData ~= nil and marketValueData ~= "" then
+			day = decode(day)
+			-- BUG FIXED: Verify yet again that the day itself was properly decoded,
+			-- but this time only check for "nil" which indicates "decode()" failure.
+			if day ~= nil then
+				-- Create a "scans" table entry for the decoded day.
+				scans[day] = {}
+
+				if strfind(marketValueData, "@") then
+					-- New method of decoding scans.
+					local avg, count = ("@"):split(marketValueData)
+					avg = decode(avg)
+					count = decode(count)
+					if avg ~= "~" and count ~= "~" then
+						if abs(currentDay - day) <= TSM.MAX_AVG_DAY then
+							scans[day].avg = avg
+							scans[day].count = count
+						else
+							scans[day] = avg
+						end
 					end
-				end
-			else
-				-- Old method of decoding scans
-				for _, value in ipairs({(";"):split(marketValueData)}) do
-					local decodedValue = decode(value)
-					if decodedValue ~= "~" then
-						tinsert(scans[day], tonumber(decodedValue))
+				else
+					-- Old method of decoding scans.
+					for _, value in ipairs({(";"):split(marketValueData)}) do
+						local decodedValue = decode(value)
+						if decodedValue ~= "~" then
+							tinsert(scans[day], tonumber(decodedValue))
+						end
 					end
-				end
-				if day ~= currentDay then
-					scans[day] = TSM.Data:GetAverage(scans[day])
+					if day ~= currentDay then
+						scans[day] = TSM.Data:GetAverage(scans[day])
+					end
 				end
 			end
-			
 		end
 	end
 

@@ -210,6 +210,7 @@ L["Running Scan..."] = "검색 진행 중..." -- Needs review
 L["Save New Price"] = "새 가격 저장" -- Needs review
 L["Scan Complete!"] = "검색 완료!" -- Needs review
 L["Scanning %d / %d"] = "검색 중 %d / %d" -- Needs review
+L["Scanning %d / %d (Page 1 / ?)"] = "검색 중 %d / %d (페이지 1 / ?)" -- Needs review
 L["Scanning %d / %d (Page %d / %d)"] = "검색 중 %d / %d (페이지 %d / %d)" -- Needs review
 L["ScrollWheel Direction (both recommended):"] = "스크롤휠 방향 (둘다 체크 추천)"
 L["Select a duration in this dropdown and click on the button below to cancel all auctions at or below this duration."] = "이 드롭다운에서 기간을 선택하고 아래의 버튼을 클릭하면 지정한 기간 또는 그 이하의 모든 경매는 취소됩니다." -- Needs review

@@ -85,6 +85,9 @@ end
 
 function Manage:ScanComplete(interrupted)
 	if interrupted then
+		-- If our scan has been interrupted by the Auction House closing,
+		-- simply act as if the user clicked "Stop", but with an extra flag
+		-- to also clarify that this was interrupted.
 		Util:Stop(true)
 	else
 		local numToManage = Util:DoneScanning()
@@ -106,24 +109,40 @@ local function IsStepDone(step)
 end
 -- update the statusbar
 function Manage:UpdateStatus(statusType, current, total)
+	-- The ScanUtil.lua events trigger us with the "statusType" and the arguments
+	-- such as what page we're on. We then update our current scan status based on that.
 	scanStatus[statusType] = {current, total}
+
+	-- Ignore the empty "reset page count" events that happen before every new
+	-- scan. We've reset the page counts, which is the only thing that matters.
+	if statusType == "page" and current == nil and total == nil then
+		return
+	end
+
+	-- Handle the progress event by updating our status bar.
 	if statusType == "query" then
 		if total >= 0 then
 			GUI.statusBar:SetStatusText(format(L["Preparing Filter %d / %d"], current, total))
 		else
 			GUI.statusBar:SetStatusText(format(L["Preparing Filters..."], current, total))
 		end
-	elseif IsStepDone("scan") and IsStepDone("manage") and IsStepDone("confirm") then -- scan complete
+	elseif IsStepDone("scan") and IsStepDone("manage") and IsStepDone("confirm") then
+		-- The entire scan of all items is complete.
 		GUI.statusBar:SetStatusText(L["Scan Complete!"])
 	else
 		local parts = {}
 		if IsStepDone("scan") then
 			tinsert(parts, L["Done Scanning"])
 		elseif IsStepStarted("scan") then
+			-- NOTE: In the label, we count the items starting at 1, to say
+			-- "Scanning 1 / 2" (instead of "Scanning 0 / 2").
 			if IsStepStarted("page") then
-				tinsert(parts, format(L["Scanning %d / %d (Page %d / %d)"], scanStatus.scan[1], scanStatus.scan[2], scanStatus.page[1], scanStatus.page[2]))
+				-- We have received the page counter ("current page / total pages") for the current item.
+				-- NOTE: We add "+1" to the page counter, to indicate that we've received that page and are working on the next page.
+				tinsert(parts, format(L["Scanning %d / %d (Page %d / %d)"], scanStatus.scan[1] + 1, scanStatus.scan[2], min(scanStatus.page[1] + 1, scanStatus.page[2]), scanStatus.page[2]))
 			else
-				tinsert(parts, format(L["Scanning %d / %d"], scanStatus.scan[1], scanStatus.scan[2]))
+				-- We have started a new item scan but haven't received the page count yet.
+				tinsert(parts, format(L["Scanning %d / %d (Page 1 / ?)"], scanStatus.scan[1] + 1, scanStatus.scan[2]))
 			end
 		end
 		if IsStepDone("manage") then
@@ -133,25 +152,25 @@ function Manage:UpdateStatus(statusType, current, total)
 				tinsert(parts, L["Done Canceling"])
 			end
 			if IsStepStarted("confirm") then
-				tinsert(parts, format(L["Confirming %d / %d"], scanStatus.confirm[1]+1, scanStatus.confirm[2]))
+				tinsert(parts, format(L["Confirming %d / %d"], scanStatus.confirm[1] + 1, scanStatus.confirm[2]))
 			else
 				tinsert(parts, format(L["Confirming %d / %d"], 1, scanStatus.manage[2]))
 			end
 		elseif IsStepDone("scan") and IsStepStarted("manage") then
 			if mode == "Post" then
-				tinsert(parts, format(L["Posting %d / %d"], scanStatus.manage[1]+1, scanStatus.manage[2]))
+				tinsert(parts, format(L["Posting %d / %d"], scanStatus.manage[1] + 1, scanStatus.manage[2]))
 			elseif mode == "Cancel" then
-				tinsert(parts, format(L["Canceling %d / %d"], scanStatus.manage[1]+1, scanStatus.manage[2]))
+				tinsert(parts, format(L["Canceling %d / %d"], scanStatus.manage[1] + 1, scanStatus.manage[2]))
 			end
 			if IsStepStarted("confirm") then
-				tinsert(parts, format(L["Confirming %d / %d"], scanStatus.confirm[1]+1, scanStatus.confirm[2]))
+				tinsert(parts, format(L["Confirming %d / %d"], scanStatus.confirm[1] + 1, scanStatus.confirm[2]))
 			else
 				tinsert(parts, format(L["Confirming %d / %d"], 1, scanStatus.manage[2]))
 			end
 		end
 		GUI.statusBar:SetStatusText(table.concat(parts, "  -  "))
 	end
-	
+
 	if IsStepDone("query") then
 		local scanCurrent = scanStatus.scan and scanStatus.scan[1] or 0
 		local scanTotal = scanStatus.scan and scanStatus.scan[2] or 1

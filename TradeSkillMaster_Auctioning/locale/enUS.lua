@@ -222,6 +222,7 @@ L["Round Normal Price"] = true
 L["Running Scan..."] = true
 L["Save New Price"] = true
 L["Scan Complete!"] = true
+L["Scanning %d / %d (Page 1 / ?)"] = true
 L["Scanning %d / %d (Page %d / %d)"] = true
 L["Scanning %d / %d"] = true
 L["ScrollWheel Direction (both recommended):"] = true

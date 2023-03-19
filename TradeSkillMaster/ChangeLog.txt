@@ -1,3 +1,167 @@
+# v2.8.3.666
+
+TradeSkillMaster: Revived
+
+- Release Date: March 19th, 2023
+- Author: Gnomezilla on Warmane-Icecrown [https://github.com/Bananaman].
+
+
+## The Market Value Algorithm Actually Works Now
+
+The new market value algorithm now actually calculates the market value.
+
+Yes, seriously. For some reason, the previous algorithm author didn't think about sorting the auction scan data by "buyout price" before parsing it, which meant that all previous TSM calculations were completely incorrect. All previous versions of TSM generate absolutely batshit insane market prices, such as "1 Wool = 500 Gold", simply because the old algorithm was completely broken.
+
+Therefore, TSM's core feature, the "dbmarket" value which is used in its automatic pricing algorithms, was completely broken and useless.
+
+It has now been fixed. All market value calculations are now correct.
+
+In fact, all of your old AuctionDB databases should be wiped and restarted from zero data with this new patch, so that you get rid of all old, corrupt market price data.
+
+
+## Completely Rewritten Auction Scanning Algorithm
+
+Rewritten, cleaned up and much faster auction scanning algorithm, which uses almost zero memory and NEVER causes any memory overflow crashes, unlike the old algorithm.
+
+This new algorithm is 1.3x-27.3x faster depending on input data size, and on average 5x faster for most data. It uses less than 5% of the memory of the old algorithm. :)
+
+If you want to see for yourself that the new algorithm is working correctly, you simply have to set `verifyNewAlgorithm = true` at the top of `TradeSkillMaster_AuctionDB/Modules/Scanning.lua`, and then run a "GetAll" scan to quickly fetch a huge amount of auctions. It will then process all of the data via both the old and new algorithms, and will display the speed improvements of the new algorithm. If there are any differences at all between the calculations of the two algorithms, it would tell you about that via an "error" message. But the algorithms behave completely identically, so you don't have to worry about that and won't see any errors. This verification feature was simply added because the algorithm rewrite is a massive change, and I am sure that some people will want to verify the complex new algorithm with their own eyes.
+
+
+## Fixed Database Decoding Crash
+
+Fixed a database decoding bug which caused TSM to crash anytime you attempted to decode data for a "corrupted" item in the database.
+
+This bug usually manifested itself as people failing to perform auction house scans, since every "Full Scan" and "GetAll Scan" (but not "Group Scan") ends by decoding EVERY existing item in your current database (to reset their last-seen, cheapest "minBuyout" value to nil before processing the new data). This meant that the decode failures were usually triggered when people reached the end of their auction scans (but would also happen any other time when something attempts to decode data for that item, such as attempting to view the price-info tooltip of an item that has corrupt data in your database).
+
+The cause of the random database corruption is pretty much impossible to find, but it's extremely rare (and it might even have been caused by people re-using databases from older versions of TSM). The fix simply ignores the corrupt "market day / scan" data for items that cannot be correctly decoded, thus purging those corrupt "days / scans" from the database automatically, while still rescuing their remaining non-corrupt data.
+
+
+## Added Support for SharedMedia and Custom GUI Fonts
+
+For some insane reason, TradeSkillMaster uses "Arial" as its default font, which is one of the ugliest fonts in the Universe.
+
+Therefore, I've implemented LibSharedMedia support in TSM, which means that you now have access to a huge variety of fonts. By default, TSM will only list the game's own fonts, but you can install the [SharedMedia](https://github.com/bkader/SharedMedia#install) addon for WOTLK to add over 100 extra fonts that are now usable in TSM! Other addons you've installed may also be adding extra fonts to the LibSharedMedia collection!
+
+To change TSM's font, simply type "/tsm", then go into the main tab, and then "Options". Scroll down to the bottom, until you see the new "Normal Font" and "Header Font" options. Have fun!
+
+Note: TSM is unable to use SharedMedia fonts that are registered by addons that load AFTER TSM, since TSM accesses the fonts and creates its own GUI immediately when it loads, even before the user opens TSM's GUI. To use fonts from such an addon, you have to add that addon to "OptionalDeps" in "TradeSkillMaster.toc", which tells the game that you want TSM to load AFTER the addon that provides your extra fonts. This step isn't necessary for SharedMedia fonts, since they're already marked as an optional TSM dependency now.
+
+
+## Made the "Group Scan" (AuctionDB) Progress Bar More Logical
+
+The old progress bar for "Group Scans" used absolutely insane numbering and progress messages. It previously went: "Preparing Filter 1 / 2", "Preparing Filter 2 / 2", "Scanning 0 / 2 (Page 1 / 1)", "Scanning 0 / 2 (Page 2 / 16)", ... "Scanning 0 / 2 (Page 16 / 16)", "Scanning 1 / 2 (Page 1 / 1)", "Scanning 1 / 2 (Page 2 / 6)", ... "Scanning 1 / 2 (Page 6 / 6)", "Done Scanning".
+
+It made absolutely zero sense, and was inconsistent with the behavior of other "counting" progress labels in TSM. There were two issues with it: The item scanner counted from 0, so item 0 was actually item 1, and item 1 was actually item 2, etc. The other issue is that it always said "Page 1 / 1" while requesting the first page, which was a very confusing and misleading display.
+
+Both issues have now been fixed, and the exact same scan would now look as follows: "Preparing Filter 1 / 2", "Preparing Filter 2 / 2", "Scanning 1 / 2 (Page 1 / ?)", "Scanning 1 / 2 (Page 2 / 16)", ... "Scanning 1 / 2 (Page 16 / 16)", "Scanning 2 / 2 (Page 1 / ?)", "Scanning 2 / 2 (Page 2 / 6)", ... "Scanning 2 / 2 (Page 6 / 6)", "Done Scanning".
+
+In other words, we now properly count the items we're processing, and we display a temporary question mark while we're fetching page 1 (while we don't know how many other pages exist), which then changes into the actual page count as the scan proceeds.
+
+
+## Made the "Auctioning" Module's Progress Bar More Logical
+
+This is similar to the "Group Scan" issues described above.
+
+The "Auctioning" module's features (Post Scan / Cancel Scan / Reset Scan) had several issues.
+
+They were counting items from 0, so the progres bar said "Scanning 0 / 2" for the first item, and "Scanning 1 / 2" for the final item. That has now been fixed and now counts properly (as "1/2" and "2/2").
+
+They also had a completely broken page counter, which didn't properly reset between items, which meant that you'd see complete nonsense while scanning, such as "Scanning 3 / 5 (Page 5 / 5)" followed by "Scanning 4 / 5 (Page 5 / 5)" (keeping the previous page counter), and then the proper counter would finally show up as "Scanning 4 / 5 (Page 1 / 12)" after a few seconds (whenever the server finally replied to the query). It was broken and confusing as hell. That's now been fixed too, so that it properly resets the page counter before every new item it's scanning.
+
+Furthermore, the confusing "Page 1 / 1 ... Page 2 / 18" issue has been fixed here too, and now says "Page 1 / ?" while fetching the first page of each item.
+
+Lastly, their page counter was inconsistent with the behavior of regular "AuctionDB: Group Scan" and the "Shopping" progress bars. The page counter in "Auctioning" was zero-indexed, meaning that "Scanning Page 1/8" meant that you were actually scanning page 2/8. That math has now been fixed here, for consistency with the AuctionDB and Shopping scanner's math, because that's a much more logical way to display the pages.
+
+
+## Made the "Shopping" Module's Progress Bar More Logical
+
+The "Shopping" module's scanner had multiple issues.
+
+The bar background was supposed to gradually "fill in" to indicate progress for both the "current/total item progress" and the "page progress of the current item". But the math was completely broken. It rendered the progress bar incorrectly, since it ended up counting the progress as "2 items below the item it's currently working on" (due to a mistaken "-1" in the old math). As a result, if you were currently scanning item 3 of 3, you SHOULD have seen a 66% full bar (since 2 of 3 items are done, and the 3rd is being worked on). But you instead only saw a 33% full bar, which was completely wrong. This was especially noticeable if you performed a multi-item search, such as "copper ore; copper bar; gold ore; gold bar".
+
+They were also counting items from 0, so the progress bar said "Scanning 0 / 2" for the first item, and "Scanning 1 / 2" for the final item. That has now been fixed and now counts properly (as "1/2" and "2/2"), just like with the other modules above.
+
+Lastly, the confusing "Page 1 / 1 ... Page 2 / 18" issue has been fixed here too, and now says "Page 1 / ?" while fetching the first page of each item.
+
+
+## Accurate Time Estimate for the "Full Scan" Progress Bar
+
+Implemented an accurate "time remaining" estimate for the "Full Scan" algorithm. The progress bar now shows how much time remains until the scan is complete, such as `Scanning page 293/2399 (~1:04:34)`, meaning that roughly one hour remains. This is very useful for people who want to use the comprehensive "Full Scan" scanning method, but who hate the feeling of blindly scanning without being able to see the remaining time.
+
+The first time you run a scan on a server, you'll have a very unpredictable estimate, since we use a learning algorithm. The estimate is based on how fast the server is feeding us the "auction pages" on average, which is impossible to know on the first run. Most servers will gradually throttle the player's requests and use random load throttling, so you'll see a growing estimate until it finally settles on an accurate estimate after around 80% of the pages have been received. The slowdown curve depends on the server's throttling implementation, and cannot be predicted ahead of time.
+
+Think of the first run as the "learning run". After you've completed a "Full Scan", our algorithm learns from it and will produce excellent estimates for all future scans, using a blending algorithm which takes into account both the active run's speed and previous speeds, to predict the server's behavior. The statistics are stored per-server and per-faction, so if you're playing both Alliance and Horde, you'll have to do one full scan per faction to teach it about both factions.
+
+Note regarding the other scan types: The "GetAll Scan" algorithm only takes a few seconds, so it doesn't need any time estimate. And the "Group Scan" algorithm can't implement any estimate, since there's no way to know how many "auction pages" the remaining items in the group will have.
+
+
+## Improved "GetAll" Algorithm Reliability
+
+Most private servers don't implement WoW's "can we perform a GetAll Query?" API, and incorrectly answer that the user is allowed to run a query, even though you may still be throttled after a recent "GetAll" scan. Therefore, TSM's own "don't start a GetAll if we're on cooldown" check doesn't work on private servers. The user may therefore click on "Run GetAll Scan" and will then just blindly sit there like an idiot while the request has actually been secretly ignored by the server.
+
+This situation has now been fixed, so that the "GetAll" scan UI tells the user when the server has silently throttled / ignored their "GetAll" request, so they don't sit there and wait for hours without any progress. Basically, if it's taken longer than 30 seconds, we're assuming that the request has been silently ignored by the server, and will now tell the user via the TSM GUI's progress bar message. It first says `Running query...` as usual, which then changes to `Running query... Server not responding due to throttling? Try again later...` if there hasn't been a server response in more than 30 seconds.
+
+The "GetAll" algorithm has also been improved to automatically detect when your server is only sending limited / truncated data. Extremely large private servers such as Warmane simply have too many auctions, and their "GetAll" scan won't retrieve all of them. We now warn the user via a chat-message whenever we detect truncated auction data, and we then tell them to use "Full Scan" instead.
+
+It's unfortunately impossible to calculate accurate market values if your server is sending truncated "GetAll" responses, but people may still prefer the speed of the "GetAll" scans, so we're therefore still allowing their "truncated" auction data to be processed. The users will have to read the warning message and decide for themselves which scans they want to use.
+
+The inaccuracy of an incomplete "GetAll" scan completely depends on how the server implements "GetAll". If the server sorts the cheapest auctions first, then it's somewhat acceptable for popular items which have many stacks (and are therefore likely to contain enough data points in the "GetAll" result), and those items will "just" tend to be undervalued by 2-10% less than their real market value (since their percentile-based scans will look at less auctions than the real amount). But for very rare or unpopular items, the partial "GetAll" scan is very dangerous, since you might only receive the massively overpriced auctions of a certain item, and thereby calculate an insanely high market value for it. These dangers are increased if the server sends the auctions in a totally random order, which means an even greater risk of market price pollution by only seeing overpriced auctions for many of the items.
+
+Furthermore, receiving incomplete "GetAll" results means that TSM will wipe all of its "cheapest, current buyout price" data for all items, and then fills them with incorrect data (or nothing at all if an item wasn't seen in the latest fetch), thus hindering your ability to look up the correct "best current buyout prices" too.
+
+In summary, you'll have to use partial "GetAll" results at your own risk! A "Full Scan" is ALWAYS much better when your server's "GetAll" doesn't provide all auction data!
+
+
+## Improved All Auction Data and Market Value Processing
+
+There were several bugs everywhere in the old code. For example, only the "GetAll" scan had correctly implemented filtering of non-buyout items (auctions that ONLY have a bid price, without any buyout price), which meant that TSM's other scan methods ("Full Scan", "Group Scan", etc) were injecting invalid data into the player's database, such as items with empty "buyout prices". They were being treated as items with a buyout price of ZERO (as if they were totally free items, at no cost!). This serious bug happened every time when there were ANY bid-based auctions for an item in the latest scan.
+
+All of the auction scanning and processing algorithms have been rewritten for correctness, and will now filter out those useless "bid-only" data entries. We will only analyze auctions that have buyout prices.
+
+Several bugs have also been fixed related to items being incorrectly marked as "seen and scanned now" even when there was no new data for that item in the latest data batch (this was yet again related to the "incoming data only has bid-based auctions" bug). We now only update the scan-statistics for items when we encounter new data for them with valid buyout prices.
+
+There were also bugs in the market value calculation algorithm, which would crash with "division by zero" if given empty input data (yet again related to only having bid-based auctions in the input data, but this crash only happened if there were only bid-based auctions for an item, without any buyout-based auctions whatsoever for that item, so it was rare to encounter this crash). That issue has also been fixed now, by adding perfect protection against empty inputs in the market value calculation algorithm.
+
+We also no longer update the market value for an item if we were unable to calculate a new market value (the old code simply wrote invalid market values to the database without any sanity checks).
+
+All of these improvements mean that TSM's market price estimates are now infinitely more reliable than old TSM versions.
+
+
+## Fixed Missing "Interruption" Events in Auction Scanners
+
+This is a great example of what a total mess the TSM codebase is...
+
+All auction scanners (AuctionDB, Auctioning and Shopping) were missing their "scan interrupted" event, which is triggered when the Auction House frame closes while a scan is ongoing.
+
+The problem was caused by the fact that TSM previously used the "LibAuctionScan-1.0" library, which emits the "SCAN_INTERRUPTED" event. All TSM scanners were still written to react to that old event name. But TSM nowadays uses their own scanning library instead, which sends the "INTERRUPTED" event instead. They literally forgot to update the event handlers when they switched the library, and they didn't even bother deleting the old library either.
+
+All three scanning methods have now been fixed, to react to the proper "INTERRUPTED" event, to be able to detect when your scans are interrupted by the auction window being closed.
+
+Furthermore, the "Shopping" module hadn't implemented interruption handling whatsoever. There literally wasn't any event handler for it. It has now been properly implemented, so that the "Shopping" scanner works properly and correctly resets itself after interruptions.
+
+
+## IMPORTANT!
+
+When upgrading to this improved version, it's an extremely good idea to delete your old-school, CORRUPT auction database, since your old data has been generated by the extremely buggy algorithms of the old TSM. For example, some of those old "auction data corrupting" bugs include the fact that it was calculating completely incorrect market values when doing "GetAll" scans, since it was previously unable to handle per-item prices inside item stacks, and another bug is the fact that all other scan methods generated wrong market values too, thanks to TSM's previously completely broken market value algorithm (those problems are described in the other changelog entries above).
+
+There is NO GOOD REASON to keep your old auction database. It's all corrupt thanks to all the old TSM bugs, 100% guaranteed. You need to start fresh.
+
+If you're ready to start fresh, simply delete these files (where `YOUR_ACCOUNT_NAME` is your own account name):
+
+```
+./WoW/WTF/Account/YOUR_ACCOUNT_NAME/SavedVariables/TradeSkillMaster_AuctionDB.lua.bak
+./WoW/WTF/Account/YOUR_ACCOUNT_NAME/SavedVariables/TradeSkillMaster_AuctionDB.lua
+```
+
+Then do a "Full Scan" in the game, and you'll be sure that all data from now on is processed using more intelligent algorithms.
+
+All serious bugs are fixed now. You can finally relax and enjoy TSM.
+
+
+
+---
+
 v2.8.3
 *Made TSMAPI:IsSoulbound() MUCH more efficient which will GREATLY reduce the interface log of all modules..
 

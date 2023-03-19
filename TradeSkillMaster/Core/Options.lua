@@ -11,6 +11,7 @@
 local TSM = select(2, ...)
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster") -- loads the localization table
 local AceGUI = LibStub("AceGUI-3.0") -- load the AceGUI libraries
+local LSM = LibStub("LibSharedMedia-3.0")  -- load the SharedMedia library
 
 local lib = TSMAPI
 local private = {}
@@ -132,6 +133,11 @@ function private:LoadHelpPage(parent)
 							text = TSMAPI.Design:ColorText(L["Co-Founder:"], "link") .. " Cente [US-Illidan(H)]",
 							relativeWidth = 1,
 						},
+						{
+							type = "Label",
+							text = TSMAPI.Design:ColorText(L["Wrath of the Lich King Revival:"], "link") .. " Gnomezilla [Warmane-Icecrown(A)], BlueAo [Warmane], andrew6180, Yoshiyuka, DimaSheiko, and other contributors...",
+							relativeWidth = 1,
+						},
 					},
 				},
 			},
@@ -224,12 +230,21 @@ end
 
 local function DecodeAppearanceData(encodedData)
 	if not encodedData then return end
-	encodedData = gsub(encodedData, " ", "")
 
+	-- Decode the appearance-data string into a table.
+	encodedData = gsub(encodedData, " ", "")
 	local result = StringToTable(encodedData, 1)
 	if not result then return TSM:Print(L["Invalid appearance data."]) end
+
+	-- Preserve the user's current font choices and switch the theme.
+	local preservedFonts = TSM.db.profile.design.fonts
 	TSM.db.profile.design = result
+	TSM.db.profile.design.fonts = preservedFonts
+
+	-- Use default values for any missing fields.
 	TSM:SetDesignDefaults(TSM.designDefaults, TSM.db.profile.design)
+
+	-- Apply the new design.
 	TSMAPI:UpdateDesign()
 end
 
@@ -762,7 +777,59 @@ function private:LoadOptionsPage(parent)
 
 	tinsert(page[1].children[4].children, { type = "HeadingLine" })
 
+	-- Figure out which fonts to automatically select in the dropdown.
+	-- NOTE: We visually fall back to our defaults if the stored names are
+	-- invalid, to avoid confusion if user-fonts are temporarily unavailable.
+	local availableFontTitlesList = LSM:List("font")
+	local selectedContentFontIndex = -1
+	local selectedBoldFontIndex = -1
+	local arialNarrowFontIndex = 1
+	local tsmDroidBoldFontIndex = 1
+	for i,v in ipairs(availableFontTitlesList) do
+		if v == "Arial Narrow" then
+			arialNarrowFontIndex = i
+		elseif v == "TSM Droid Sans Bold" then
+			tsmDroidBoldFontIndex = i
+		end
+
+		if v == TSM.db.profile.design.fonts.content then
+			selectedContentFontIndex = i
+		elseif v == TSM.db.profile.design.fonts.bold then
+			selectedBoldFontIndex = i
+		end
+	end
+	if selectedContentFontIndex == -1 then
+		selectedContentFontIndex = arialNarrowFontIndex
+	end
+	if selectedBoldFontIndex == -1 then
+		selectedBoldFontIndex = tsmDroidBoldFontIndex
+	end
+
 	local miscWidgets = {
+		{
+			type = "Dropdown",
+			relativeWidth = 0.5,
+			label = L["Normal Font (Requires Reload)"],
+			list = availableFontTitlesList,
+			value = selectedContentFontIndex,
+			callback = function(_, _, index)
+				local fontTitle = availableFontTitlesList[index]
+				TSM.db.profile.design.fonts.content = fontTitle
+			end,
+			tooltip = format(L["Default: \"%s\"."], "Arial Narrow"),
+		},
+		{
+			type = "Dropdown",
+			relativeWidth = 0.5,
+			label = L["Header Font (Requires Reload)"],
+			list = availableFontTitlesList,
+			value = selectedBoldFontIndex,
+			callback = function(_, _, index)
+				local fontTitle = availableFontTitlesList[index]
+				TSM.db.profile.design.fonts.bold = fontTitle
+			end,
+			tooltip = format(L["Default: \"%s\"."], "TSM Droid Sans Bold"),
+		},
 		{
 			type = "Slider",
 			relativeWidth = 0.5,

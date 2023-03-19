@@ -10,10 +10,14 @@
 local TSM = select(2, ...)
 local lib = TSMAPI
 
+local LSM = LibStub("LibSharedMedia-3.0")  -- load the SharedMedia library
+
 TSMAPI.Design = {}
 local Design = TSMAPI.Design
 local coloredFrames = {}
 local coloredTexts = {}
+
+local LSM_Fonts = LSM:HashTable("font")  -- Persistent hashtable of all registered LSM fonts.
 
 
 --[[-----------------------------------------------------------------------------
@@ -88,15 +92,44 @@ function Design:SetTitleTextColor(obj)
 	return SetTextColor(obj, "title")
 end
 
+--- Primary content font.
 function Design:GetContentFont(size)
+	-- Retrieve the user's desired font size, if the "size" specifier is valid.
 	size = size or "normal"
-	TSM.db.profile.design.fontSizes[size] = TSM.db.profile.design.fontSizes[size] or TSM.designDefaults.fontSizes[size]
-	assert(TSM.db.profile.design.fontSizes[size], format("Invalid font size '%s", tostring(size)))
-	return TSM.db.profile.design.fonts.content, TSM.db.profile.design.fontSizes[size]
+	local size_number = TSM.db.profile.design.fontSizes[size]
+	if not size_number then
+		if TSM.designDefaults.fontSizes[size] then
+			-- Save the default size to user's settings, for faster lookups.
+			TSM.db.profile.design.fontSizes[size] = TSM.designDefaults.fontSizes[size]
+			size_number = TSM.db.profile.design.fontSizes[size]
+		end
+		assert(size_number, format("Invalid font size '%s", tostring(size)))
+	end
+
+	-- Verify existence of user's chosen font, and do a "soft revert" to our defaults
+	-- if missing, which can happen if previous SharedMedia fonts have been uninstalled.
+	-- NOTE: We don't overwrite the database value, in case the user re-enables that font.
+	local content_font = LSM_Fonts[TSM.db.profile.design.fonts.content]
+	if not content_font then
+		content_font = LSM_Fonts["Arial Narrow"]
+	end
+
+	-- Return the path to the font, and the desired (user-configurable) size.
+	return content_font, size_number
 end
 
+--- Header/section title font.
 function Design:GetBoldFont()
-	return TSM.db.profile.design.fonts.bold
+	-- Verify existence of user's chosen font, and do a "soft revert" to our defaults
+	-- if missing, which can happen if previous SharedMedia fonts have been uninstalled.
+	-- NOTE: We don't overwrite the database value, in case the user re-enables that font.
+	local bold_font = LSM_Fonts[TSM.db.profile.design.fonts.bold]
+	if not bold_font then
+		bold_font = LSM_Fonts["TSM Droid Sans Bold"]
+	end
+
+	-- Return the path to the font.
+	return bold_font
 end
 
 function Design:GetInlineColor(key)

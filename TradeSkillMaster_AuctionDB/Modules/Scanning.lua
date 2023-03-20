@@ -453,6 +453,16 @@ function Scan:StartFullScan()
 end
 
 function Scan:StartGetAllScan()
+	-- Refuse to perform "GetAll" if we're called while "GetAll" is disabled.
+	-- NOTE: Only happens if the player has visited the auction house and looked
+	-- at the AuctionDB GUI, and THEN gone into TSM's options to disable "GetAll".
+	-- The "Run GetAll Scan" button remains until /reload, so we must block it.
+	if TSM.db.profile.disableGetAll then
+		TSM:Print(L["You have disabled GetAll scans via AuctionDB's options."])
+		return
+	end
+
+	-- Begin the "GetAll" scan.
 	TSM.db.profile.lastGetAll = time()
 	Scan.isScanning = "GetAll"
 	Scan.isBuggedGetAll = nil

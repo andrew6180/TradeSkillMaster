@@ -14,7 +14,7 @@ local L = LibStub("AceLocale-3.0"):NewLocale("TradeSkillMaster_AuctionDB", "frFR
 if not L then return end
 
 L["A full auction house scan will scan every item on the auction house but is far slower than a GetAll scan. Expect this scan to take several minutes or longer."] = "Une analyse complète de l'Hôtel des ventes examinera tous les objets de l'hôtel des ventes mais est beaucoup plus lente que la méthode du GetAll. Attendez-vous à ce que cette analyse dure de nombreuses minutes."
--- L["A GetAll scan is the fastest in-game method for scanning every item on the auction house. However, there are many possible bugs on Blizzard's end with it including the chance for it to disconnect you from the game. Also, it has a 15 minute cooldown."] = ""
+-- L["A GetAll scan is the fastest in-game method for scanning every item on the auction house. However, there are many possible bugs on Blizzard's end with it including the chance for it to disconnect you from the game. Also, it has a 15 minute cooldown. You can disable the GetAll button via TSM's AuctionDB options if this feature doesn't work well on your server."] = ""
 L["Any items in the AuctionDB database that contain the search phrase in their names will be displayed."] = "Tout objets présent dans la base de donnée d'AuctionDB contenant la phrase recherchée dans son nom sera affiché."
 L["Are you sure you want to clear your AuctionDB data?"] = "Êtes-vous sûr de vouloir vider les données d'AuctionDB?"
 L["Ascending"] = "Croissant"

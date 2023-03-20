@@ -34,6 +34,7 @@ local savedDBDefaults = {
 		marketValueTooltip = true,
 		minBuyoutTooltip = true,
 		showAHTab = true,
+		disableGetAll = false,
 	},
 }
 

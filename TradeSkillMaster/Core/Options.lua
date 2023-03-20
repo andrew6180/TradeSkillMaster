@@ -237,11 +237,13 @@ local function DecodeAppearanceData(encodedData)
 	if not result then return TSM:Print(L["Invalid appearance data."]) end
 
 	-- Preserve the user's current font choices and switch the theme.
-	local preservedFonts = TSM.db.profile.design.fonts
+	-- NOTE: The "design" table won't exist on first TSM launch, while we're
+	-- loading the default design, so we also check the "design" table's existence.
+	local preservedFonts = TSM.db.profile.design and TSM.db.profile.design.fonts or nil
 	TSM.db.profile.design = result
-	TSM.db.profile.design.fonts = preservedFonts
+	TSM.db.profile.design.fonts = preservedFonts  -- Is allowed to be nil.
 
-	-- Use default values for any missing fields.
+	-- Use default values for any missing fields (such as fonts, if missing).
 	TSM:SetDesignDefaults(TSM.designDefaults, TSM.db.profile.design)
 
 	-- Apply the new design.

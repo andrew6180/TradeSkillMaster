@@ -1,3 +1,25 @@
+# v2.8.3.667
+
+TradeSkillMaster: Revived
+
+- Release Date: March 20th, 2023
+- Author: Gnomezilla on Warmane-Icecrown [https://github.com/Bananaman].
+
+
+## AuctionDB's "GetAll" Scans Can Now Be Disabled
+
+You can now completely disable "GetAll" scans via the AuctionDB settings. This is useful if your server doesn't return all auctions in its "GetAll" results, which means that you'll get incorrect market value calculations for all items. If you're playing on such servers, it's best to disable the "GetAll" feature to avoid accidentally polluting your price database with incorrect data.
+
+Go into TSM's main options, and then the "AuctionDB" section at the top. Click on the "Options" tab, and use the "Disable GetAll Auction Scans" checkbox. Disabling the "GetAll" feature will also hide its button from the auction scanning GUI.
+
+This protection feature is disabled by default, since most casual players probably won't care that "GetAll" generates incorrect market values. However, it's an incredibly good feature for professional gold makers, who want to avoid all risks of calculating incorrect item prices.
+
+Regardless of whether you use this feature or not, the AuctionDB scan GUI has also been cleaned up now, with much cleaner and more uniform spacing between the various scan buttons.
+
+
+
+---
+
 # v2.8.3.666
 
 TradeSkillMaster: Revived

@@ -2,10 +2,12 @@
 ## Title: |cff00fe00TradeSkillMaster: Revived|r
 ## Notes: Core addon for the TradeSkillMaster suite, revived for Wrath of the Lich King. Does nothing without modules installed.
 ## Author: Sapu94, Bart39, Gnomezilla [Warmane-Icecrown(A)], BlueAo [Warmane], andrew6180, Yoshiyuka, DimaSheiko, and other contributors...
-## Version: v2.8.3.666
+## Version: Rev667
 ## SavedVariables: TradeSkillMasterAppDB, TradeSkillMasterDB
 ## OptionalDeps: AccurateTime, Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, TipHelper, LibParse, LibCompress, LibGraph-2.0, SharedMedia, TheUndermineJournal, TheUndermineJournalGE
 ## X-Embeds: AccurateTime, Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, TipHelper, LibParse, LibCompress, LibGraph-2.0
+
+# TSM Revived is based on TSM v2.8.3.
 
 #@no-lib-strip@
 Libs\LibStub\LibStub.lua

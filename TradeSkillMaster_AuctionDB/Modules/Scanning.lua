@@ -11,11 +11,13 @@ local TSM = select(2, ...)
 local Scan = TSM:NewModule("Scan", "AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_AuctionDB") -- loads the localization table
 
+Scan.groupScanStartTime = 0
 Scan.groupScanData = {}
 Scan.filterList = {}
 Scan.numFilters = 0
 Scan.fullScanStartTime = 0
 Scan.fullScanSecondsPerPage = -1
+Scan.fullScanCompleteElapsed = nil
 
 local verifyNewAlgorithm = false  -- DEVELOPERS: Set to "true" to validate and benchmark the new market data algorithm!
 
@@ -144,10 +146,16 @@ local function FullScanCallback(event, ...)
 			TSM.db.factionrealm.lastScanSecondsPerPage = Scan.fullScanSecondsPerPage
 		end
 
-		-- Now process all of the fetched auctions.
+		-- Calculate how many seconds the completed "Full Scan" took.
+		-- NOTE: We must cache it in this external variable, because "Full Scans"
+		-- use a threading callback which calls "DoneScanning()" one more time,
+		-- so we preserve the value to still display it via that callback too.
+		Scan.fullScanCompleteElapsed = abs(time() - Scan.fullScanStartTime)
+
+		-- Now process all of the fetched auctions, and display the total time elapsed.
 		local data = ...
 		Scan:ProcessScanData(data)
-		Scan:DoneScanning()
+		Scan:DoneScanning(Scan.fullScanCompleteElapsed)
 	elseif event == "SCAN_INTERRUPTED" or event == "INTERRUPTED" then
 		-- We've been interrupted by the Auction House closing.
 		-- NOTE: "SCAN_INTERRUPTED" is from LibAuctionScan-1.0, which isn't used
@@ -379,7 +387,13 @@ function Scan:GetAllScanQuery()
 	if not canScan then return TSMAPI:CreateTimeDelay(0.5, Scan.GetAllScanQuery) end
 	Scan:RegisterEvent("AUCTION_ITEM_LIST_UPDATE")
 	QueryAuctionItems("", nil, nil, nil, nil, nil, nil, nil, nil, true)
-	TSMAPI.Threading:Start(Scan.ProcessGetAllScan, 1, function() Scan:DoneScanning() end)
+	TSMAPI.Threading:Start(Scan.ProcessGetAllScan, 1, function()
+		-- Pass through the cached "full scan complete elapsed" value, which ONLY
+		-- contains a value if the latest full scan was successfully completed.
+		-- NOTE: This callback runs when the thread is finished, no matter what
+		-- reason. That's why we must preserve the "time elapsed" value for display.
+		Scan:DoneScanning(Scan.fullScanCompleteElapsed)
+	end)
 end
 
 local function GroupScanCallback(event, ...)
@@ -426,8 +440,12 @@ end
 
 function Scan:ScanNextGroupFilter(data)
 	if #Scan.filterList == 0 then
+		-- Calculate how many seconds the completed "Group Scan" took.
+		local seconds_elapsed = abs(time() - Scan.groupScanStartTime)
+
+		-- Now process all of the fetched auctions, and display the total time elapsed.
 		Scan:ProcessScanData(Scan.groupScanData)
-		Scan:DoneScanning()
+		Scan:DoneScanning(seconds_elapsed)
 		return
 	end
 
@@ -450,6 +468,7 @@ function Scan:StartGroupScan(items)
 	wipe(Scan.groupScanData)
 	Scan.numFilters = 0
 	TSMAPI.AuctionScan:StopScan()
+	Scan.groupScanStartTime = time()  -- Keep track of when we started the "Group Scan".
 	TSMAPI:GenerateQueries(items, GroupScanCallback)
 	TSM.GUI:UpdateStatus(L["Preparing Filters..."])
 end
@@ -462,6 +481,7 @@ function Scan:StartFullScan()
 	TSMAPI.AuctionScan:StopScan()
 	Scan.fullScanStartTime = time()  -- Keep track of when we started the "Full Scan".
 	Scan.fullScanSecondsPerPage = -1  -- Reset the page-speed timer.
+	Scan.fullScanCompleteElapsed = nil  -- Reset the "full scan completed" information.
 	TSMAPI.AuctionScan:RunQuery({name=""}, FullScanCallback)
 end
 
@@ -484,8 +504,14 @@ function Scan:StartGetAllScan()
 	Scan:GetAllScanQuery()
 end
 
-function Scan:DoneScanning()
-	TSM.GUI:UpdateStatus(L["Done Scanning"], 100)
+function Scan:DoneScanning(seconds_elapsed)
+	if seconds_elapsed then
+		-- If given the "time elapsed", display it as "Done Scanning (1:35:27)".
+		TSM.GUI:UpdateStatus(format("%s (%s)", L["Done Scanning"], TSMAPI:FormatHMS(TSMAPI:SecondsToHMS(seconds_elapsed))), 100)
+	else
+		-- Used when we don't care about showing time (such as scan failures).
+		TSM.GUI:UpdateStatus(L["Done Scanning"], 100)
+	end
 	Scan.isScanning = nil
 	Scan.getAllLoaded = nil
 end

@@ -16,9 +16,19 @@ TSM.moduleNames = {}
 
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster") -- loads the localization table
 TSM._version = GetAddOnMetadata("TradeSkillMaster", "Version") -- current version of the addon
+local LSM = LibStub("LibSharedMedia-3.0")  -- load the SharedMedia library
 
 TSMAPI = {}
 
+-- We must register all custom fonts we want here, since we're loaded before the other TSM modules.
+local LSM_Fonts = LSM:HashTable("font")  -- Persistent hashtable of all registered LSM fonts.
+if not LSM_Fonts["Arial Narrow"] then
+	-- LSM only registers it for western locales, so enforce its registration for all locales.
+	LSM:Register("font", "Arial Narrow", [[Fonts\ARIALN.TTF]])
+end
+LSM:Register("font", "TSM Droid Sans Bold", [[Interface\Addons\TradeSkillMaster\Media\DroidSans-Bold.ttf]])  -- Our own custom font.
+
+-- Default TSM design settings.
 TSM.designDefaults = {
 	frameColors = {
 		frameBG = { backdrop = { 24, 24, 24, .93 }, border = { 30, 30, 30, 1 } },
@@ -42,8 +52,8 @@ TSM.designDefaults = {
 	},
 	edgeSize = 1.5,
 	fonts = {
-		content = "Fonts\\ARIALN.TTF",
-		bold = "Interface\\Addons\\TradeSkillMaster\\Media\\DroidSans-Bold.ttf",
+		content = "Arial Narrow",
+		bold = "TSM Droid Sans Bold",
 	},
 	fontSizes = {
 		normal = 15,
@@ -155,10 +165,35 @@ function TSM:OnInitialize()
 	-- add this character to the list of characters on this realm
 	TSM.db.factionrealm.characters[UnitName("player")] = true
 
+	-- Initialize default design, and apply defaults for any missing DB values.
+	-- NOTE: We allow missing fonts (such as uninstalled SharedMedia fonts), and
+	-- simply do a soft fallback to our defaults in our font lookup functions
+	-- later (in "GUI/Design.lua"), to support the scenario where the user has
+	-- selected fonts which are registered by a SharedMedia-based addon which
+	-- may be temporarily disabled.
+	-- NOTE: TSM is unable to use SharedMedia fonts that are registered by addons
+	-- that load AFTER TSM, since TSM accesses the fonts and creates its own GUI
+	-- immediately when it loads, even before the user opens TSM's GUI. To use
+	-- fonts from such an addon, you have to add that addon to "OptionalDeps"
+	-- in "TradeSkillMaster.toc", which tells the game that you want TSM to load
+	-- AFTER the addon that provides your extra fonts. This step isn't necessary
+	-- for SharedMedia fonts, since they're already marked as an optional TSM
+	-- dependency now.
 	if not TSM.db.profile.design then
 		TSM:LoadDefaultDesign()
 	end
 	TSM:SetDesignDefaults(TSM.designDefaults, TSM.db.profile.design)
+
+	-- If the user is migrating from an old TSM version, convert their static
+	-- font paths into our modern font name representations instead.
+	-- NOTE: Our font system can handle fallbacks for these "missing fonts", but
+	-- this method cleans up their old database and modernizes it, which is nicer.
+	if TSM.db.profile.design.fonts.content == "Fonts\\ARIALN.TTF" then
+		TSM.db.profile.design.fonts.content = "Arial Narrow"
+	end
+	if TSM.db.profile.design.fonts.bold == "Interface\\Addons\\TradeSkillMaster\\Media\\DroidSans-Bold.ttf" then
+		TSM.db.profile.design.fonts.bold = "TSM Droid Sans Bold"
+	end
 
 	-- create / register the minimap button
 	TSM.LDBIcon = LibStub("LibDataBroker-1.1", true) and LibStub("LibDBIcon-1.0", true)

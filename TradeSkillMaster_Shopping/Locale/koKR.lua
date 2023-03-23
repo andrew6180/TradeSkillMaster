@@ -110,6 +110,7 @@ L["Reset Filters"] = "필터 리셋" -- Needs review
 L["Right-Click to favorite this recent search."] = "Right-Click으로 이 검색을 즐겨찾기에 등록합니다." -- Needs review
 L["Right-Click to remove from favorite searches."] = "Right-Click으로 츨겨찾기 검색에서 제거합니다." -- Needs review
 L["Saved Searches"] = "저장된 검색"
+L["Scanning %d / %d (Page 1 / ?)"] = "검색 중 %d / %d (페이지 1 / ?)" -- Needs review
 L["Scanning %d / %d (Page %d / %d)"] = "검색 중 %d / %d (페이지 %d / %d)" -- Needs review
 L["Search Filter:"] = "검색 필터:" -- Needs review
 L["Select the groups which you would like to include in the search."] = "검색에 포함할 그룹을 선택하세요." -- Needs review

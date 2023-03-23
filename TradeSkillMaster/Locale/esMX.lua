@@ -315,7 +315,7 @@ Once you're done, click the button below.]=] ] = "" ]==]
 -- L["Module Operations / Options"] = ""
 -- L["Modules"] = ""
 -- L["More Advanced Methods"] = ""
--- L["More advanced options are now designated by %sred text|r. Beginners are encourages to come back to these once they have a solid understanding of the basics."] = ""
+-- L["More advanced options are now designated by %sred text|r. Beginners are encouraged to come back to these once they have a solid understanding of the basics."] = ""
 -- L["Move Already Grouped Items"] = ""
 -- L["Moved %s to %s."] = ""
 -- L["Move Group"] = ""

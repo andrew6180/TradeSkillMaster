@@ -210,6 +210,7 @@ L["Right-Click to add %s to your friends list."] = "Clic-droit pour ajouter %s �
 -- L["Save New Price"] = ""
 L["Scan Complete!"] = "Scan terminé !" -- Needs review
 L["Scanning %d / %d"] = "Scan %d / %d" -- Needs review
+L["Scanning %d / %d (Page 1 / ?)"] = "Scan %d / %d (Page 1 / ?)" -- Needs review
 L["Scanning %d / %d (Page %d / %d)"] = "Scan %d / %d (Page %d / %d)" -- Needs review
 L["ScrollWheel Direction (both recommended):"] = "Direction de la molette (les deux sont recommandées)"
 -- L["Select a duration in this dropdown and click on the button below to cancel all auctions at or below this duration."] = ""

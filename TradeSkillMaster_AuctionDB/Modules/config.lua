@@ -390,6 +390,13 @@ function Config:LoadOptions(container)
 							relativeWidth = 0.5,
 							tooltip = L["If checked, AuctionDB will add a tab to the AH to allow for in-game scans. If you are using the TSM app exclusively for your scans, you may want to hide it by unchecking this option. This option requires a reload to take effect."],
 						},
+						{
+							type = "CheckBox",
+							label = L["Disable \"GetAll\" Auction Scans"],
+							settingInfo = { TSM.db.profile, "disableGetAll" },
+							relativeWidth = 0.5,
+							tooltip = L["If checked, AuctionDB will not perform \"GetAll\" scans. This is useful if your server doesn't return all auctions in its \"GetAll\" results, which means that you'll get incorrect market value calculations for all items. If you're playing on such servers, it's best to disable the \"GetAll\" feature to avoid accidentally polluting your price database with incorrect data. This option takes effect immediately, but requires a reload to completely hide the \"Run GetAll Scan\" button."],
+						},
 					},
 				},
 				{

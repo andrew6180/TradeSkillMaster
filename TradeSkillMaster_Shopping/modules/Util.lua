@@ -202,17 +202,29 @@ function private:PrepareForScan(callback, isLastPageScan)
 	TSM.moduleAPICallback = nil
 end
 
-local scanStatus, pageStatus
 function private.ScanCallback(event, ...)
 	if event == "QUERY_COMPLETE" then
 		private.filterList = ...
 		private.numFilters = #private.filterList
 		private:ScanNextFilter()
 	elseif event == "QUERY_UPDATE" then
-		local arg1, arg2 = ...
-		private:UpdateStatus("query", arg1, arg2)
+		local current, total, skipped = ...
+		private:UpdateStatus("query", current, total)
 	elseif event == "SCAN_PAGE_UPDATE" then
+		-- Simply forward the "currently received" and "total" page counts
+		-- for the current item we're scanning.
+		-- NOTE: Private servers sometimes give totally insane "total page counts"
+		-- on the first response, such as "page 1/142", but those server errors
+		-- always correct themselves to "page 2/REAL" when the scan has reached
+		-- page 2. There's nothing we can do to avoid that rare page-count issue
+		-- (which happens on many popular private servers, such as Warmane).
 		private:UpdateStatus("page", ...)
+	elseif event == "SCAN_INTERRUPTED" or event == "INTERRUPTED" then
+		-- We've been interrupted by the Auction House closing.
+		-- NOTE: "SCAN_INTERRUPTED" is from LibAuctionScan-1.0, which isn't used
+		-- by TSM anymore, and "INTERRUPTED" is from "TSM/Auction/AuctionScanning.lua",
+		-- which is what this scanner uses nowadays.
+		private:ScanComplete(true)
 	elseif event == "SCAN_TIMEOUT" then
 		tremove(private.filterList, 1)
 		private:ScanNextFilter()
@@ -288,14 +300,25 @@ function private.ScanCallback(event, ...)
 end
 
 function private:ScanNextFilter()
+	-- We must reset the page counter, otherwise the next scan will keep the
+	-- page count of the previous item until we receive "SCAN_PAGE_UPDATE".
+	-- NOTE: The "nil" signals that we don't know the item's page count yet.
+	-- NOTE: The recipient may want to ignore "page" events that have nil values
+	-- and not update their status bars based on those, since we send these empty
+	-- page events before we start each new scan!
+	private:UpdateStatus("page", nil, nil)
+
+	-- Now update the scan counter.
+	-- NOTE: Our scan progress counter below starts counting from 0 as the first item.
 	if #private.filterList == 0 then
+		private:UpdateStatus("scan", private.numFilters, private.numFilters)
 		return private:ScanComplete()
 	end
-	pageStatus = {0, 1}
-	private:UpdateStatus("scan", private.numFilters-#private.filterList+1, private.numFilters)
+	private:UpdateStatus("scan", private.numFilters-#private.filterList, private.numFilters)
 	TSMAPI.AuctionScan:RunQuery(private.filterList[1], private.ScanCallback, true, private.callback("filter", private.filterList[1]), true)
 end
 
+local scanStatus, pageStatus
 function private:UpdateStatus(statusType, ...)
 	if statusType == "query" then
 		private.searchFrame.statusBar:SetStatusText(format(L["Preparing Filter %d / %d"], ...))
@@ -305,31 +328,63 @@ function private:UpdateStatus(statusType, ...)
 			scanStatus = {...}
 		elseif statusType == "page" then
 			pageStatus = {...}
+			-- Ignore the empty "reset page count" events that happen before every new
+			-- scan. We've reset the page counts, which is the only thing that matters.
+			if pageStatus[1] == nil and pageStatus[2] == nil then
+				return
+			end
 		end
-		private.searchFrame.statusBar:SetStatusText(format(L["Scanning %d / %d (Page %d / %d)"], scanStatus[1], scanStatus[2], pageStatus[1]+1, pageStatus[2]))
-		private.searchFrame.statusBar:UpdateStatus(100*(scanStatus[1]-1)/scanStatus[2], 100*pageStatus[1]/pageStatus[2])
+
+		-- NOTE: We don't do +1 for the item-scan or page-status counters below,
+		-- since we want our progress bar to show FULLY RECEIVED/FINISHED items
+		-- and pages, and not fill up until we've fully received each item/page.
+		local progress_bar_items = min(100*(scanStatus[1]/scanStatus[2]), 100)  -- Calculate "total items" progress bar from 0-100%.
+		local progress_bar_pages = 0
+		-- NOTE: In the status text label, we count the items starting at 1,
+		-- to say "Scanning 1 / 2" (instead of "Scanning 0 / 2"). For pages,
+		-- we show which page we're waiting for (so if we have received 2/4 pages,
+		-- the label will say 3/4, meaning "we're waiting for page 3...").
+		if pageStatus[1] ~= nil and pageStatus[2] ~= nil then
+			-- We have received the page counter ("current page / total pages") for the current item.
+			-- NOTE: We add "+1" to the page counter, to indicate that we've received that page and are working on the next page.
+			private.searchFrame.statusBar:SetStatusText(format(L["Scanning %d / %d (Page %d / %d)"], scanStatus[1] + 1, scanStatus[2], min(pageStatus[1] + 1, pageStatus[2]), pageStatus[2]))
+			progress_bar_pages = min(100*(pageStatus[1]/pageStatus[2]), 100)  -- Calculate "total pages of current item" progress bar from 0-100%.
+		else
+			-- We have started a new item scan but haven't received the page count yet.
+			-- NOTE: If we don't initialize the page-progress to 0%, we'd get a "jumpy"
+			-- progress bar that goes from 100% at page 1/? to "real%" after page 1.
+			private.searchFrame.statusBar:SetStatusText(format(L["Scanning %d / %d (Page 1 / ?)"], scanStatus[1] + 1, scanStatus[2]))
+			progress_bar_pages = 0  -- Begin at 0% for the gray page-counter bar of the current item.
+		end
+		private.searchFrame.statusBar:UpdateStatus(progress_bar_items, progress_bar_pages)
 	end
 end
 
-function private:ScanComplete()
-	if not private.callback then return end
-	private.searchFrame.statusBar:SetStatusText(L["Done Scanning"])
-	private.searchFrame.statusBar:UpdateStatus(100, 100)
-	private.searchFrame.rt:SetDisabled(false)
-	if #private.searchFrame.rt.auctionData == 1 then
-		private.searchFrame.rt:SetExpanded(private.searchFrame.rt.auctionData[1]:GetItemString(), true)
-		private.searchFrame.rt.rows[1].cols[1]:Click()
-	elseif #private.searchFrame.rt.auctionData == 0 and private.searchItem and private:HasInBags(TSMAPI:GetBaseItemString(private.searchItem)) then
-		private.controlButtons.post:Enable()
-		local postPrice = TSM:GetMaxPrice(TSM.db.global.normalPostPrice, private.searchItem) or 0
-		TSMAPI.AuctionControl:SetNoResultItem(private.searchItem, postPrice)
+function private:ScanComplete(interrupted)
+	if interrupted then
+		-- If our scan has been interrupted by the Auction House closing,
+		-- simply act as if the user clicked "Stop".
+		Util:StopScan()
+	else
+		if not private.callback then return end
+		private.searchFrame.statusBar:SetStatusText(L["Done Scanning"])
+		private.searchFrame.statusBar:UpdateStatus(100, 100)
+		private.searchFrame.rt:SetDisabled(false)
+		if #private.searchFrame.rt.auctionData == 1 then
+			private.searchFrame.rt:SetExpanded(private.searchFrame.rt.auctionData[1]:GetItemString(), true)
+			private.searchFrame.rt.rows[1].cols[1]:Click()
+		elseif #private.searchFrame.rt.auctionData == 0 and private.searchItem and private:HasInBags(TSMAPI:GetBaseItemString(private.searchItem)) then
+			private.controlButtons.post:Enable()
+			local postPrice = TSM:GetMaxPrice(TSM.db.global.normalPostPrice, private.searchItem) or 0
+			TSMAPI.AuctionControl:SetNoResultItem(private.searchItem, postPrice)
+		end
+		
+		if #private.searchFrame.rt.auctionData == 0 and TSM.moduleAPICallback then
+			TSM.moduleAPICallback()
+		end
+		private.callback("done", private.auctions)
+		TSMAPI:FireEvent("SHOPPING:SEARCH:SCANDONE", #private.searchFrame.rt.auctionData)
 	end
-	
-	if #private.searchFrame.rt.auctionData == 0 and TSM.moduleAPICallback then
-		TSM.moduleAPICallback()
-	end
-	private.callback("done", private.auctions)
-	TSMAPI:FireEvent("SHOPPING:SEARCH:SCANDONE", #private.searchFrame.rt.auctionData)
 end
 
 -- processes scan data for a specific item

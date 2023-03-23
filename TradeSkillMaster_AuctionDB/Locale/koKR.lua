@@ -14,7 +14,7 @@ local L = LibStub("AceLocale-3.0"):NewLocale("TradeSkillMaster_AuctionDB", "koKR
 if not L then return end
 
 L["A full auction house scan will scan every item on the auction house but is far slower than a GetAll scan. Expect this scan to take several minutes or longer."] = "전체 검색은 경매장 내의 모든 아이템을 검색하지만 GetAll 검색보다는 훨씬 느립니다. 이 검색은 몇 분 정도 또는 그 이상의 시간이 소요됩니다."
-L["A GetAll scan is the fastest in-game method for scanning every item on the auction house. However, there are many possible bugs on Blizzard's end with it including the chance for it to disconnect you from the game. Also, it has a 15 minute cooldown."] = "GetAll 검색은 게임 내에서 경매장의 모든 아이템을 검색하기 위한 가장 빠른 검색 방법입니다. 하지만 블리자드 쪽에 많은 버그가 존재하며 게임의 접속이 끊길 가능성도 있습니다. 또한, 15분의 쿨다운이 존재합니다." -- Needs review
+L["A GetAll scan is the fastest in-game method for scanning every item on the auction house. However, there are many possible bugs on Blizzard's end with it including the chance for it to disconnect you from the game. Also, it has a 15 minute cooldown. You can disable the GetAll button via TSM's AuctionDB options if this feature doesn't work well on your server."] = "GetAll 검색은 게임 내에서 경매장의 모든 아이템을 검색하기 위한 가장 빠른 검색 방법입니다. 하지만 블리자드 쪽에 많은 버그가 존재하며 게임의 접속이 끊길 가능성도 있습니다. 또한, 15분의 쿨다운이 존재합니다. You can disable the GetAll button via TSM's AuctionDB options if this feature doesn't work well on your server." -- Needs review
 L["Any items in the AuctionDB database that contain the search phrase in their names will be displayed."] = "이름에 검색 구문을 포함하는 AuctionDB 데이터베이스 내의 모든 아이템이 표시됩니다."
 L["Are you sure you want to clear your AuctionDB data?"] = "모든 AuctionDB 데이터를 삭제 하시겠습니까?"
 L["Ascending"] = "오름차순"

@@ -61,6 +61,7 @@ local AuctionRecord = {
 	
 	GetItemBuyout = function(self)
 		if not self.buyout or self.buyout == 0 then return end
+		-- Calculate the price per item, always rounded downwards.
 		return floor(self.buyout / self.count)
 	end,
 	

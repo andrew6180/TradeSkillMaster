@@ -17,10 +17,6 @@ Scan.skipped = {}
 local function CallbackHandler(event, ...)
 	if event == "QUERY_COMPLETE" then
 		local filterList = ...
-		local numItems = 0
-		for _, v in ipairs(filterList) do
-			numItems = numItems + #v.items
-		end
 		Scan.filterList = filterList
 		Scan.numFilters = #filterList
 		Scan:ScanNextFilter()
@@ -32,8 +28,19 @@ local function CallbackHandler(event, ...)
 			tinsert(Scan.skipped, itemString)
 		end
 	elseif event == "SCAN_PAGE_UPDATE" then
+		-- Simply forward the "currently received" and "total" page counts
+		-- for the current item we're scanning.
+		-- NOTE: Private servers sometimes give totally insane "total page counts"
+		-- on the first response, such as "page 1/142", but those server errors
+		-- always correct themselves to "page 2/REAL" when the scan has reached
+		-- page 2. There's nothing we can do to avoid that rare page-count issue
+		-- (which happens on many popular private servers, such as Warmane).
 		TSM.Manage:UpdateStatus("page", ...)
-	elseif event == "SCAN_INTERRUPTED" then
+	elseif event == "SCAN_INTERRUPTED" or event == "INTERRUPTED" then
+		-- We've been interrupted by the Auction House closing.
+		-- NOTE: "SCAN_INTERRUPTED" is from LibAuctionScan-1.0, which isn't used
+		-- by TSM anymore, and "INTERRUPTED" is from "TSM/Auction/AuctionScanning.lua",
+		-- which is what this scanner uses nowadays.
 		TSM.Manage:ScanComplete(true)
 	elseif event == "SCAN_TIMEOUT" then
 		tremove(Scan.filterList, 1)
@@ -60,6 +67,16 @@ function Scan:StartItemScan(itemList)
 end
 
 function Scan:ScanNextFilter()
+	-- We must reset the page counter, otherwise the next scan will keep the
+	-- page count of the previous item until we receive "SCAN_PAGE_UPDATE".
+	-- NOTE: The "nil" signals that we don't know the item's page count yet.
+	-- NOTE: The recipient may want to ignore "page" events that have nil values
+	-- and not update their status bars based on those, since we send these empty
+	-- page events before we start each new scan!
+	TSM.Manage:UpdateStatus("page", nil, nil)
+
+	-- Now update the scan counter.
+	-- NOTE: Our scan progress counter below starts counting from 0 as the first item.
 	if #Scan.filterList == 0 then
 		TSM.Manage:UpdateStatus("scan", Scan.numFilters, Scan.numFilters)
 		return TSM.Manage:ScanComplete()

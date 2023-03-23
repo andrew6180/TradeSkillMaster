@@ -13,6 +13,25 @@ local private = {}
 TSMAPI:RegisterForTracing(private, "TradeSkillMaster.Util_private")
 
 
+-- Locals to speed up function access.
+local CopyTable = CopyTable
+local error = error
+local floor = floor
+local format = format
+local GetRealmName = GetRealmName
+local gsub = gsub
+local ipairs = ipairs
+local select = select
+local StaticPopup_Show = StaticPopup_Show
+local strfind = strfind
+local strlower = strlower
+local strsub = strsub
+local tinsert = tinsert
+local tremove = tremove
+local type = type
+local UnitName = UnitName
+
+
 --- Shows a popup dialog with the given name and ensures it's visible over the TSM frame by setting the frame strata to TOOLTIP.
 -- @param name The name of the static popup dialog to be shown.
 function TSMAPI:ShowStaticPopupDialog(name)
@@ -97,4 +116,25 @@ end
 
 function TSMAPI:IsPlayer(target)
 	return strlower(target) == strlower(UnitName("player")) or (strfind(target, "-") and strlower(target) == strlower(UnitName("player").."-"..GetRealmName()))
+end
+
+--- Converts seconds into hours, minutes and seconds.
+-- @param seconds Number of seconds. Can be a float (will automatically be rounded down to whole seconds).
+-- NOTE: The return values of this function can be wrapped directly by a call to "TSMAPI:FormatHMS()".
+function TSMAPI:SecondsToHMS(seconds)
+	-- NOTE: This code can be shorter, but was written this way for efficiency.
+	local hours = floor(seconds / 3600)
+	seconds = seconds - (hours * 3600)
+	local minutes = floor(seconds / 60)
+	seconds = floor(seconds - (minutes * 60))
+
+	return hours, minutes, seconds
+end
+
+--- Converts hours, minutes and seconds into a human-readable string.
+-- @param hours Hours. Must be a whole number without decimals.
+-- @param minutes Minutes. Must be a whole number without decimals.
+-- @param seconds Seconds. Must be a whole number without decimals.
+function TSMAPI:FormatHMS(hours, minutes, seconds)
+	return format("%d:%02d:%02d", hours, minutes, seconds)
 end

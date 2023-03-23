@@ -104,14 +104,10 @@ local function FullScanCallback(event, ...)
 			end
 
 			-- Estimate the "remaining time", rounded to the nearest whole second, at least 1 second.
-			local seconds = max(1, floor((pages_remaining * seconds_per_page) + 0.5))
+			local seconds_raw = max(1, floor((pages_remaining * seconds_per_page) + 0.5))
 
 			-- Convert the estimated seconds into hours, minutes and seconds.
-			-- NOTE: This code can be shorter, but was written this way for efficiency.
-			local hours = floor(seconds / 3600)
-			seconds = seconds - (hours * 3600)
-			local minutes = floor(seconds / 60)
-			seconds = seconds - (minutes * 60)
+			local hours, minutes, seconds = TSMAPI:SecondsToHMS(seconds_raw)
 			time_estimate_str = format(" (~%d:%02d:%02d)", hours, minutes, seconds)
 		end
 

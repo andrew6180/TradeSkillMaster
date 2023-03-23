@@ -35,11 +35,11 @@ local function FullScanCallback(event, ...)
 		local progress_float = page / total
 		local remaining_float = 1.0 - progress_float
 
-		-- Estimate the remaining scan time, based on a MIX of the average per-page so far,
+		-- Estimate the total scan time, based on a MIX of the average per-page so far,
 		-- and the previous scan's averages stored in the database (if available).
 		-- NOTE: This callback triggers after we RECEIVED "page", so we count "page" too.
 		-- NOTE: We don't do any "live" updates of the progress bar text. We only
-		-- update the estimate when we receive a page, which is very CPU-efficient.
+		-- update the text labels when we receive a page, which is very CPU-efficient.
 		local time_estimate_str = ""
 		if (page >= 1) and (total > page) then
 			-- Calculate how many seconds have elapsed per page-request so far.
@@ -51,7 +51,7 @@ local function FullScanCallback(event, ...)
 			-- per page" is constantly re-calculated based on the latest "total
 			-- amount of whole seconds elapsed", so it doesn't accumulate any
 			-- rounding errors and gets more precise the more pages have been
-			-- downloaded (after ~10 pages, it's basically as accurate as the
+			-- downloaded (after ~10 pages, it's practically as accurate as the
 			-- debug-timer). We have to use this technique for safety!
 			-- NOTE: Most servers will gradually slow down the page requests
 			-- across the first 300 requests or so, which will become slower
@@ -61,8 +61,8 @@ local function FullScanCallback(event, ...)
 			-- which is why we're also storing the last scan's "final average"
 			-- in the database and using that for our subsequent scan estimates.
 			local seconds_elapsed = abs(time() - Scan.fullScanStartTime)
-			local pages_remaining = total - page
 			local seconds_per_page = seconds_elapsed / page
+			-- local pages_remaining = total - page  -- Not used for anything.
 
 			-- Remember our "real", unweighted value, for later DB storage.
 			Scan.fullScanSecondsPerPage = seconds_per_page
@@ -103,12 +103,29 @@ local function FullScanCallback(event, ...)
 				-- TSM:Print(format("Nothing in DB yet (Our unweighted estimate: %f)", seconds_per_page))  -- DEBUG
 			end
 
-			-- Estimate the "remaining time", rounded to the nearest whole second, at least 1 second.
-			local seconds_raw = max(1, floor((pages_remaining * seconds_per_page) + 0.5))
+			-- Estimate the "total time" requirement for ALL pages, rounded to
+			-- the nearest whole second, at least 1 second.
+			-- NOTE: We calculate the total estimate instead of the "remaining
+			-- time", because servers tend to fluctuate constantly between slowly
+			-- and then quickly sending the pages, which means a "pages_remaining"
+			-- timer is hard to understand in terms of real time remaining, since
+			-- we might get 10 pages within a few seconds and count down their
+			-- "seconds per page" amounts much faster than natural time, and
+			-- then suddenly stall for 30 seconds without getting any pages.
+			-- So a "remaining time" estimate would not move naturally. Instead,
+			-- we use a constantly updating "total time estimate" which follows
+			-- the server performance beautifully and is easy to understand.
+			-- NOTE: Thanks to the linear blend between historical and current
+			-- server performance, our estimate is very accurate yet responsive.
+			-- NOTE: The total page count is able to change during AH scan, when
+			-- more auctions are added or removed, which further contributes to
+			-- the confusion if we would use a "time remaining" display instead,
+			-- but since we use a "total time" estimate the user instead smoothly
+			-- sees the total estimate change when the page count changes.
+			local seconds_total_estimate = max(1, floor((total * seconds_per_page) + 0.5))
 
-			-- Convert the estimated seconds into hours, minutes and seconds.
-			local hours, minutes, seconds = TSMAPI:SecondsToHMS(seconds_raw)
-			time_estimate_str = format(" (~%d:%02d:%02d)", hours, minutes, seconds)
+			-- Convert the "elapsed / estimated" seconds into hours, minutes and seconds.
+			time_estimate_str = format(" (%s / ~%s)", TSMAPI:FormatHMS(TSMAPI:SecondsToHMS(seconds_elapsed)), TSMAPI:FormatHMS(TSMAPI:SecondsToHMS(seconds_total_estimate)))
 		end
 
 		-- Calculate progress bar from 0-100%.

@@ -11,11 +11,13 @@ local TSM = select(2, ...)
 local Scan = TSM:NewModule("Scan", "AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_AuctionDB") -- loads the localization table
 
+Scan.groupScanStartTime = 0
 Scan.groupScanData = {}
 Scan.filterList = {}
 Scan.numFilters = 0
 Scan.fullScanStartTime = 0
 Scan.fullScanSecondsPerPage = -1
+Scan.fullScanCompleteElapsed = nil
 
 local verifyNewAlgorithm = false  -- DEVELOPERS: Set to "true" to validate and benchmark the new market data algorithm!
 
@@ -35,11 +37,11 @@ local function FullScanCallback(event, ...)
 		local progress_float = page / total
 		local remaining_float = 1.0 - progress_float
 
-		-- Estimate the remaining scan time, based on a MIX of the average per-page so far,
+		-- Estimate the total scan time, based on a MIX of the average per-page so far,
 		-- and the previous scan's averages stored in the database (if available).
 		-- NOTE: This callback triggers after we RECEIVED "page", so we count "page" too.
 		-- NOTE: We don't do any "live" updates of the progress bar text. We only
-		-- update the estimate when we receive a page, which is very CPU-efficient.
+		-- update the text labels when we receive a page, which is very CPU-efficient.
 		local time_estimate_str = ""
 		if (page >= 1) and (total > page) then
 			-- Calculate how many seconds have elapsed per page-request so far.
@@ -51,7 +53,7 @@ local function FullScanCallback(event, ...)
 			-- per page" is constantly re-calculated based on the latest "total
 			-- amount of whole seconds elapsed", so it doesn't accumulate any
 			-- rounding errors and gets more precise the more pages have been
-			-- downloaded (after ~10 pages, it's basically as accurate as the
+			-- downloaded (after ~10 pages, it's practically as accurate as the
 			-- debug-timer). We have to use this technique for safety!
 			-- NOTE: Most servers will gradually slow down the page requests
 			-- across the first 300 requests or so, which will become slower
@@ -61,8 +63,8 @@ local function FullScanCallback(event, ...)
 			-- which is why we're also storing the last scan's "final average"
 			-- in the database and using that for our subsequent scan estimates.
 			local seconds_elapsed = abs(time() - Scan.fullScanStartTime)
-			local pages_remaining = total - page
 			local seconds_per_page = seconds_elapsed / page
+			-- local pages_remaining = total - page  -- Not used for anything.
 
 			-- Remember our "real", unweighted value, for later DB storage.
 			Scan.fullScanSecondsPerPage = seconds_per_page
@@ -103,16 +105,29 @@ local function FullScanCallback(event, ...)
 				-- TSM:Print(format("Nothing in DB yet (Our unweighted estimate: %f)", seconds_per_page))  -- DEBUG
 			end
 
-			-- Estimate the "remaining time", rounded to the nearest whole second, at least 1 second.
-			local seconds = max(1, floor((pages_remaining * seconds_per_page) + 0.5))
+			-- Estimate the "total time" requirement for ALL pages, rounded to
+			-- the nearest whole second, at least 1 second.
+			-- NOTE: We calculate the total estimate instead of the "remaining
+			-- time", because servers tend to fluctuate constantly between slowly
+			-- and then quickly sending the pages, which means a "pages_remaining"
+			-- timer is hard to understand in terms of real time remaining, since
+			-- we might get 10 pages within a few seconds and count down their
+			-- "seconds per page" amounts much faster than natural time, and
+			-- then suddenly stall for 30 seconds without getting any pages.
+			-- So a "remaining time" estimate would not move naturally. Instead,
+			-- we use a constantly updating "total time estimate" which follows
+			-- the server performance beautifully and is easy to understand.
+			-- NOTE: Thanks to the linear blend between historical and current
+			-- server performance, our estimate is very accurate yet responsive.
+			-- NOTE: The total page count is able to change during AH scan, when
+			-- more auctions are added or removed, which further contributes to
+			-- the confusion if we would use a "time remaining" display instead,
+			-- but since we use a "total time" estimate the user instead smoothly
+			-- sees the total estimate change when the page count changes.
+			local seconds_total_estimate = max(1, floor((total * seconds_per_page) + 0.5))
 
-			-- Convert the estimated seconds into hours, minutes and seconds.
-			-- NOTE: This code can be shorter, but was written this way for efficiency.
-			local hours = floor(seconds / 3600)
-			seconds = seconds - (hours * 3600)
-			local minutes = floor(seconds / 60)
-			seconds = seconds - (minutes * 60)
-			time_estimate_str = format(" (~%d:%02d:%02d)", hours, minutes, seconds)
+			-- Convert the "elapsed / estimated" seconds into hours, minutes and seconds.
+			time_estimate_str = format(" (%s / ~%s)", TSMAPI:FormatHMS(TSMAPI:SecondsToHMS(seconds_elapsed)), TSMAPI:FormatHMS(TSMAPI:SecondsToHMS(seconds_total_estimate)))
 		end
 
 		-- Calculate progress bar from 0-100%.
@@ -131,10 +146,16 @@ local function FullScanCallback(event, ...)
 			TSM.db.factionrealm.lastScanSecondsPerPage = Scan.fullScanSecondsPerPage
 		end
 
-		-- Now process all of the fetched auctions.
+		-- Calculate how many seconds the completed "Full Scan" took.
+		-- NOTE: We must cache it in this external variable, because "Full Scans"
+		-- use a threading callback which calls "DoneScanning()" one more time,
+		-- so we preserve the value to still display it via that callback too.
+		Scan.fullScanCompleteElapsed = abs(time() - Scan.fullScanStartTime)
+
+		-- Now process all of the fetched auctions, and display the total time elapsed.
 		local data = ...
 		Scan:ProcessScanData(data)
-		Scan:DoneScanning()
+		Scan:DoneScanning(Scan.fullScanCompleteElapsed)
 	elseif event == "SCAN_INTERRUPTED" or event == "INTERRUPTED" then
 		-- We've been interrupted by the Auction House closing.
 		-- NOTE: "SCAN_INTERRUPTED" is from LibAuctionScan-1.0, which isn't used
@@ -366,7 +387,13 @@ function Scan:GetAllScanQuery()
 	if not canScan then return TSMAPI:CreateTimeDelay(0.5, Scan.GetAllScanQuery) end
 	Scan:RegisterEvent("AUCTION_ITEM_LIST_UPDATE")
 	QueryAuctionItems("", nil, nil, nil, nil, nil, nil, nil, nil, true)
-	TSMAPI.Threading:Start(Scan.ProcessGetAllScan, 1, function() Scan:DoneScanning() end)
+	TSMAPI.Threading:Start(Scan.ProcessGetAllScan, 1, function()
+		-- Pass through the cached "full scan complete elapsed" value, which ONLY
+		-- contains a value if the latest full scan was successfully completed.
+		-- NOTE: This callback runs when the thread is finished, no matter what
+		-- reason. That's why we must preserve the "time elapsed" value for display.
+		Scan:DoneScanning(Scan.fullScanCompleteElapsed)
+	end)
 end
 
 local function GroupScanCallback(event, ...)
@@ -413,8 +440,12 @@ end
 
 function Scan:ScanNextGroupFilter(data)
 	if #Scan.filterList == 0 then
+		-- Calculate how many seconds the completed "Group Scan" took.
+		local seconds_elapsed = abs(time() - Scan.groupScanStartTime)
+
+		-- Now process all of the fetched auctions, and display the total time elapsed.
 		Scan:ProcessScanData(Scan.groupScanData)
-		Scan:DoneScanning()
+		Scan:DoneScanning(seconds_elapsed)
 		return
 	end
 
@@ -437,6 +468,7 @@ function Scan:StartGroupScan(items)
 	wipe(Scan.groupScanData)
 	Scan.numFilters = 0
 	TSMAPI.AuctionScan:StopScan()
+	Scan.groupScanStartTime = time()  -- Keep track of when we started the "Group Scan".
 	TSMAPI:GenerateQueries(items, GroupScanCallback)
 	TSM.GUI:UpdateStatus(L["Preparing Filters..."])
 end
@@ -449,6 +481,7 @@ function Scan:StartFullScan()
 	TSMAPI.AuctionScan:StopScan()
 	Scan.fullScanStartTime = time()  -- Keep track of when we started the "Full Scan".
 	Scan.fullScanSecondsPerPage = -1  -- Reset the page-speed timer.
+	Scan.fullScanCompleteElapsed = nil  -- Reset the "full scan completed" information.
 	TSMAPI.AuctionScan:RunQuery({name=""}, FullScanCallback)
 end
 
@@ -471,8 +504,14 @@ function Scan:StartGetAllScan()
 	Scan:GetAllScanQuery()
 end
 
-function Scan:DoneScanning()
-	TSM.GUI:UpdateStatus(L["Done Scanning"], 100)
+function Scan:DoneScanning(seconds_elapsed)
+	if seconds_elapsed then
+		-- If given the "time elapsed", display it as "Done Scanning (1:35:27)".
+		TSM.GUI:UpdateStatus(format("%s (%s)", L["Done Scanning"], TSMAPI:FormatHMS(TSMAPI:SecondsToHMS(seconds_elapsed))), 100)
+	else
+		-- Used when we don't care about showing time (such as scan failures).
+		TSM.GUI:UpdateStatus(L["Done Scanning"], 100)
+	end
 	Scan.isScanning = nil
 	Scan.getAllLoaded = nil
 end

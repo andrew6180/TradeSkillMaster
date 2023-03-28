@@ -1,3 +1,30 @@
+# v2.8.3.668
+
+TradeSkillMaster: Revived
+
+- Release Date: March 23rd, 2023
+- Author: Gnomezilla on Warmane-Icecrown [https://github.com/Bananaman].
+
+
+## Total Time Elapsed Shown After "Full Scan" and "Group Scan" Completion
+
+The "Full Scan" and "Group Scan" features now display the "total time elapsed" in the status bar after completion, such as "Done Scanning (1:35:27)".
+
+This helps players get a better feel for how long each scan takes, and gives people something nice to look at after each scan.
+
+
+## Improved Formatting of the "Full Scan" Time Estimate
+
+We now display the time as `elapsed time / ~estimated total time`, such as `0:15:37 / ~1:41:27`.
+
+The total time estimate is continuously updated during the scan, based on our intelligent, weighted "seconds per page" metric and the total number of pages (which can dynamically change during a scan, when other people post or buy auctions). This "total time estimate" therefore follows the server performance beautifully and is very accurate yet responsive to server performance changes.
+
+It's easier to understand than our previous display of "estimated time remaining", since the server might rapidly send you 10 pages in just a few seconds (which then counted down the "estimated time remaining" very quickly), before suddenly stalling for 30 seconds without any progress. It was still exactly as accurate as the new display method, but the new method is nicer to look at and easier to understand.
+
+
+
+---
+
 # v2.8.3.667
 
 TradeSkillMaster: Revived

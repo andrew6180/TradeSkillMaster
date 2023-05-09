@@ -1193,7 +1193,18 @@ function GUI:CreateCraftInfoFrame(parent)
 
 	local function OnClick()
 		if not frame.index then return end
-		HandleModifiedItemClick(GetTradeSkillItemLink(frame.index))
+
+		local itemLink = GetTradeSkillItemLink(frame.index)
+		if not itemLink then return end
+
+		if strfind(itemLink, "enchant:") then
+			local spellID = TSMAPI:GetItemID(itemLink)
+			if TSM.enchantingItemIDs[spellID] then
+				local itemID = "item:"..TSM.enchantingItemIDs[spellID]..":0:0:0:0:0:0"
+				itemLink = select(2, TSMAPI:GetSafeItemInfo(itemID))
+			end
+		end
+		HandleModifiedItemClick(itemLink)
 	end
 
 	local function OnEnter(self)
